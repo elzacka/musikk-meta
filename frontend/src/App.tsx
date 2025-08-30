@@ -64,9 +64,17 @@ function App() {
           album_name: 'After Hours',
           popularity: 95,
           duration_ms: 200040,
+          explicit: false,
+          genres: 'pop, synth-pop, new wave',
           danceability: 0.514,
           energy: 0.73,
-          valence: 0.334
+          valence: 0.334,
+          acousticness: 0.001,
+          instrumentalness: 0.0009,
+          liveness: 0.176,
+          loudness: -5.9,
+          speechiness: 0.06,
+          tempo: 171.005
         },
         {
           id: '2', 
@@ -75,16 +83,79 @@ function App() {
           album_name: 'Fine Line',
           popularity: 89,
           duration_ms: 174000,
+          explicit: false,
+          genres: 'pop, pop rock',
           danceability: 0.548,
           energy: 0.816,
-          valence: 0.557
+          valence: 0.557,
+          acousticness: 0.122,
+          instrumentalness: 0,
+          liveness: 0.33,
+          loudness: -4.209,
+          speechiness: 0.034,
+          tempo: 95.39
+        },
+        {
+          id: '3',
+          track_name: 'Shape of You',
+          artist_names: 'Ed Sheeran',
+          album_name: '÷ (Divide)',
+          popularity: 92,
+          duration_ms: 233713,
+          explicit: false,
+          genres: 'pop, dance pop, tropical house',
+          danceability: 0.825,
+          energy: 0.652,
+          valence: 0.931,
+          acousticness: 0.581,
+          instrumentalness: 0,
+          liveness: 0.0931,
+          loudness: -3.183,
+          speechiness: 0.0802,
+          tempo: 95.977
+        },
+        {
+          id: '4',
+          track_name: 'Bad Habits',
+          artist_names: 'Ed Sheeran',
+          album_name: '= (Equals)',
+          popularity: 91,
+          duration_ms: 230747,
+          explicit: false,
+          genres: 'pop, dance pop',
+          danceability: 0.791,
+          energy: 0.897,
+          valence: 0.564,
+          acousticness: 0.012,
+          instrumentalness: 0,
+          liveness: 0.342,
+          loudness: -3.769,
+          speechiness: 0.0431,
+          tempo: 125.975
+        },
+        {
+          id: '5',
+          track_name: 'Someone Like You',
+          artist_names: 'Adele',
+          album_name: '21',
+          popularity: 86,
+          duration_ms: 285120,
+          explicit: false,
+          genres: 'pop, soul, piano ballad',
+          danceability: 0.499,
+          energy: 0.396,
+          valence: 0.234,
+          acousticness: 0.724,
+          instrumentalness: 0,
+          liveness: 0.11,
+          loudness: -8.058,
+          speechiness: 0.0302,
+          tempo: 67.481
         }
       ]
       
       setAllTracks(sampleTracks)
-      if (!query) {
-        setTracks(sampleTracks)
-      }
+      // Don't show any tracks by default - user must search
     } catch (err) {
       setError('Failed to load initial data')
     } finally {
@@ -94,7 +165,7 @@ function App() {
 
   const performSearch = async (searchQuery: string) => {
     if (!searchQuery.trim()) {
-      setTracks(allTracks)
+      setTracks([]) // Show no tracks when search is empty
       return
     }
 
