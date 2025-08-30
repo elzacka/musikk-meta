@@ -209,7 +209,7 @@ function App() {
       {hasGoogleSheets ? (
         <div className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-b border-green-500/30 p-3 text-center">
           <p className="text-sm text-green-200">
-            ✨ <strong>Live Data</strong> - Connected to Google Sheets with updated music data.
+            ✨ <strong>Live data</strong> - Via Google Sheets API.
           </p>
         </div>
       ) : isGitHubPages ? (
@@ -231,7 +231,7 @@ function App() {
               <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 MusikkMeta
               </h1>
-              <p className="text-gray-400 mt-1">Modern Music Discovery Platform</p>
+              <p className="text-gray-400 mt-1">Lydens DNA</p>
             </div>
           </div>
 
