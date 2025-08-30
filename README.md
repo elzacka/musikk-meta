@@ -1,6 +1,6 @@
 # MusikkMeta 🎵
 
-En web-applikasjon for å utforske og analysere musikkmeta-data med detaljerte audio features fra Spotify.
+En web-applikasjon for å utforske og analysere musikkmeta-data med detaljerte lydegenskaper fra Spotify.
 
 ## Demo
 
@@ -132,7 +132,7 @@ interface Track {
 
 ## Lisens
 
-Dette prosjektet er privat og tilhører Lene.
+Dette prosjektet er privat og tilhører elzacka.
 
 ## Audio Features Forklaring
 
@@ -150,4 +150,4 @@ Dette prosjektet er privat og tilhører Lene.
 
 ---
 
-*Laget med ❤️ av Lene*
+*Laget med ❤️ av elzacka*
