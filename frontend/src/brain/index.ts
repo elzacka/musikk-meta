@@ -2,10 +2,12 @@ import { auth } from "app/auth";
 import { API_HOST, API_PATH, API_PREFIX_PATH } from "../constants";
 import { Brain } from "./Brain";
 import { StaticBrain } from "./staticBrain";
+import { GoogleSheetsBrain } from "./googleSheetsBrain";
 import type { RequestParams } from "./http-client";
 
 const isLocalhost = /localhost:\d{4}/i.test(window.location.origin);
 const isGitHubPages = window.location.hostname.includes('github.io');
+const hasGoogleSheetsConfig = !!(import.meta.env.VITE_GOOGLE_SHEET_ID && import.meta.env.VITE_GOOGLE_SHEETS_API_KEY);
 
 const constructBaseUrl = (): string => {
   if (isLocalhost) {
@@ -32,8 +34,15 @@ const constructBaseApiParams = (): BaseApiParams => {
 };
 
 const constructClient = () => {
-  // Use static brain for GitHub Pages deployment
+  // Priority 1: Use Google Sheets if configured (works everywhere)
+  if (hasGoogleSheetsConfig) {
+    console.log('🔗 Using Google Sheets as data source');
+    return new GoogleSheetsBrain();
+  }
+
+  // Priority 2: Use static brain for GitHub Pages without Google Sheets
   if (isGitHubPages) {
+    console.log('📊 Using static sample data (GitHub Pages mode)');
     return new StaticBrain();
   }
 

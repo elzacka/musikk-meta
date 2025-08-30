@@ -4,6 +4,8 @@ import { ResultsTable } from "components/ResultsTable";
 import brain from "brain";
 import { useDebounce } from "utils/useDebounce";
 import { useLocation } from "react-router-dom";
+import { useCommandPalette } from "../hooks/useCommandPalette";
+import { CommandPalette } from "../components/CommandPalette";
 import { Toaster } from "@/components/ui/sonner";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
@@ -22,12 +24,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 function App() {
   const [query, setQuery] = useState("");
   const [tracks, setTracks] = useState<Track[] | null>(null);
+  const [allTracks, setAllTracks] = useState<Track[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedTracks, setSelectedTracks] = useState<Set<string>>(new Set());
   const location = useLocation();
   const debouncedQuery = useDebounce(query, 300);
   const isGitHubPages = window.location.hostname.includes('github.io');
+  const hasGoogleSheetsConfig = !!(import.meta.env.VITE_GOOGLE_SHEET_ID && import.meta.env.VITE_GOOGLE_SHEETS_API_KEY);
+  const commandPalette = useCommandPalette();
 
   useEffect(() => {
     document.title = "MusikkMeta";
@@ -45,7 +50,22 @@ function App() {
       favicon.href = cacheBustedUrl;
       document.head.appendChild(favicon);
     }
+
+    // Load all tracks for command palette
+    loadAllTracks();
   }, []);
+
+  const loadAllTracks = async () => {
+    try {
+      // For Google Sheets brain, we can get all tracks
+      if (brain.getAllTracks && typeof brain.getAllTracks === 'function') {
+        const allTracksData = await brain.getAllTracks();
+        setAllTracks(allTracksData);
+      }
+    } catch (error) {
+      console.warn('Could not load all tracks for command palette:', error);
+    }
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
@@ -130,9 +150,29 @@ function App() {
     performSearch(query);
   };
 
+  const handleTrackSelect = (track: Track) => {
+    // Set the search query to the track name to show it in results
+    const searchTerm = `${track.artist_names} ${track.track_name}`;
+    setQuery(searchTerm);
+    performSearch(searchTerm);
+  };
+
+  const handleCommandPaletteSearch = (searchQuery: string) => {
+    setQuery(searchQuery);
+    performSearch(searchQuery);
+  };
+
   return (
     <div className="dark h-screen w-screen bg-black text-white p-8 flex flex-col">
-      {isGitHubPages && (
+      {hasGoogleSheetsConfig ? (
+        <div className="w-full max-w-[1600px] mx-auto mb-4">
+          <div className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border border-green-500/30 rounded-lg p-3 text-center">
+            <p className="text-sm text-green-200">
+              ✨ <strong>Live Data</strong> - Koblet til Google Sheets med oppdatert musikkdata.
+            </p>
+          </div>
+        </div>
+      ) : isGitHubPages ? (
         <div className="w-full max-w-[1600px] mx-auto mb-4">
           <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border border-blue-500/30 rounded-lg p-3 text-center">
             <p className="text-sm text-blue-200">
@@ -140,7 +180,7 @@ function App() {
             </p>
           </div>
         </div>
-      )}
+      ) : null}
       <div className="w-full h-full max-w-[1600px] mx-auto flex flex-col gap-6 glassmorphic-container p-6">
         <header className="flex flex-wrap items-start justify-between gap-4">
           <div className="flex flex-col items-start gap-6">
@@ -173,16 +213,24 @@ function App() {
               </div>
             </div>
             <div className="flex items-center gap-2 w-full md:w-auto">
-              <Input
-                type="text"
-                placeholder="Skriv inn sang eller artist her..."
-                className="w-full md:w-[400px] text-base p-6 rounded-full glassmorphic"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") handleSearch();
-                }}
-              />
+              <div className="relative w-full md:w-[400px]">
+                <Input
+                  type="text"
+                  placeholder="Skriv inn sang eller artist her..."
+                  className="text-base p-6 rounded-full glassmorphic pr-20"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleSearch();
+                  }}
+                />
+                <button
+                  onClick={commandPalette.open}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 px-2 py-1 text-xs text-gray-400 hover:text-white transition-colors border border-gray-600 rounded-md bg-gray-800/50"
+                >
+                  ⌘K
+                </button>
+              </div>
               <Button
                 size="lg"
                 className="p-6 rounded-full glassmorphic text-white border border-white/20"
@@ -301,6 +349,16 @@ function App() {
           )}
         </main>
       </div>
+
+      {/* Command Palette */}
+      <CommandPalette
+        isOpen={commandPalette.isOpen}
+        onClose={commandPalette.close}
+        tracks={allTracks}
+        onTrackSelect={handleTrackSelect}
+        onSearch={handleCommandPaletteSearch}
+      />
+
       <Toaster richColors />
     </div>
   );

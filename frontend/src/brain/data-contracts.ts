@@ -126,3 +126,8 @@ export interface SearchTracksParams {
 export type SearchTracksData = SearchResponse;
 
 export type SearchTracksError = HTTPValidationError;
+
+/** Google Sheets API Response */
+export interface SheetData {
+  values: string[][];
+}

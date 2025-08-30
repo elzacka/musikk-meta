@@ -1,0 +1,27 @@
+{
+  "name": "MusikkMeta",
+  "short_name": "MusikkMeta",
+  "description": "Utforsk og analyser musikkmeta-data med detaljerte audio features",
+  "theme_color": "#1B4332",
+  "background_color": "#000000",
+  "display": "standalone",
+  "scope": "./",
+  "start_url": "./",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "categories": ["music", "productivity", "utilities"],
+  "lang": "no"
+}

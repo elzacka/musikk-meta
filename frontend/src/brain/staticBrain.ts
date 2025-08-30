@@ -76,4 +76,13 @@ export class StaticBrain {
       json: async () => ({ status: "OK - Static Demo Mode" })
     };
   }
+
+  // Additional utility methods for command palette
+  async getAllTracks(): Promise<Track[]> {
+    return sampleTracks;
+  }
+
+  async refreshData(): Promise<void> {
+    // No-op for static data
+  }
 }
