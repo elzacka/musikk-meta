@@ -1,17 +1,33 @@
-import { StrictMode } from 'react'
+import React from 'react'
 import { createRoot } from 'react-dom/client'
-import { AppWrapper } from './AppWrapper.tsx'
+import { BrowserRouter } from 'react-router-dom'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import App from './App'
+import { ErrorBoundary } from '@/components/ErrorBoundary'
+import { Toaster } from '@/components/ui/sonner'
 import './index.css'
-// Polyfill for support react use in react 18
-import "./polyfills/react-polyfill";
-// PWA Service Worker registration
-import { registerServiceWorker } from './utils/pwa';
 
-// Register PWA Service Worker
-registerServiceWorker();
+// Create a client for React Query
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: 1,
+    },
+  },
+})
 
-createRoot(document.getElementById('root')!).render(
-  <StrictMode>
-    <AppWrapper />
-  </StrictMode>,
+const root = createRoot(document.getElementById('root')!)
+
+root.render(
+  <React.StrictMode>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <App />
+          <Toaster />
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ErrorBoundary>
+  </React.StrictMode>
 )

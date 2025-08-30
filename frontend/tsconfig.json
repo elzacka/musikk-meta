@@ -1,80 +1,44 @@
 {
   "compilerOptions": {
-    "target": "ESNext",
-    "useDefineForClassFields": true,
-    "lib": [
-      "DOM",
-      "DOM.Iterable",
-      "ESNext"
-    ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": false,
-    "allowSyntheticDefaultImports": true,
-    "allowImportingTsExtensions": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
+    "target": "ES2022",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
-    "moduleResolution": "Node",
-    "resolveJsonModule": true,
-    "isolatedModules": false,
+    "skipLibCheck": true,
+
+    /* Bundler mode */
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "isolatedModules": true,
+    "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+
+    /* Linting - Enable strict mode */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    /* Path mapping */
     "baseUrl": ".",
     "paths": {
-      "brain": [
-        "./src/brain"
-      ],
-      "types": [
-        "./src/brain/data-contracts.ts"
-      ],
-      "components/*": [
-        "./src/components/*"
-      ],
-      "pages/*": [
-        "./src/pages/*"
-      ],
-      "app": [
-        "./src/app"
-      ],
-      "app/auth": [
-        "./src/app/auth"
-      ],
-      "utils/*": [
-        "./src/utils/*"
-      ],
-      "@/*": [
-        "./src/*"
-      ],
-      "@/hooks/*": [
-        "./src/extensions/shadcn/hooks/*"
-      ],
-      "@/components/hooks/*": [
-        "./src/extensions/shadcn/hooks/*"
-      ],
-      "@/components/ui/*": [
-        "./src/extensions/shadcn/components/*"
-      ],
+      "@/*": ["./src/*"],
+      "@/components/*": ["./src/components/*"],
+      "@/hooks/*": ["./src/hooks/*"],
+      "@/services/*": ["./src/services/*"],
+      "@/types/*": ["./src/types/*"],
+      "@/utils/*": ["./src/utils/*"],
+      "@/features/*": ["./src/features/*"]
     }
   },
   "include": [
-    "env.d.ts",
     "src"
   ],
   "exclude": [
-    "src/brain/Brain.ts",
-    "src/brain/BrainRoute.ts",
-    "src/brain/data-contracts.ts",
-    "src/brain/http-client.ts"
-  ],
-  "references": [
-    {
-      "path": "./tsconfig.node.json"
-    }
-  ],
-  "ts-node": {
-    "compilerOptions": {
-      "module": "CommonJS"
-    }
-  }
+    "node_modules",
+    "dist"
+  ]
 }

@@ -1,123 +1,118 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Track } from '../brain/data-contracts';
-import { X, Search, Music, User, Disc } from 'lucide-react';
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import React, { useState, useEffect, useRef, useMemo } from 'react'
+import { Search, Music, X, User, Disc } from 'lucide-react'
+import { Dialog, DialogContent } from '@/components/ui/dialog'
+import type { Track } from '@/types/music'
 
 interface CommandPaletteProps {
-  isOpen: boolean;
-  onClose: () => void;
-  tracks: Track[];
-  onTrackSelect: (track: Track) => void;
-  onSearch: (query: string) => void;
+  isOpen: boolean
+  onClose: () => void
+  tracks: Track[]
+  onTrackSelect: (track: Track) => void
+  onSearch: (query: string) => void
 }
 
-export const CommandPalette: React.FC<CommandPaletteProps> = ({
+const CommandPalette: React.FC<CommandPaletteProps> = ({
   isOpen,
   onClose,
   tracks,
   onTrackSelect,
   onSearch
 }) => {
-  const [query, setQuery] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const inputRef = useRef<HTMLInputElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
+  const [query, setQuery] = useState('')
+  const [selectedIndex, setSelectedIndex] = useState(0)
+  const inputRef = useRef<HTMLInputElement>(null)
+  const listRef = useRef<HTMLDivElement>(null)
 
   // Filter tracks based on query
   const filteredTracks = useMemo(() => {
-    if (!query.trim()) return tracks.slice(0, 10); // Show first 10 if no query
+    if (!query.trim()) return tracks.slice(0, 10)
     
-    const searchTerm = query.toLowerCase();
+    const searchTerm = query.toLowerCase()
     return tracks.filter(track => 
       track.track_name?.toLowerCase().includes(searchTerm) ||
       track.artist_names?.toLowerCase().includes(searchTerm) ||
-      track.album_name?.toLowerCase().includes(searchTerm) ||
-      track.genres?.toLowerCase().includes(searchTerm)
-    ).slice(0, 10); // Limit to 10 results for performance
-  }, [query, tracks]);
+      track.album_name?.toLowerCase().includes(searchTerm)
+    ).slice(0, 10)
+  }, [query, tracks])
 
   // Reset selection when results change
   useEffect(() => {
-    setSelectedIndex(0);
-  }, [filteredTracks]);
+    setSelectedIndex(0)
+  }, [filteredTracks])
 
   // Focus input when opened
   useEffect(() => {
     if (isOpen && inputRef.current) {
-      inputRef.current.focus();
+      inputRef.current.focus()
     }
-  }, [isOpen]);
+  }, [isOpen])
 
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return;
+      if (!isOpen) return
 
       switch (e.key) {
         case 'ArrowDown':
-          e.preventDefault();
+          e.preventDefault()
           setSelectedIndex(prev => 
             prev < filteredTracks.length - 1 ? prev + 1 : 0
-          );
-          break;
+          )
+          break
         case 'ArrowUp':
-          e.preventDefault();
+          e.preventDefault()
           setSelectedIndex(prev => 
             prev > 0 ? prev - 1 : filteredTracks.length - 1
-          );
-          break;
+          )
+          break
         case 'Enter':
-          e.preventDefault();
+          e.preventDefault()
           if (filteredTracks[selectedIndex]) {
-            handleTrackSelect(filteredTracks[selectedIndex]);
+            handleTrackSelect(filteredTracks[selectedIndex])
           } else if (query.trim()) {
-            // Perform search if no specific track selected
-            onSearch(query);
-            onClose();
+            onSearch(query)
+            onClose()
           }
-          break;
+          break
         case 'Escape':
-          e.preventDefault();
-          onClose();
-          break;
+          e.preventDefault()
+          onClose()
+          break
       }
-    };
+    }
 
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, selectedIndex, filteredTracks, query, onSearch, onClose]);
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [isOpen, selectedIndex, filteredTracks, query, onSearch, onClose])
 
   // Scroll selected item into view
   useEffect(() => {
-    if (listRef.current) {
-      const selectedElement = listRef.current.children[selectedIndex] as HTMLElement;
-      if (selectedElement) {
-        selectedElement.scrollIntoView({ 
-          block: 'nearest', 
-          behavior: 'smooth' 
-        });
-      }
+    if (listRef.current && listRef.current.children[selectedIndex]) {
+      const selectedElement = listRef.current.children[selectedIndex] as HTMLElement
+      selectedElement.scrollIntoView({ 
+        block: 'nearest', 
+        behavior: 'smooth' 
+      })
     }
-  }, [selectedIndex]);
+  }, [selectedIndex])
 
   const handleTrackSelect = (track: Track) => {
-    onTrackSelect(track);
-    onClose();
-    setQuery('');
-  };
+    onTrackSelect(track)
+    setQuery('')
+  }
 
   const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
+    setQuery(e.target.value)
+  }
 
   const formatDuration = (ms: number | null): string => {
-    if (!ms) return '';
-    const minutes = Math.floor(ms / 60000);
-    const seconds = Math.floor((ms % 60000) / 1000);
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-  };
+    if (!ms) return ''
+    const minutes = Math.floor(ms / 60000)
+    const seconds = Math.floor((ms % 60000) / 1000)
+    return `${minutes}:${seconds.toString().padStart(2, '0')}`
+  }
 
-  if (!isOpen) return null;
+  if (!isOpen) return null
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -129,7 +124,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
             <input
               ref={inputRef}
               type="text"
-              placeholder="Søk etter låt, artist, album eller sjanger..."
+              placeholder="Search for tracks, artists, albums..."
               className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none text-lg"
               value={query}
               onChange={handleQueryChange}
@@ -152,13 +147,13 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                 {query.trim() ? (
                   <div>
                     <Music className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p>Ingen resultater funnet for "{query}"</p>
-                    <p className="text-sm mt-1">Trykk Enter for å søke i hele databasen</p>
+                    <p>No results found for "{query}"</p>
+                    <p className="text-sm mt-1">Press Enter to search in database</p>
                   </div>
                 ) : (
                   <div>
                     <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p>Start å skrive for å søke...</p>
+                    <p>Start typing to search...</p>
                   </div>
                 )}
               </div>
@@ -177,28 +172,23 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
                         <div className="flex items-center space-x-2 mb-1">
                           <Music className="w-4 h-4 text-blue-400 flex-shrink-0" />
                           <p className="font-medium text-white truncate">
-                            {track.track_name || 'Ukjent låt'}
+                            {track.track_name || 'Unknown Track'}
                           </p>
                         </div>
                         <div className="flex items-center space-x-4 text-sm text-gray-400">
                           <div className="flex items-center space-x-1">
                             <User className="w-3 h-3" />
                             <span className="truncate">
-                              {track.artist_names || 'Ukjent artist'}
+                              {track.artist_names || 'Unknown Artist'}
                             </span>
                           </div>
                           <div className="flex items-center space-x-1">
                             <Disc className="w-3 h-3" />
                             <span className="truncate">
-                              {track.album_name || 'Ukjent album'}
+                              {track.album_name || 'Unknown Album'}
                             </span>
                           </div>
                         </div>
-                        {track.genres && (
-                          <p className="text-xs text-gray-500 mt-1 truncate">
-                            {track.genres}
-                          </p>
-                        )}
                       </div>
                       <div className="ml-4 flex-shrink-0 text-right">
                         {track.popularity && (
@@ -223,17 +213,19 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           <div className="px-4 py-2 border-t border-gray-700 bg-gray-900/50">
             <div className="flex items-center justify-between text-xs text-gray-400">
               <div className="flex items-center space-x-4">
-                <span>↑↓ Naviger</span>
-                <span>Enter Velg</span>
-                <span>Esc Lukk</span>
+                <span>↑↓ Navigate</span>
+                <span>Enter Select</span>
+                <span>Esc Close</span>
               </div>
               <div>
-                Cmd+K for å åpne
+                Cmd+K to open
               </div>
             </div>
           </div>
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
+
+export default CommandPalette
