@@ -9,6 +9,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogDescription } from '@/components/ui/dialog'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import brain from './brain/modernBrain'
 import type { Track } from '@/types/music'
 
 // Lazy-loaded components for better performance
@@ -55,109 +56,22 @@ function App() {
   const loadInitialData = async () => {
     try {
       setLoading(true)
-      // Load sample data for demo
-      const sampleTracks: Track[] = [
-        {
-          id: '1',
-          track_name: 'Blinding Lights',
-          artist_names: 'The Weeknd',
-          album_name: 'After Hours',
-          popularity: 95,
-          duration_ms: 200040,
-          explicit: false,
-          genres: 'pop, synth-pop, new wave',
-          danceability: 0.514,
-          energy: 0.73,
-          valence: 0.334,
-          acousticness: 0.001,
-          instrumentalness: 0.0009,
-          liveness: 0.176,
-          loudness: -5.9,
-          speechiness: 0.06,
-          tempo: 171.005
-        },
-        {
-          id: '2', 
-          track_name: 'Watermelon Sugar',
-          artist_names: 'Harry Styles',
-          album_name: 'Fine Line',
-          popularity: 89,
-          duration_ms: 174000,
-          explicit: false,
-          genres: 'pop, pop rock',
-          danceability: 0.548,
-          energy: 0.816,
-          valence: 0.557,
-          acousticness: 0.122,
-          instrumentalness: 0,
-          liveness: 0.33,
-          loudness: -4.209,
-          speechiness: 0.034,
-          tempo: 95.39
-        },
-        {
-          id: '3',
-          track_name: 'Shape of You',
-          artist_names: 'Ed Sheeran',
-          album_name: '÷ (Divide)',
-          popularity: 92,
-          duration_ms: 233713,
-          explicit: false,
-          genres: 'pop, dance pop, tropical house',
-          danceability: 0.825,
-          energy: 0.652,
-          valence: 0.931,
-          acousticness: 0.581,
-          instrumentalness: 0,
-          liveness: 0.0931,
-          loudness: -3.183,
-          speechiness: 0.0802,
-          tempo: 95.977
-        },
-        {
-          id: '4',
-          track_name: 'Bad Habits',
-          artist_names: 'Ed Sheeran',
-          album_name: '= (Equals)',
-          popularity: 91,
-          duration_ms: 230747,
-          explicit: false,
-          genres: 'pop, dance pop',
-          danceability: 0.791,
-          energy: 0.897,
-          valence: 0.564,
-          acousticness: 0.012,
-          instrumentalness: 0,
-          liveness: 0.342,
-          loudness: -3.769,
-          speechiness: 0.0431,
-          tempo: 125.975
-        },
-        {
-          id: '5',
-          track_name: 'Someone Like You',
-          artist_names: 'Adele',
-          album_name: '21',
-          popularity: 86,
-          duration_ms: 285120,
-          explicit: false,
-          genres: 'pop, soul, piano ballad',
-          danceability: 0.499,
-          energy: 0.396,
-          valence: 0.234,
-          acousticness: 0.724,
-          instrumentalness: 0,
-          liveness: 0.11,
-          loudness: -8.058,
-          speechiness: 0.0302,
-          tempo: 67.481
-        }
-      ]
       
-      setAllTracks(sampleTracks)
+      // Load all tracks for command palette using the brain client
+      if (brain.getAllTracks && typeof brain.getAllTracks === 'function') {
+        const allTracksData = await brain.getAllTracks()
+        setAllTracks(allTracksData)
+        console.log(`🎵 Loaded ${allTracksData.length} tracks from data source`)
+      } else {
+        console.warn('getAllTracks method not available on current brain client')
+        setAllTracks([])
+      }
+      
       // Don't show any tracks by default - user must search
     } catch (err) {
-      setError('Failed to load initial data')
+      console.error('Failed to load tracks:', err)
+      setError('Failed to load music data. Please check your configuration.')
+      setAllTracks([])
     } finally {
       setLoading(false)
     }
@@ -173,16 +87,25 @@ function App() {
     setError(null)
     
     try {
-      // Simulate search - filter allTracks based on query
-      const filteredTracks = allTracks.filter(track =>
-        track.track_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        track.artist_names?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        track.album_name?.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+      // Use the brain client to search for tracks
+      const response = await brain.search_tracks({ 
+        query: searchQuery, 
+        page: 1, 
+        page_size: 50 
+      })
       
-      setTracks(filteredTracks)
+      if (response.ok) {
+        const data = await response.json()
+        setTracks(data.tracks)
+        console.log(`🔍 Found ${data.tracks.length} tracks for "${searchQuery}"`)
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.detail || 'Search failed')
+      }
     } catch (err) {
-      setError('Search failed. Please try again.')
+      console.error('Search error:', err)
+      setError(`Search failed: ${err instanceof Error ? err.message : 'Unknown error'}`)
+      setTracks([])
     } finally {
       setLoading(false)
     }
