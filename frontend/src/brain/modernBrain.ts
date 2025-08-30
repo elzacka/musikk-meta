@@ -9,6 +9,15 @@ const createBrainClient = () => {
     import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY
   )
 
+  console.log('🧠 Brain Client Selection:', {
+    hostname: window.location.hostname,
+    isGitHubPages,
+    SHEET_ID: import.meta.env?.VITE_GOOGLE_SHEET_ID ? 'CONFIGURED' : 'MISSING',
+    API_KEY: import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY ? 'CONFIGURED' : 'MISSING',
+    hasGoogleSheetsConfig,
+    selectedClient: hasGoogleSheetsConfig ? 'GoogleSheetsBrain' : 'StaticBrain'
+  })
+
   // Priority 1: Use Google Sheets if configured
   if (hasGoogleSheetsConfig) {
     console.log('🔗 Using Google Sheets as data source')

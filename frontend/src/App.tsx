@@ -38,6 +38,17 @@ function App() {
   // Environment detection for data source
   const isGitHubPages = window.location.hostname.includes('github.io')
   const hasGoogleSheets = !!(import.meta.env?.VITE_GOOGLE_SHEET_ID && import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY)
+  
+  // Debug environment detection
+  console.log('🌍 Environment Detection:', {
+    hostname: window.location.hostname,
+    isGitHubPages,
+    hasGoogleSheets,
+    env: {
+      SHEET_ID: import.meta.env?.VITE_GOOGLE_SHEET_ID ? 'SET' : 'MISSING',
+      API_KEY: import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY ? 'SET' : 'MISSING'
+    }
+  })
 
   // Initialize app
   useEffect(() => {
