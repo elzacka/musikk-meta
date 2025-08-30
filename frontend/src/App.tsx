@@ -146,13 +146,13 @@ function App() {
             ✨ <strong>Live data</strong> - Via Google Sheets API.
           </p>
         </div>
-      ) : isGitHubPages ? (
-        <div className="bg-gradient-to-r from-blue-600/20 to-purple-600/20 border-b border-blue-500/30 p-3 text-center">
-          <p className="text-sm text-blue-200">
-            🎵 <strong>Demo Mode</strong> - Static demo with sample data. Full version has access to large music database.
+      ) : (
+        <div className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border-b border-yellow-500/30 p-3 text-center">
+          <p className="text-sm text-yellow-200">
+            🔧 <strong>Debug Mode</strong> - API Key: {import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY ? '✅ SET' : '❌ MISSING'}, Sheet ID: {import.meta.env?.VITE_GOOGLE_SHEET_ID ? '✅ SET' : '❌ MISSING'}, Using: {hasGoogleSheets ? 'Google Sheets' : 'Sample Data'}
           </p>
         </div>
-      ) : null}
+      )}
 
       <div className="container mx-auto max-w-7xl p-6">
         {/* Header */}
@@ -166,6 +166,9 @@ function App() {
                 MusikkMeta
               </h1>
               <p className="text-gray-400 mt-1">Oppdag lydens DNA</p>
+              <div className="bg-red-500 text-white p-2 rounded mt-2 text-sm font-bold">
+                🚨 DEBUG TEST - API Key: {import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY || 'UNDEFINED'}, Sheet ID: {import.meta.env?.VITE_GOOGLE_SHEET_ID || 'UNDEFINED'}
+              </div>
             </div>
           </div>
 
