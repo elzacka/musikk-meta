@@ -63,7 +63,7 @@ coverage.xml
 
 # Lock files
 package-lock.json
-yarn.lock
+# yarn.lock - commented out because we use Yarn v4 which requires lockfile for CI
 
 # UV lock (Python package manager)
 uv.lock
