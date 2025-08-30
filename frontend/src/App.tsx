@@ -40,7 +40,7 @@ function App() {
 
   // Initialize app
   useEffect(() => {
-    document.title = "MusikkMeta - Modern Music Discovery"
+    document.title = "MusikkMeta - Lydens DNA"
     loadInitialData()
   }, [])
 
@@ -262,12 +262,12 @@ function App() {
               <DialogTrigger asChild>
                 <Button variant="outline" size="lg" className="h-12">
                   <Info className="h-4 w-4 mr-2" />
-                  Help
+                  Forklaringer
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                  <DialogTitle>Understanding Music Data</DialogTitle>
+                  <DialogTitle>Hva betyr disse dataene?</DialogTitle>
                   <DialogDescription>
                     Learn what these audio features mean:
                   </DialogDescription>
