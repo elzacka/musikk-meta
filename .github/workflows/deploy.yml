@@ -30,14 +30,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: yarn
-          cache-dependency-path: frontend/yarn.lock
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
 
       - name: Install dependencies
-        run: cd frontend && yarn install --frozen-lockfile
+        run: cd frontend && yarn install
 
       - name: Build for GitHub Pages
         run: cd frontend && yarn build:gh
