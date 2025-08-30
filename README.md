@@ -4,7 +4,7 @@ En web-applikasjon for å utforske og analysere musikkmeta-data med detaljerte a
 
 ## Demo
 
-🔗 **[Se live demo](https://yourusername.github.io/musikk-meta)**
+🔗 **[Se live demo](https://elzacka.github.io/musikk-meta)**
 
 *Demo-versjonen kjører med eksempeldata. Den fulle versjonen har tilgang til en omfattende database med musikkspor.*
 
@@ -45,7 +45,7 @@ En web-applikasjon for å utforske og analysere musikkmeta-data med detaljerte a
 
 1. **Klon repository**
    ```bash
-   git clone https://github.com/yourusername/musikk-meta.git
+   git clone https://github.com/elzacka/musikk-meta.git
    cd musikk-meta
    ```
 
