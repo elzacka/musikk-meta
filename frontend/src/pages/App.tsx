@@ -150,7 +150,7 @@ function App() {
     performSearch(query);
   };
 
-  const handleTrackSelect = (track: Track) => {
+  const handleCommandPaletteTrackSelect = (track: Track) => {
     // Set the search query to the track name to show it in results
     const searchTerm = `${track.artist_names} ${track.track_name}`;
     setQuery(searchTerm);
@@ -355,7 +355,7 @@ function App() {
         isOpen={commandPalette.isOpen}
         onClose={commandPalette.close}
         tracks={allTracks}
-        onTrackSelect={handleTrackSelect}
+        onTrackSelect={handleCommandPaletteTrackSelect}
         onSearch={handleCommandPaletteSearch}
       />
 
