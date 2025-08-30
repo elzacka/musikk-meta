@@ -62,17 +62,35 @@ export class GoogleSheetsBrain {
     }
 
     // Enhanced search: track name, artist, album, genres
+    console.log(`🔍 Searching for "${query}" in ${allTracks.length} tracks`);
+    console.log('🎵 Sample tracks:', allTracks.slice(0, 3).map(t => ({
+      track_name: t.track_name,
+      artist_names: t.artist_names
+    })));
+
     const filteredTracks = allTracks.filter(track => {
       const searchTerm = query.toLowerCase();
       
-      return (
+      const matches = (
         track.track_name?.toLowerCase().includes(searchTerm) ||
         track.artist_names?.toLowerCase().includes(searchTerm) ||
         track.album_name?.toLowerCase().includes(searchTerm) ||
         track.genres?.toLowerCase().includes(searchTerm) ||
         track.record_label?.toLowerCase().includes(searchTerm)
       );
+
+      if (matches) {
+        console.log('✅ Match found:', {
+          track: track.track_name,
+          artist: track.artist_names,
+          searchTerm
+        });
+      }
+
+      return matches;
     });
+
+    console.log(`🎯 Found ${filteredTracks.length} matches for "${query}"`);
 
     // Calculate pagination
     const total = filteredTracks.length;

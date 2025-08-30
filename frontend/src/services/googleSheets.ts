@@ -6,15 +6,35 @@ const RANGE = 'A:V'; // Columns A-V for all track data (22 columns)
 
 export async function fetchMusicTracks(): Promise<Track[]> {
   try {
+    console.log('🔍 Google Sheets API call:', {
+      SHEET_ID: SHEET_ID ? '✅ Configured' : '❌ Missing',
+      API_KEY: API_KEY ? '✅ Configured' : '❌ Missing',
+      url: `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY?.substring(0, 10)}...`
+    });
+
     const response = await fetch(
       `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`
     );
     
+    console.log('📊 Google Sheets response:', {
+      status: response.status,
+      ok: response.ok,
+      headers: Object.fromEntries(response.headers.entries())
+    });
+    
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorText = await response.text();
+      console.error('❌ Google Sheets API error:', errorText);
+      throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
     }
     
     const data: SheetData = await response.json();
+    console.log('📋 Raw Google Sheets data:', {
+      hasValues: !!data.values,
+      rowCount: data.values?.length || 0,
+      firstRow: data.values?.[0],
+      sampleRows: data.values?.slice(1, 3)
+    });
     
     if (!data.values || data.values.length <= 1) {
       return [];
