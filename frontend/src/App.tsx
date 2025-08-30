@@ -231,7 +231,7 @@ function App() {
               <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 MusikkMeta
               </h1>
-              <p className="text-gray-400 mt-1">Lydens DNA</p>
+              <p className="text-gray-400 mt-1">Oppdag lydens DNA</p>
             </div>
           </div>
 
