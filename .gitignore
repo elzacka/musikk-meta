@@ -1,0 +1,69 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
+dist/
+build/
+**/dist/
+**/build/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+.venv
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# FastAPI
+.pytest_cache/
+coverage.xml
+.coverage
+
+# Uvicorn
+*.log
+
+# macOS
+.DS_Store
+
+# Cache
+.cache/
+*.tsbuildinfo
+
+# Lock files
+package-lock.json
+yarn.lock
+
+# UV lock (Python package manager)
+uv.lock
