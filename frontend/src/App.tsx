@@ -196,69 +196,91 @@ function App() {
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline" size="lg" className="h-12">
-                  <Info className="h-4 w-4 mr-2" />
                   Forklaringer
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                  <DialogTitle>Hva betyr disse lydegenskapene?</DialogTitle>
+                  <DialogTitle>Hvordan bruke MusikkMeta</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="h-96">
-                  <div className="space-y-4">
+                  <div className="space-y-6">
+                    {/* Getting Started Section */}
                     <div>
-                      <h4 className="font-semibold text-white">Popularitet</h4>
-                      <p className="text-sm text-gray-400">
-                        Hvor populær låta er – på en skala fra 0 til 100. 100 betyr "alle elsker den", 0 betyr "ingen vet at den finnes".
+                      <h4 className="font-semibold text-white mb-3">Kom i gang</h4>
+                      <p className="text-sm text-gray-400 mb-3">
+                        Søk etter dine favorittlåter, artister eller album for å utforske detaljerte lydegenskaper og metadata.
                       </p>
+                      <div className="bg-gray-900/50 rounded-lg p-4">
+                        <h5 className="text-sm font-medium text-gray-300 mb-2">Prøv å søke etter:</h5>
+                        <div className="space-y-1 text-sm text-gray-400">
+                          <div>• <span className="text-blue-300">"Blinding Lights"</span> - populære låter</div>
+                          <div>• <span className="text-purple-300">"Ed Sheeran"</span> - artistnavn</div>
+                          <div>• <span className="text-green-300">"pop"</span> - musikksjangre</div>
+                          <div>• Bruk <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">⌘K</kbd> / <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">Ctrl+K</kbd> for kommandopaletten</div>
+                        </div>
+                      </div>
                     </div>
+
+                    {/* Audio Features Explanations */}
                     <div>
-                      <h4 className="font-semibold text-white">Eksplisitt</h4>
-                      <p className="text-sm text-gray-400">
-                        Forteller deg om teksten inneholder banning eller annet språk som kan fornærme bestemødre. Ja = snill som et lam, nei = Huffameg (eller at ingen gadd å sjekke).
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white">Dansbar</h4>
-                      <p className="text-sm text-gray-400">
-                        Hvor dansbar låta er. Basert på tempo, rytmestabilitet, beat-trykk og hvor jevnt den flyter. 0 er “sitt helt rolig”, 1 er “klar for dansegulvet”.
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white">Energi</h4>
-                      <p className="text-sm text-gray-400">
-                        Måler intensitet og tempo, fra 0.0 til 1.0. Høy energi føles som death metal i et lynnedslag. Lav energi minner mer om klassisk musikk og te.
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white">Valens</h4>
-                      <p className="text-sm text-gray-400">
-                        Måler hvor glad eller trist låta føles. 1.0 = solskinn, lykkepiller og sjokolade. 0.0 = regn, ekskjærester og tomt kjøleskap.
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white">Akustisk</h4>
-                      <p className="text-sm text-gray-400">
-                        Forteller hvor akustisk låta er. 1.0 betyr “hentet fra en fjellhytte med gitar og opptaker”, 0.0 betyr “laget på en laptop med ti plugins og et håp”.
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white">Instrumental</h4>
-                      <p className="text-sm text-gray-400">
-                        Måler hvor lite vokal det er. Høye verdier (nær 1.0) betyr instrumental – kanskje med litt “ooh” og “aah”. Men hvis det er snakking eller rap? Nope.
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white">Live</h4>
-                      <p className="text-sm text-gray-400">
-                        Hvor “live” det høres ut. Høye tall betyr publikum i bakgrunnen, klapping, roping – du vet, konsertfølelse. Over 0.8 og du kan nesten kjenne svetten i rommet.
-                      </p>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-white">Lydstyrke</h4>
-                      <p className="text-sm text-gray-400">
-                        Gjennomsnittlig lydnivå gjennom hele låta, målt i desibel (dB). Vanligvis mellom -60 og 0 dB. Det sier noe om hvor høyt du må skru opp før naboen banker i veggen.
-                      </p>
+                      <h4 className="font-semibold text-white mb-3">Hva betyr lydegenskapene?</h4>
+                      <div className="space-y-4">
+                        <div>
+                          <h5 className="font-medium text-white">Popularitet</h5>
+                          <p className="text-sm text-gray-400">
+                            Hvor populær låta er – på en skala fra 0 til 100. 100 betyr "alle elsker den", 0 betyr "ingen vet at den finnes".
+                          </p>
+                        </div>
+                        <div>
+                          <h5 className="font-medium text-white">Dansbar</h5>
+                          <p className="text-sm text-gray-400">
+                            Hvor dansbar låta er. Basert på tempo, rytmestabilitet, beat-trykk og hvor jevnt den flyter. 0 er "sitt helt rolig", 1 er "klar for dansegulvet".
+                          </p>
+                        </div>
+                        <div>
+                          <h5 className="font-medium text-white">Energi</h5>
+                          <p className="text-sm text-gray-400">
+                            Måler intensitet og tempo, fra 0.0 til 1.0. Høy energi føles som death metal i et lynnedslag. Lav energi minner mer om klassisk musikk og te.
+                          </p>
+                        </div>
+                        <div>
+                          <h5 className="font-medium text-white">Valens</h5>
+                          <p className="text-sm text-gray-400">
+                            Måler hvor glad eller trist låta føles. 1.0 = solskinn, lykkepiller og sjokolade. 0.0 = regn, ekskjærester og tomt kjøleskap.
+                          </p>
+                        </div>
+                        <div>
+                          <h5 className="font-medium text-white">Akustisk</h5>
+                          <p className="text-sm text-gray-400">
+                            Forteller hvor akustisk låta er. 1.0 betyr "hentet fra en fjellhytte med gitar og opptaker", 0.0 betyr "laget på en laptop med ti plugins og et håp".
+                          </p>
+                        </div>
+                        <div>
+                          <h5 className="font-medium text-white">Instrumental</h5>
+                          <p className="text-sm text-gray-400">
+                            Måler hvor lite vokal det er. Høye verdier (nær 1.0) betyr instrumental – kanskje med litt "ooh" og "aah". Men hvis det er snakking eller rap? Nope.
+                          </p>
+                        </div>
+                        <div>
+                          <h5 className="font-medium text-white">Live</h5>
+                          <p className="text-sm text-gray-400">
+                            Hvor "live" det høres ut. Høye tall betyr publikum i bakgrunnen, klapping, roping – du vet, konsertfølelse. Over 0.8 og du kan nesten kjenne svetten i rommet.
+                          </p>
+                        </div>
+                        <div>
+                          <h5 className="font-medium text-white">Lydstyrke</h5>
+                          <p className="text-sm text-gray-400">
+                            Gjennomsnittlig lydnivå gjennom hele låta, målt i desibel (dB). Vanligvis mellom -60 og 0 dB. Det sier noe om hvor høyt du må skru opp før naboen banker i veggen.
+                          </p>
+                        </div>
+                        <div>
+                          <h5 className="font-medium text-white">Eksplisitt</h5>
+                          <p className="text-sm text-gray-400">
+                            Forteller deg om teksten inneholder banning eller annet språk som kan fornærme bestemødre. Ja = snill som et lam, nei = Huffameg (eller at ingen gadd å sjekke).
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </ScrollArea>

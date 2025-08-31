@@ -38,25 +38,10 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
   if (!tracks.length) {
     return (
       <div className="text-center py-16">
-        <div className="mb-6">
-          <div className="h-20 w-20 mx-auto bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mb-4">
-            <Music className="h-10 w-10 text-blue-400" />
-          </div>
-          <h3 className="text-xl font-medium text-gray-300 mb-2">Start din musikkoppdagelse</h3>
-          <p className="text-gray-400 mb-6 max-w-md mx-auto">
-            Søk etter dine favorittlåter, artister eller album for å utforske detaljerte lydegenskaper og metadata.
-          </p>
-        </div>
-        
-        <div className="bg-gray-900/50 rounded-lg p-6 max-w-md mx-auto">
-          <h4 className="text-sm font-medium text-gray-300 mb-3">Prøv å søke etter:</h4>
-          <div className="space-y-2 text-sm text-gray-400">
-            <div>• <span className="text-blue-300">"Blinding Lights"</span> - populære låter</div>
-            <div>• <span className="text-purple-300">"Ed Sheeran"</span> - artistnavn</div>
-            <div>• <span className="text-green-300">"pop"</span> - musikksjangre</div>
-            <div>• Eller prøv <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">⌘K</kbd> / <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">Ctrl+K</kbd> kommandopaletten</div>
-          </div>
-        </div>
+        <h3 className="text-xl font-medium text-gray-300 mb-2">Søk for å komme i gang</h3>
+        <p className="text-gray-400 max-w-md mx-auto">
+          Bruk søkefeltet ovenfor eller kommandopaletten (<kbd className="px-2 py-1 bg-gray-700 rounded text-xs">⌘K</kbd> / <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">Ctrl+K</kbd>) for å finne musikk.
+        </p>
       </div>
     )
   }
