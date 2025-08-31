@@ -41,6 +41,12 @@ export async function fetchMusicTracks(): Promise<Track[]> {
       console.log('🔍 Column Headers:', data.values[0]);
       console.log('🔍 First Data Row:', data.values[1]);
       console.log('🔍 Second Data Row:', data.values[2]);
+      
+      // Extra detailed logging for troubleshooting
+      console.log('🔍 Column Mapping:');
+      data.values[0].forEach((header, index) => {
+        console.log(`  Column ${index}: "${header}" = "${data.values[1]?.[index] || 'N/A'}"`);
+      });
     }
     
     if (!data.values || data.values.length <= 1) {
