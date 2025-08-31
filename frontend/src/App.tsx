@@ -149,7 +149,7 @@ function App() {
       ) : (
         <div className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border-b border-yellow-500/30 p-3 text-center">
           <p className="text-sm text-yellow-200">
-            🔧 <strong>Debug Mode</strong> - API Key: {import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY ? '✅ SET' : '❌ MISSING'}, Sheet ID: {import.meta.env?.VITE_GOOGLE_SHEET_ID ? '✅ SET' : '❌ MISSING'}, Using: {hasGoogleSheets ? 'Google Sheets' : 'Sample Data'}
+            🔧 <strong>Debug Mode</strong> - API Key: {import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY ? `✅ SET (${import.meta.env.VITE_GOOGLE_SHEETS_API_KEY.substring(0, 6)}...)` : '❌ MISSING'}, Sheet ID: {import.meta.env?.VITE_GOOGLE_SHEET_ID ? `✅ SET (${import.meta.env.VITE_GOOGLE_SHEET_ID.substring(0, 6)}...)` : '❌ MISSING'}, Using: {hasGoogleSheets ? 'Google Sheets' : 'Sample Data'}
           </p>
         </div>
       )}
@@ -166,6 +166,7 @@ function App() {
                 MusikkMeta
               </h1>
               <p className="text-gray-400 mt-1">Oppdag lydens DNA</p>
+              <p className="text-xs text-gray-600 mt-1">Build: 4cda942 | Env: {hasGoogleSheets ? 'PROD' : 'DEMO'}</p>
               <div className="bg-red-500 text-white p-2 rounded mt-2 text-sm font-bold">
                 🚨 DEBUG TEST - API Key: {import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY || 'UNDEFINED'}, Sheet ID: {import.meta.env?.VITE_GOOGLE_SHEET_ID || 'UNDEFINED'}
               </div>
