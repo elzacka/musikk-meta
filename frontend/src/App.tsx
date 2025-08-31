@@ -196,7 +196,7 @@ function App() {
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="outline" size="lg" className="h-12">
-                  Forklaringer
+                  Veiledning
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl">
@@ -208,16 +208,28 @@ function App() {
                     {/* Getting Started Section */}
                     <div>
                       <h4 className="font-semibold text-white mb-3">Kom i gang</h4>
-                      <p className="text-sm text-gray-400 mb-3">
-                        Søk etter dine favorittlåter, artister eller album for å utforske detaljerte lydegenskaper og metadata.
+                      <p className="text-sm text-gray-400 mb-4">
+                        Bruk søkefeltet ovenfor eller <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">⌘K</kbd> / <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">Ctrl+K</kbd> for å finne musikk og utforske detaljerte lydegenskaper.
                       </p>
+                      
                       <div className="bg-gray-900/50 rounded-lg p-4">
-                        <h5 className="text-sm font-medium text-gray-300 mb-2">Prøv å søke etter:</h5>
-                        <div className="space-y-1 text-sm text-gray-400">
-                          <div>• <span className="text-blue-300">"Blinding Lights"</span> - populære låter</div>
-                          <div>• <span className="text-purple-300">"Ed Sheeran"</span> - artistnavn</div>
-                          <div>• <span className="text-green-300">"pop"</span> - musikksjangre</div>
-                          <div>• Bruk <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">⌘K</kbd> / <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">Ctrl+K</kbd> for kommandopaletten</div>
+                        <h5 className="text-sm font-medium text-gray-300 mb-3">Prøv å søke etter:</h5>
+                        <div className="space-y-2 text-sm">
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-400">•</span>
+                            <span className="text-blue-300 font-medium">"Blinding Lights"</span>
+                            <span className="text-gray-500">- populære låter</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-400">•</span>
+                            <span className="text-purple-300 font-medium">"Ed Sheeran"</span>
+                            <span className="text-gray-500">- artistnavn</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-gray-400">•</span>
+                            <span className="text-green-300 font-medium">"pop"</span>
+                            <span className="text-gray-500">- musikksjangre</span>
+                          </div>
                         </div>
                       </div>
                     </div>

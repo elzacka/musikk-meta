@@ -38,10 +38,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
   if (!tracks.length) {
     return (
       <div className="text-center py-16">
-        <h3 className="text-xl font-medium text-gray-300 mb-2">Søk for å komme i gang</h3>
-        <p className="text-gray-400 max-w-md mx-auto">
-          Bruk søkefeltet ovenfor eller kommandopaletten (<kbd className="px-2 py-1 bg-gray-700 rounded text-xs">⌘K</kbd> / <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">Ctrl+K</kbd>) for å finne musikk.
-        </p>
+        <p className="text-gray-400">Ingen resultater ennå.</p>
       </div>
     )
   }
