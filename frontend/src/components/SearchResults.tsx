@@ -42,19 +42,19 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
           <div className="h-20 w-20 mx-auto bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-full flex items-center justify-center mb-4">
             <Music className="h-10 w-10 text-blue-400" />
           </div>
-          <h3 className="text-xl font-medium text-gray-300 mb-2">Start Your Music Discovery</h3>
+          <h3 className="text-xl font-medium text-gray-300 mb-2">Start din musikkoppdagelse</h3>
           <p className="text-gray-400 mb-6 max-w-md mx-auto">
-            Search for your favorite tracks, artists, or albums to explore detailed audio features and metadata.
+            Søk etter dine favorittlåter, artister eller album for å utforske detaljerte lydegenskaper og metadata.
           </p>
         </div>
         
         <div className="bg-gray-900/50 rounded-lg p-6 max-w-md mx-auto">
-          <h4 className="text-sm font-medium text-gray-300 mb-3">Try searching for:</h4>
+          <h4 className="text-sm font-medium text-gray-300 mb-3">Prøv å søke etter:</h4>
           <div className="space-y-2 text-sm text-gray-400">
-            <div>• <span className="text-blue-300">"Blinding Lights"</span> - Popular tracks</div>
-            <div>• <span className="text-purple-300">"Ed Sheeran"</span> - Artist names</div>
-            <div>• <span className="text-green-300">"pop"</span> - Music genres</div>
-            <div>• Or try the <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">⌘K</kbd> command palette</div>
+            <div>• <span className="text-blue-300">"Blinding Lights"</span> - populære låter</div>
+            <div>• <span className="text-purple-300">"Ed Sheeran"</span> - artistnavn</div>
+            <div>• <span className="text-green-300">"pop"</span> - musikksjangre</div>
+            <div>• Eller prøv <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">⌘K</kbd> kommandopaletten</div>
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-medium text-white">
-          Found {tracks.length} track{tracks.length !== 1 ? 's' : ''}
+          Fant {tracks.length} låt{tracks.length !== 1 ? 'er' : ''}
         </h2>
       </div>
 
@@ -84,13 +84,13 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
                   </div>
                   <div className="min-w-0 flex-1">
                     <h3 className="font-semibold text-white text-lg mb-1 truncate">
-                      {track.track_name || 'Unknown Track'}
+                      {track.track_name || 'Ukjent låt'}
                     </h3>
                     <p className="text-gray-300 mb-1 truncate">
-                      by {track.artist_names || 'Unknown Artist'}
+                      av {track.artist_names || 'Ukjent artist'}
                     </p>
                     <p className="text-gray-500 text-sm truncate">
-                      {track.album_name || 'Unknown Album'}
+                      {track.album_name || 'Ukjent album'}
                     </p>
                   </div>
                 </div>
@@ -100,7 +100,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
                   <div className="text-center p-2 bg-gray-800/30 rounded">
                     <div className="flex items-center justify-center gap-1 mb-1">
                       <TrendingUp className="h-4 w-4 text-yellow-400" />
-                      <span className="text-xs text-gray-400">Popularity</span>
+                      <span className="text-xs text-gray-400">Popularitet</span>
                     </div>
                     <span className="text-white font-medium">
                       {track.popularity || '--'}
@@ -110,7 +110,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
                   <div className="text-center p-2 bg-gray-800/30 rounded">
                     <div className="flex items-center justify-center gap-1 mb-1">
                       <Clock className="h-4 w-4 text-blue-400" />
-                      <span className="text-xs text-gray-400">Duration</span>
+                      <span className="text-xs text-gray-400">Varighet</span>
                     </div>
                     <span className="text-white font-medium">
                       {formatDuration(track.duration_ms)}
@@ -125,7 +125,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
                   </div>
 
                   <div className="text-center p-2 bg-gray-800/30 rounded">
-                    <span className="text-xs text-gray-400 block mb-1">Explicit</span>
+                    <span className="text-xs text-gray-400 block mb-1">Eksplisitt</span>
                     <span className="text-white font-medium">
                       {track.explicit ? '🔞' : '✓'}
                     </span>
@@ -134,31 +134,31 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
 
                 {/* Audio Features */}
                 <div>
-                  <h4 className="text-sm font-medium text-gray-300 mb-2">Audio Features</h4>
+                  <h4 className="text-sm font-medium text-gray-300 mb-2">Lydegenskaper</h4>
                   <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                     <div className="text-center p-2 bg-blue-900/20 rounded">
-                      <span className="text-xs text-blue-300 block mb-1">Dance</span>
+                      <span className="text-xs text-blue-300 block mb-1">Dans</span>
                       <span className="text-white font-medium text-sm">
                         {formatAudioFeature(track.danceability)}
                       </span>
                     </div>
 
                     <div className="text-center p-2 bg-red-900/20 rounded">
-                      <span className="text-xs text-red-300 block mb-1">Energy</span>
+                      <span className="text-xs text-red-300 block mb-1">Energi</span>
                       <span className="text-white font-medium text-sm">
                         {formatAudioFeature(track.energy)}
                       </span>
                     </div>
 
                     <div className="text-center p-2 bg-green-900/20 rounded">
-                      <span className="text-xs text-green-300 block mb-1">Valence</span>
+                      <span className="text-xs text-green-300 block mb-1">Valens</span>
                       <span className="text-white font-medium text-sm">
                         {formatAudioFeature(track.valence)}
                       </span>
                     </div>
 
                     <div className="text-center p-2 bg-purple-900/20 rounded">
-                      <span className="text-xs text-purple-300 block mb-1">Acoustic</span>
+                      <span className="text-xs text-purple-300 block mb-1">Akustisk</span>
                       <span className="text-white font-medium text-sm">
                         {formatAudioFeature(track.acousticness)}
                       </span>
@@ -172,7 +172,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
                     </div>
 
                     <div className="text-center p-2 bg-gray-700/30 rounded">
-                      <span className="text-xs text-gray-300 block mb-1">Loudness</span>
+                      <span className="text-xs text-gray-300 block mb-1">Lydstyrke</span>
                       <span className="text-white font-medium text-sm">
                         {formatLoudness(track.loudness)}
                       </span>

@@ -8,7 +8,7 @@ interface LoadingSpinnerProps {
 
 export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({ 
   size = 'md', 
-  text = 'Loading...' 
+  text = 'Laster...' 
 }) => {
   const sizeClasses = {
     sm: 'h-4 w-4',
@@ -58,7 +58,7 @@ export const SearchSkeleton: React.FC = () => (
 
 // Full page loading with music theme
 export const PageLoading: React.FC<{ message?: string }> = ({ 
-  message = 'Loading your music...' 
+  message = 'Laster musikken din...' 
 }) => (
   <div className="min-h-screen bg-black text-white flex items-center justify-center">
     <div className="text-center space-y-4">
@@ -68,7 +68,7 @@ export const PageLoading: React.FC<{ message?: string }> = ({
       <div className="space-y-2">
         <LoadingSpinner size="lg" text="" />
         <p className="text-lg font-medium">{message}</p>
-        <p className="text-sm text-gray-400">Just a moment...</p>
+        <p className="text-sm text-gray-400">Bare et øyeblikk...</p>
       </div>
     </div>
   </div>
@@ -77,6 +77,6 @@ export const PageLoading: React.FC<{ message?: string }> = ({
 // Suspense fallback component
 export const SuspenseFallback: React.FC = () => (
   <div className="flex items-center justify-center p-8">
-    <LoadingSpinner text="Loading component..." />
+    <LoadingSpinner text="Laster komponent..." />
   </div>
 );

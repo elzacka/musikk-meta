@@ -124,7 +124,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
             <input
               ref={inputRef}
               type="text"
-              placeholder="Search for tracks, artists, albums..."
+              placeholder="Søk etter låter, artister, album..."
               className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none text-lg"
               value={query}
               onChange={handleQueryChange}
@@ -147,13 +147,13 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                 {query.trim() ? (
                   <div>
                     <Music className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p>No results found for "{query}"</p>
-                    <p className="text-sm mt-1">Press Enter to search in database</p>
+                    <p>Ingen resultater for "{query}"</p>
+                    <p className="text-sm mt-1">Trykk Enter for å søke i databasen</p>
                   </div>
                 ) : (
                   <div>
                     <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p>Start typing to search...</p>
+                    <p>Begynn å skrive for å søke...</p>
                   </div>
                 )}
               </div>
@@ -172,20 +172,20 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                         <div className="flex items-center space-x-2 mb-1">
                           <Music className="w-4 h-4 text-blue-400 flex-shrink-0" />
                           <p className="font-medium text-white truncate">
-                            {track.track_name || 'Unknown Track'}
+                            {track.track_name || 'Ukjent låt'}
                           </p>
                         </div>
                         <div className="flex items-center space-x-4 text-sm text-gray-400">
                           <div className="flex items-center space-x-1">
                             <User className="w-3 h-3" />
                             <span className="truncate">
-                              {track.artist_names || 'Unknown Artist'}
+                              {track.artist_names || 'Ukjent artist'}
                             </span>
                           </div>
                           <div className="flex items-center space-x-1">
                             <Disc className="w-3 h-3" />
                             <span className="truncate">
-                              {track.album_name || 'Unknown Album'}
+                              {track.album_name || 'Ukjent album'}
                             </span>
                           </div>
                         </div>

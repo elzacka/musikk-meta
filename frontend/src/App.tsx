@@ -143,13 +143,13 @@ function App() {
       {hasGoogleSheets ? (
         <div className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-b border-green-500/30 p-3 text-center">
           <p className="text-sm text-green-200">
-            ✨ <strong>Live data</strong> - Via Google Sheets API.
+            ✨ <strong>Live data</strong> - via Google Sheets API.
           </p>
         </div>
       ) : (
         <div className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border-b border-yellow-500/30 p-3 text-center">
           <p className="text-sm text-yellow-200">
-            🔧 <strong>Debug Mode</strong> - API Key: {import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY ? `✅ SET (${import.meta.env.VITE_GOOGLE_SHEETS_API_KEY.substring(0, 6)}...)` : '❌ MISSING'}, Sheet ID: {import.meta.env?.VITE_GOOGLE_SHEET_ID ? `✅ SET (${import.meta.env.VITE_GOOGLE_SHEET_ID.substring(0, 6)}...)` : '❌ MISSING'}, Using: {hasGoogleSheets ? 'Google Sheets' : 'Sample Data'}
+            🔧 <strong>Debug-modus</strong> - API-nøkkel: {import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY ? `✅ SATT (${import.meta.env.VITE_GOOGLE_SHEETS_API_KEY.substring(0, 6)}...)` : '❌ MANGLER'}, ark-ID: {import.meta.env?.VITE_GOOGLE_SHEET_ID ? `✅ SATT (${import.meta.env.VITE_GOOGLE_SHEET_ID.substring(0, 6)}...)` : '❌ MANGLER'}, bruker: {hasGoogleSheets ? 'Google Sheets' : 'eksempeldata'}
           </p>
         </div>
       )}
@@ -175,7 +175,7 @@ function App() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <Input
                 type="text"
-                placeholder="Search for tracks, artists, albums..."
+                placeholder="Søk etter låter, artister, album..."
                 className="pl-10 pr-16 h-12 bg-gray-900/50 border-gray-700 text-white placeholder-gray-400 focus:border-blue-500"
                 value={localQuery}
                 onChange={(e) => setLocalQuery(e.target.value)}
@@ -189,7 +189,7 @@ function App() {
               </button>
             </div>
             <Button onClick={handleSearch} size="lg" className="h-12">
-              {loading ? <LoadingSpinner size="sm" text="" /> : 'Search'}
+              {loading ? <LoadingSpinner size="sm" text="" /> : 'Søk'}
             </Button>
             
             <Dialog>
@@ -203,33 +203,33 @@ function App() {
                 <DialogHeader>
                   <DialogTitle>Hva betyr disse dataene?</DialogTitle>
                   <DialogDescription>
-                    Learn what these audio features mean:
+                    Lær hva disse lydegenskapene betyr:
                   </DialogDescription>
                 </DialogHeader>
                 <ScrollArea className="h-96">
                   <div className="space-y-4">
                     <div>
-                      <h4 className="font-semibold text-white">Popularity</h4>
+                      <h4 className="font-semibold text-white">Popularitet</h4>
                       <p className="text-sm text-gray-400">
-                        How popular the track is (0-100). Higher numbers mean more people are listening to it.
+                        Hvor populær låten er (0-100). Høyere tall betyr at flere lytter til den.
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white">Danceability</h4>
+                      <h4 className="font-semibold text-white">Dansebarhet</h4>
                       <p className="text-sm text-gray-400">
-                        How suitable the track is for dancing (0.0-1.0). Higher values mean more danceable.
+                        Hvor egnet låten er for dans (0,0-1,0). Høyere verdier betyr mer dansbar.
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white">Energy</h4>
+                      <h4 className="font-semibold text-white">Energi</h4>
                       <p className="text-sm text-gray-400">
-                        Intensity and power of the track (0.0-1.0). Higher values feel more energetic.
+                        Intensitet og kraft i låten (0,0-1,0). Høyere verdier føles mer energiske.
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white">Valence</h4>
+                      <h4 className="font-semibold text-white">Valens</h4>
                       <p className="text-sm text-gray-400">
-                        Musical positivity (0.0-1.0). Higher values sound more positive/happy.
+                        Musikalsk positivitet (0,0-1,0). Høyere verdier låter mer positive/glade.
                       </p>
                     </div>
                   </div>
