@@ -218,7 +218,6 @@ function App() {
                         Forteller deg om teksten inneholder banning eller annet språk som kan fornærme bestemødre. true = ja, false = nei – eller at ingen gadd å sjekke.
                       </p>
                     </div>
-                    </div>
                     <div>
                       <h4 className="font-semibold text-white">Dansbar</h4>
                       <p className="text-sm text-gray-400">
