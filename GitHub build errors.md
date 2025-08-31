@@ -1,12 +1,12 @@
 Run cd frontend && yarn build:gh
 vite v5.4.19 building for production...
 transforming...
-✓ 61 modules transformed.
-x Build failed in 709ms
+✓ 56 modules transformed.
+x Build failed in 374ms
 error during build:
 [vite:esbuild] Transform failed with 4 errors:
 /home/runner/work/musikk-meta/musikk-meta/frontend/src/App.tsx:322:10: ERROR: Unexpected closing "header" tag does not match opening "div" tag
-/home/runner/work/musikk-meta/musikk-meta/frontend/src/App.tsx:338:8: ERROR: Unexpected closing "div" tag does not match opening "header" tag
+/home/runner/work/musikk-meta/musikk-meta/frontend/src/App.tsx:360:8: ERROR: Unexpected closing "div" tag does not match opening "header" tag
 /home/runner/work/musikk-meta/musikk-meta/frontend/src/App.tsx:363:0: ERROR: The character "}" is not valid inside a JSX element
 /home/runner/work/musikk-meta/musikk-meta/frontend/src/App.tsx:366:0: ERROR: Unexpected end of file before a closing "div" tag
 file: /home/runner/work/musikk-meta/musikk-meta/frontend/src/App.tsx:322:10
@@ -20,12 +20,12 @@ Unexpected closing "header" tag does not match opening "div" tag
 324|          {/* Main Content */}
 
 Unexpected closing "div" tag does not match opening "header" tag
-336|            </ErrorBoundary>
-337|          </main>
-338|        </div>
+358|            />
+359|          </Suspense>
+360|        </div>
    |          ^
-339|  
-340|        {/* Command Palette */}
+361|      </div>
+362|    )
 
 The character "}" is not valid inside a JSX element
 361|      </div>

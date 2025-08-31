@@ -318,6 +318,7 @@ function App() {
                 </ScrollArea>
               </DialogContent>
             </Dialog>
+            </div>
           </div>
         </header>
 
