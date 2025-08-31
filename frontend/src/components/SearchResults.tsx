@@ -54,7 +54,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
             <div>• <span className="text-blue-300">"Blinding Lights"</span> - populære låter</div>
             <div>• <span className="text-purple-300">"Ed Sheeran"</span> - artistnavn</div>
             <div>• <span className="text-green-300">"pop"</span> - musikksjangre</div>
-            <div>• Eller prøv <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">⌘K</kbd> kommandopaletten</div>
+            <div>• Eller prøv <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">⌘K</kbd> / <kbd className="px-2 py-1 bg-gray-700 rounded text-xs">Ctrl+K</kbd> kommandopaletten</div>
           </div>
         </div>
       </div>
@@ -95,98 +95,95 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
                   </div>
                 </div>
 
-                {/* Basic Info */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                  <div className="text-center p-2 bg-gray-800/30 rounded">
+                {/* All Audio Features with Consistent Design */}
+                <div className="grid grid-cols-3 sm:grid-cols-5 gap-3 mb-4">
+                  {/* Basic Track Info */}
+                  <div className="text-center p-3 bg-gray-800/30 rounded-lg">
                     <div className="flex items-center justify-center gap-1 mb-1">
                       <TrendingUp className="h-4 w-4 text-yellow-400" />
-                      <span className="text-xs text-gray-400">Popularitet</span>
+                      <span className="text-xs font-medium text-gray-400">Popularitet</span>
                     </div>
-                    <span className="text-white font-medium">
+                    <span className="text-white font-semibold text-sm">
                       {track.popularity || '--'}
                     </span>
                   </div>
                   
-                  <div className="text-center p-2 bg-gray-800/30 rounded">
+                  <div className="text-center p-3 bg-gray-800/30 rounded-lg">
                     <div className="flex items-center justify-center gap-1 mb-1">
                       <Clock className="h-4 w-4 text-blue-400" />
-                      <span className="text-xs text-gray-400">Varighet</span>
+                      <span className="text-xs font-medium text-gray-400">Varighet</span>
                     </div>
-                    <span className="text-white font-medium">
+                    <span className="text-white font-semibold text-sm">
                       {formatDuration(track.duration_ms)}
                     </span>
                   </div>
 
-                  <div className="text-center p-2 bg-gray-800/30 rounded">
-                    <span className="text-xs text-gray-400 block mb-1">Tempo</span>
-                    <span className="text-white font-medium">
+                  <div className="text-center p-3 bg-gray-800/30 rounded-lg">
+                    <span className="text-xs font-medium text-gray-400 block mb-1">Tempo</span>
+                    <span className="text-white font-semibold text-sm">
                       {formatTempo(track.tempo)}
                     </span>
                   </div>
 
-                  <div className="text-center p-2 bg-gray-800/30 rounded">
-                    <span className="text-xs text-gray-400 block mb-1">Eksplisitt</span>
-                    <span className="text-white font-medium">
+                  <div className="text-center p-3 bg-gray-800/30 rounded-lg">
+                    <span className="text-xs font-medium text-gray-400 block mb-1">Eksplisitt</span>
+                    <span className="text-white font-semibold text-sm">
                       {track.explicit ? '🔞' : '✓'}
+                    </span>
+                  </div>
+
+                  <div className="text-center p-3 bg-gray-800/30 rounded-lg">
+                    <span className="text-xs font-medium text-gray-400 block mb-1">Sjanger</span>
+                    <span className="text-white font-semibold text-sm truncate" title={track.genres || '--'}>
+                      {track.genres || '--'}
                     </span>
                   </div>
                 </div>
 
                 {/* Audio Features */}
-                <div>
-                  <h4 className="text-sm font-medium text-gray-300 mb-2">Lydegenskaper</h4>
-                  <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-                    <div className="text-center p-2 bg-blue-900/20 rounded">
-                      <span className="text-xs text-blue-300 block mb-1">Dans</span>
-                      <span className="text-white font-medium text-sm">
-                        {formatAudioFeature(track.danceability)}
-                      </span>
-                    </div>
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
+                  <div className="text-center p-3 bg-blue-900/20 rounded-lg">
+                    <span className="text-xs font-medium text-blue-300 block mb-1">Dans</span>
+                    <span className="text-white font-semibold text-sm">
+                      {formatAudioFeature(track.danceability)}
+                    </span>
+                  </div>
 
-                    <div className="text-center p-2 bg-red-900/20 rounded">
-                      <span className="text-xs text-red-300 block mb-1">Energi</span>
-                      <span className="text-white font-medium text-sm">
-                        {formatAudioFeature(track.energy)}
-                      </span>
-                    </div>
+                  <div className="text-center p-3 bg-red-900/20 rounded-lg">
+                    <span className="text-xs font-medium text-red-300 block mb-1">Energi</span>
+                    <span className="text-white font-semibold text-sm">
+                      {formatAudioFeature(track.energy)}
+                    </span>
+                  </div>
 
-                    <div className="text-center p-2 bg-green-900/20 rounded">
-                      <span className="text-xs text-green-300 block mb-1">Valens</span>
-                      <span className="text-white font-medium text-sm">
-                        {formatAudioFeature(track.valence)}
-                      </span>
-                    </div>
+                  <div className="text-center p-3 bg-green-900/20 rounded-lg">
+                    <span className="text-xs font-medium text-green-300 block mb-1">Valens</span>
+                    <span className="text-white font-semibold text-sm">
+                      {formatAudioFeature(track.valence)}
+                    </span>
+                  </div>
 
-                    <div className="text-center p-2 bg-purple-900/20 rounded">
-                      <span className="text-xs text-purple-300 block mb-1">Akustisk</span>
-                      <span className="text-white font-medium text-sm">
-                        {formatAudioFeature(track.acousticness)}
-                      </span>
-                    </div>
+                  <div className="text-center p-3 bg-purple-900/20 rounded-lg">
+                    <span className="text-xs font-medium text-purple-300 block mb-1">Akustisk</span>
+                    <span className="text-white font-semibold text-sm">
+                      {formatAudioFeature(track.acousticness)}
+                    </span>
+                  </div>
 
-                    <div className="text-center p-2 bg-orange-900/20 rounded">
-                      <span className="text-xs text-orange-300 block mb-1">Live</span>
-                      <span className="text-white font-medium text-sm">
-                        {formatAudioFeature(track.liveness)}
-                      </span>
-                    </div>
+                  <div className="text-center p-3 bg-orange-900/20 rounded-lg">
+                    <span className="text-xs font-medium text-orange-300 block mb-1">Live</span>
+                    <span className="text-white font-semibold text-sm">
+                      {formatAudioFeature(track.liveness)}
+                    </span>
+                  </div>
 
-                    <div className="text-center p-2 bg-gray-700/30 rounded">
-                      <span className="text-xs text-gray-300 block mb-1">Lydstyrke</span>
-                      <span className="text-white font-medium text-sm">
-                        {formatLoudness(track.loudness)}
-                      </span>
-                    </div>
+                  <div className="text-center p-3 bg-gray-700/30 rounded-lg">
+                    <span className="text-xs font-medium text-gray-300 block mb-1">Lydstyrke</span>
+                    <span className="text-white font-semibold text-sm">
+                      {formatLoudness(track.loudness)}
+                    </span>
                   </div>
                 </div>
-
-                {/* Genres */}
-                {track.genres && (
-                  <div className="mt-3">
-                    <span className="text-xs text-gray-400">Genres: </span>
-                    <span className="text-gray-300 text-sm">{track.genres}</span>
-                  </div>
-                )}
               </div>
             </div>
           </div>

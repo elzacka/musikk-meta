@@ -124,7 +124,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
             <input
               ref={inputRef}
               type="text"
-              placeholder="Søk etter låter, artister, album..."
+              placeholder="Søk etter låter, artister, album... (⌘K / Ctrl+K)"
               className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none text-lg"
               value={query}
               onChange={handleQueryChange}
@@ -218,7 +218,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
                 <span>Esc Close</span>
               </div>
               <div>
-                Cmd+K to open
+                ⌘K / Ctrl+K to open
               </div>
             </div>
           </div>

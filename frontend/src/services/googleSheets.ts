@@ -31,9 +31,11 @@ export async function fetchMusicTracks(): Promise<Track[]> {
     const data: SheetData = await response.json();
     console.log(`📋 Loaded ${data.values?.length - 1 || 0} tracks from Google Sheets`);
     
-    // Debug: Check genre mapping for first track
+    // Debug: Check data mapping for first track
     if (data.values && data.values.length > 1) {
-      console.log('🎭 Genre Debug - First track:', {
+      console.log('🎭 Data Debug - First track:', {
+        'Column 8 (Tempo?)': data.values[1][8],
+        'Column 9': data.values[1][9], 
         'Column 10 (Genres)': data.values[1][10],
         'Track Name': data.values[1][1]
       });
@@ -66,7 +68,7 @@ export async function fetchMusicTracks(): Promise<Track[]> {
       instrumentalness: parseFloat(row[19]) || null, // Column 19: "Instrumentalness"
       liveness: parseFloat(row[20]) || null,        // Column 20: "Liveness"
       valence: parseFloat(row[21]) || null,         // Column 21: "Valence"
-      tempo: null, // Not available in current spreadsheet structure
+      tempo: parseFloat(row[8]) || null,            // Column 8: "Tempo" (BPM)
     }));
     
     // Filter out empty rows (tracks without a name)
