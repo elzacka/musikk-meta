@@ -200,9 +200,6 @@ function App() {
                 </Button>
               </DialogTrigger>
               <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>Hvordan bruke MusikkMeta</DialogTitle>
-                </DialogHeader>
                 <ScrollArea className="h-96">
                   <div className="space-y-6">
                     {/* Getting Started Section */}
@@ -213,21 +210,21 @@ function App() {
                       </p>
                       
                       <div className="bg-gray-900/50 rounded-lg p-4">
-                        <h5 className="text-sm font-medium text-gray-300 mb-3">Prøv å søke etter noe veldig spesifikt som:</h5>
+                        <h5 className="font-medium text-white">Prøv å søke etter noe spesifikt som:</h5>
                         <div className="space-y-2 text-sm">
                           <div className="flex items-center gap-2">
                             <span className="text-gray-400">•</span>
-                            <span className="text-blue-300 font-medium">"Krølla 50-lapp Y'all"</span>
-                            <span className="text-gray-500">- en låt fra Oslos fineste borgere</span>
+                            <span className="text-blue-300 font-medium">Krølla 50-lapp Y'all</span>
+                            <span className="text-gray-500">- En låt fra Oslos fineste borgere</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="text-gray-400">•</span>
-                            <span className="text-purple-300 font-medium">"Shatoo"</span>
+                            <span className="text-purple-300 font-medium">Shatoo</span>
                             <span className="text-gray-500">- Norsk boyband fra 80-tallet med smør i stemmen</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="text-gray-400">•</span>
-                            <span className="text-green-300 font-medium">"madchester"</span>
+                            <span className="text-green-300 font-medium">Madchester</span>
                             <span className="text-gray-500">- En mer presis musikksjanger en den store sekkeposten "pop"</span>
                           </div>
                         </div>
