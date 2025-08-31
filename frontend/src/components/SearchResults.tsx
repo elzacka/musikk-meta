@@ -135,7 +135,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
                 {/* Audio Features */}
                 <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                   <div className="text-center p-3 bg-blue-900/20 rounded-lg flex flex-col justify-center items-center">
-                    <span className="text-xs font-medium text-blue-300 mb-2">Dans</span>
+                    <span className="text-xs font-medium text-blue-300 mb-2">Dansbar</span>
                     <span className="text-white font-semibold text-sm">
                       {formatAudioFeature(track.danceability)}
                     </span>
