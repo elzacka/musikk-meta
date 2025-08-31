@@ -165,7 +165,7 @@ function App() {
               <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 MusikkMeta
               </h1>
-              <p className="text-gray-400 mt-1">Oppdag lydens DNA</p>
+              <p className="text-gray-400 mt-1">Oppdag musikkens DNA</p>
             </div>
           </div>
 
@@ -215,7 +215,7 @@ function App() {
                     <div>
                       <h4 className="font-semibold text-white">Eksplisitt</h4>
                       <p className="text-sm text-gray-400">
-                        Forteller deg om teksten inneholder banning eller annet språk som kan fornærme bestemødre. true = ja, false = nei – eller at ingen gadd å sjekke.
+                        Forteller deg om teksten inneholder banning eller annet språk som kan fornærme bestemødre. Ja = snill som et lam, nei = Huffameg (eller at ingen gadd å sjekke).
                       </p>
                     </div>
                     <div>
