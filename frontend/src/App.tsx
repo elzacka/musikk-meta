@@ -166,10 +166,6 @@ function App() {
                 MusikkMeta
               </h1>
               <p className="text-gray-400 mt-1">Oppdag lydens DNA</p>
-              <p className="text-xs text-gray-600 mt-1">Build: 4cda942 | Env: {hasGoogleSheets ? 'PROD' : 'DEMO'}</p>
-              <div className="bg-red-500 text-white p-2 rounded mt-2 text-sm font-bold">
-                🚨 DEBUG TEST - API Key: {import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY || 'UNDEFINED'}, Sheet ID: {import.meta.env?.VITE_GOOGLE_SHEET_ID || 'UNDEFINED'}
-              </div>
             </div>
           </div>
 
