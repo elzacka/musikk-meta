@@ -35,6 +35,13 @@ export async function fetchMusicTracks(): Promise<Track[]> {
       firstRow: data.values?.[0],
       sampleRows: data.values?.slice(1, 3)
     });
+
+    // Debug: Log column headers and first few data rows
+    if (data.values && data.values.length > 0) {
+      console.log('🔍 Column Headers:', data.values[0]);
+      console.log('🔍 First Data Row:', data.values[1]);
+      console.log('🔍 Second Data Row:', data.values[2]);
+    }
     
     if (!data.values || data.values.length <= 1) {
       return [];
