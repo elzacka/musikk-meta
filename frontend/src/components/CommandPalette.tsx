@@ -28,17 +28,35 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
     if (!query.trim()) return tracks.slice(0, 10)
     
     const searchTerm = query.toLowerCase()
-    return tracks.filter(track => 
+    const filtered = tracks.filter(track => 
       track.track_name?.toLowerCase().includes(searchTerm) ||
       track.artist_names?.toLowerCase().includes(searchTerm) ||
       track.album_name?.toLowerCase().includes(searchTerm)
-    ).slice(0, 10)
+    ).slice(0, 9) // Leave space for "Search in database" option
+    
+    return filtered
   }, [query, tracks])
+
+  // Combined results with search option when there's a query
+  const displayResults = useMemo(() => {
+    if (!query.trim()) return filteredTracks
+    
+    // Add "Search in database" option at the top
+    const searchOption = {
+      id: 'search-database',
+      track_name: `Søk etter "${query}" i databasen`,
+      artist_names: 'Trykk Enter eller klikk for å søke',
+      album_name: '',
+      isSearchOption: true
+    }
+    
+    return [searchOption as any, ...filteredTracks]
+  }, [query, filteredTracks])
 
   // Reset selection when results change
   useEffect(() => {
     setSelectedIndex(0)
-  }, [filteredTracks])
+  }, [displayResults])
 
   // Focus input when opened
   useEffect(() => {
@@ -56,20 +74,27 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
         case 'ArrowDown':
           e.preventDefault()
           setSelectedIndex(prev => 
-            prev < filteredTracks.length - 1 ? prev + 1 : 0
+            prev < displayResults.length - 1 ? prev + 1 : 0
           )
           break
         case 'ArrowUp':
           e.preventDefault()
           setSelectedIndex(prev => 
-            prev > 0 ? prev - 1 : filteredTracks.length - 1
+            prev > 0 ? prev - 1 : displayResults.length - 1
           )
           break
         case 'Enter':
           e.preventDefault()
-          if (filteredTracks[selectedIndex]) {
-            handleTrackSelect(filteredTracks[selectedIndex])
+          const selectedItem = displayResults[selectedIndex]
+          if (selectedItem?.isSearchOption) {
+            // User selected "Search in database" option
+            onSearch(query)
+            onClose()
+          } else if (selectedItem && !selectedItem.isSearchOption) {
+            // User selected a track
+            handleTrackSelect(selectedItem as Track)
           } else if (query.trim()) {
+            // Fallback: search if no selection but there's a query
             onSearch(query)
             onClose()
           }
@@ -83,7 +108,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, selectedIndex, filteredTracks, query, onSearch, onClose])
+  }, [isOpen, selectedIndex, displayResults, query, onSearch, onClose])
 
   // Scroll selected item into view
   useEffect(() => {
@@ -142,66 +167,76 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
             ref={listRef}
             className="max-h-96 overflow-y-auto"
           >
-            {filteredTracks.length === 0 ? (
+            {displayResults.length === 0 ? (
               <div className="px-4 py-8 text-center text-gray-400">
-                {query.trim() ? (
-                  <div>
-                    <Music className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p>Ingen resultater for "{query}"</p>
-                    <p className="text-sm mt-1">Trykk Enter for å søke i databasen</p>
-                  </div>
-                ) : (
-                  <div>
-                    <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
-                    <p>Begynn å skrive for å søke...</p>
-                  </div>
-                )}
+                <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                <p>Begynn å skrive for å søke...</p>
               </div>
             ) : (
               <div className="py-2">
-                {filteredTracks.map((track, index) => (
+                {displayResults.map((item, index) => (
                   <button
-                    key={track.id}
+                    key={item.id}
                     className={`w-full px-4 py-3 text-left hover:bg-gray-800/50 transition-colors ${
                       index === selectedIndex ? 'bg-blue-600/30 border-l-2 border-blue-500' : ''
-                    }`}
-                    onClick={() => handleTrackSelect(track)}
+                    } ${item.isSearchOption ? 'bg-gray-800/30' : ''}`}
+                    onClick={() => {
+                      if (item.isSearchOption) {
+                        onSearch(query)
+                        onClose()
+                      } else {
+                        handleTrackSelect(item as Track)
+                      }
+                    }}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-2 mb-1">
-                          <Music className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                          {item.isSearchOption ? (
+                            <Search className="w-4 h-4 text-green-400 flex-shrink-0" />
+                          ) : (
+                            <Music className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                          )}
                           <p className="font-medium text-white truncate">
-                            {track.track_name || 'Ukjent låt'}
+                            {item.track_name || 'Ukjent låt'}
                           </p>
                         </div>
-                        <div className="flex items-center space-x-4 text-sm text-gray-400">
-                          <div className="flex items-center space-x-1">
-                            <User className="w-3 h-3" />
-                            <span className="truncate">
-                              {track.artist_names || 'Ukjent artist'}
-                            </span>
+                        {!item.isSearchOption && (
+                          <div className="flex items-center space-x-4 text-sm text-gray-400">
+                            <div className="flex items-center space-x-1">
+                              <User className="w-3 h-3" />
+                              <span className="truncate">
+                                {item.artist_names || 'Ukjent artist'}
+                              </span>
+                            </div>
+                            <div className="flex items-center space-x-1">
+                              <Disc className="w-3 h-3" />
+                              <span className="truncate">
+                                {item.album_name || 'Ukjent album'}
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center space-x-1">
-                            <Disc className="w-3 h-3" />
-                            <span className="truncate">
-                              {track.album_name || 'Ukjent album'}
-                            </span>
-                          </div>
+                        )}
+                        {item.isSearchOption && (
+                          <p className="text-sm text-gray-400 truncate">
+                            {item.artist_names}
+                          </p>
+                        )}
+                      </div>
+                      {!item.isSearchOption && (
+                        <div className="ml-4 flex-shrink-0 text-right">
+                          {item.popularity && (
+                            <div className="text-xs text-gray-400 mb-1">
+                              ★ {item.popularity}
+                            </div>
+                          )}
+                          {item.duration_ms && (
+                            <div className="text-xs text-gray-500">
+                              {formatDuration(item.duration_ms)}
+                            </div>
+                          )}
                         </div>
-                      </div>
-                      <div className="ml-4 flex-shrink-0 text-right">
-                        {track.popularity && (
-                          <div className="text-xs text-gray-400 mb-1">
-                            ★ {track.popularity}
-                          </div>
-                        )}
-                        {track.duration_ms && (
-                          <div className="text-xs text-gray-500">
-                            {formatDuration(track.duration_ms)}
-                          </div>
-                        )}
-                      </div>
+                      )}
                     </div>
                   </button>
                 ))}
