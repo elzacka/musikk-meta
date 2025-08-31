@@ -1,12 +1,11 @@
 # MusikkMeta 🎵
 
-En web-applikasjon for å utforske og analysere musikkmeta-data med detaljerte lydegenskaper fra Spotify.
+En web-applikasjon for å utforske og analysere musikkens metadata med detaljerte lydegenskaper fra Spotify.
 
 ## Demo
 
 🔗 **[Se live demo](https://elzacka.github.io/musikk-meta)**
 
-*Demo-versjonen kjører med eksempeldata. Den fulle versjonen har tilgang til en omfattende database med musikkspor.*
 
 ## Funksjoner
 
@@ -33,61 +32,6 @@ En web-applikasjon for å utforske og analysere musikkmeta-data med detaljerte l
 - **FastAPI** Python server
 - **PostgreSQL** database (Neon)
 - **asyncpg** for database-tilkobling
-- **Databutton** deployment platform
-
-## Installasjon og Utvikling
-
-### Forutsetninger
-- Node.js 18+
-- Yarn pakkemanager
-
-### Lokalt oppsett
-
-1. **Klon repository**
-   ```bash
-   git clone https://github.com/elzacka/musikk-meta.git
-   cd musikk-meta
-   ```
-
-2. **Installer avhengigheter**
-   ```bash
-   make install
-   # eller
-   cd frontend && yarn install
-   cd ../backend && ./install.sh
-   ```
-
-3. **Start utviklingsservere**
-   ```bash
-   # Terminal 1: Backend
-   make run-backend
-   
-   # Terminal 2: Frontend
-   make run-frontend
-   ```
-
-4. **Åpne applikasjonen**
-   - Frontend: http://localhost:5173
-   - Backend API: http://localhost:8000
-
-## Deployment
-
-### GitHub Pages (Statisk demo)
-
-Automatisk deployment via GitHub Actions når du pusher til `main` branch:
-
-```bash
-git add .
-git commit -m "Deploy to GitHub Pages"
-git push origin main
-```
-
-### Manuell build for GitHub Pages
-
-```bash
-cd frontend
-yarn build:gh
-```
 
 ## Datastruktur
 
@@ -121,14 +65,6 @@ interface Track {
   mode: number;             // 0 = minor, 1 = major
 }
 ```
-
-## Bidrag
-
-1. Fork repository
-2. Lag en feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit endringene (`git commit -m 'Add amazing feature'`)
-4. Push til branch (`git push origin feature/amazing-feature`)
-5. Åpne en Pull Request
 
 ## Lisens
 
