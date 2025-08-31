@@ -33,10 +33,11 @@ export async function fetchMusicTracks(): Promise<Track[]> {
     
     // Debug: Check tempo mapping for first track 
     if (data.values && data.values.length > 1) {
-      console.log('🎵 Tempo Debug - Column 23:', {
+      console.log('🎵 Tempo Debug - Column W (22):', {
         'Track Name (Col 1)': data.values[1][1],
-        'Col 23 (Tempo)': data.values[1][23],
-        'Tempo parsed': parseFloat(data.values[1][23]) || null
+        'Col W (22) Tempo': data.values[1][22],
+        'Col X (23) Time Signature': data.values[1][23],
+        'Tempo parsed': parseFloat(data.values[1][22]) || null
       });
     }
     
@@ -67,7 +68,7 @@ export async function fetchMusicTracks(): Promise<Track[]> {
       instrumentalness: parseFloat(row[19]) || null, // Column 19: "Instrumentalness"
       liveness: parseFloat(row[20]) || null,        // Column 20: "Liveness"
       valence: parseFloat(row[21]) || null,         // Column 21: "Valence"
-      tempo: parseFloat(row[23]) || null,           // Column 23: "Tempo" (BPM)
+      tempo: parseFloat(row[22]) || null,           // Column W (22): "Tempo" (BPM)
     }));
     
     // Filter out empty rows (tracks without a name)
