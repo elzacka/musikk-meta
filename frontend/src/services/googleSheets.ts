@@ -31,6 +31,14 @@ export async function fetchMusicTracks(): Promise<Track[]> {
     const data: SheetData = await response.json();
     console.log(`📋 Loaded ${data.values?.length - 1 || 0} tracks from Google Sheets`);
     
+    // Debug: Check genre mapping for first track
+    if (data.values && data.values.length > 1) {
+      console.log('🎭 Genre Debug - First track:', {
+        'Column 10 (Genres)': data.values[1][10],
+        'Track Name': data.values[1][1]
+      });
+    }
+    
     if (!data.values || data.values.length <= 1) {
       return [];
     }
