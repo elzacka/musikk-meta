@@ -1,9 +1,7 @@
 const CACHE_NAME = 'musikkmeta-v1';
 const STATIC_CACHE_URLS = [
   './',
-  './manifest.json',
-  './icon-192.png',
-  './icon-512.png'
+  './manifest.json'
 ];
 
 const SHEETS_API_CACHE = 'sheets-api-cache';
