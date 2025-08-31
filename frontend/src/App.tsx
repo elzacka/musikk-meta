@@ -243,6 +243,12 @@ function App() {
                       </p>
                     </div>
                     <div>
+                      <h4 className="font-semibold text-white">Instrumental</h4>
+                      <p className="text-sm text-gray-400">
+                        Måler hvor lite vokal det er. Høye verdier (nær 1.0) betyr instrumental – kanskje med litt “ooh” og “aah”. Men hvis det er snakking eller rap? Nope.
+                      </p>
+                    </div>
+                    <div>
                       <h4 className="font-semibold text-white">Live</h4>
                       <p className="text-sm text-gray-400">
                         Hvor “live” det høres ut. Høye tall betyr publikum i bakgrunnen, klapping, roping – du vet, konsertfølelse. Over 0.8 og du kan nesten kjenne svetten i rommet.
