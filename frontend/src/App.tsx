@@ -335,29 +335,29 @@ function App() {
             </Suspense>
           </ErrorBoundary>
         </main>
-      </div>
 
-      {/* Command Palette */}
-      <Suspense fallback={null}>
-        <CommandPalette
-          isOpen={isOpen}
-          onClose={close}
-          tracks={allTracks}
-          onTrackSelect={(track) => {
-            const searchTerm = `${track.artist_names} ${track.track_name}`
-            setLocalQuery(searchTerm)
-            setQuery(searchTerm)
-            performSearch(searchTerm)
-            close()
-          }}
-          onSearch={(searchQuery) => {
-            setLocalQuery(searchQuery)
-            setQuery(searchQuery)
-            performSearch(searchQuery)
-            close()
-          }}
-        />
-      </Suspense>
+        {/* Command Palette */}
+        <Suspense fallback={null}>
+          <CommandPalette
+            isOpen={isOpen}
+            onClose={close}
+            tracks={allTracks}
+            onTrackSelect={(track) => {
+              const searchTerm = `${track.artist_names} ${track.track_name}`
+              setLocalQuery(searchTerm)
+              setQuery(searchTerm)
+              performSearch(searchTerm)
+              close()
+            }}
+            onSearch={(searchQuery) => {
+              setLocalQuery(searchQuery)
+              setQuery(searchQuery)
+              performSearch(searchQuery)
+              close()
+            }}
+          />
+        </Suspense>
+      </div>
     </div>
   )
 }
