@@ -143,7 +143,7 @@ function App() {
       {hasGoogleSheets ? (
         <div className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-b border-green-500/30 p-3 text-center">
           <p className="text-sm text-green-200">
-            ✨ <strong>Live data</strong> - via Google Sheets API.
+            ✨ <strong>Live data</strong> - via Google Sheets API
           </p>
         </div>
       ) : (
@@ -176,7 +176,7 @@ function App() {
               <Input
                 type="text"
                 placeholder="Søk etter låter, artister, album... (⌘K / Ctrl+K for kommandopalett)"
-                className="pl-10 pr-20 h-12 bg-gray-900/50 border-gray-700 text-white placeholder-gray-400 focus:border-blue-500"
+                className="pl-10 pr-24 h-12 bg-gray-900/50 border-gray-700 text-white placeholder-gray-400 focus:border-blue-500"
                 value={localQuery}
                 onChange={(e) => setLocalQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -186,7 +186,7 @@ function App() {
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 px-2 py-1 text-xs text-gray-400 hover:text-white transition-colors border border-gray-600 rounded bg-gray-800/50"
                 title="Åpne kommandopalett (⌘K / Ctrl+K)"
               >
-                ⌘K
+                ⌘K / Ctrl+K
               </button>
             </div>
             <Button onClick={handleSearch} size="lg" className="h-12">
