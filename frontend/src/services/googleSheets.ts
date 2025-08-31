@@ -2,7 +2,7 @@ import type { Track, SheetData } from '../types';
 
 const SHEET_ID = import.meta.env.VITE_GOOGLE_SHEET_ID;
 const API_KEY = import.meta.env.VITE_GOOGLE_SHEETS_API_KEY;
-const RANGE = 'A:V'; // Columns A-V for all track data (22 columns)
+const RANGE = 'A:X'; // Columns A-X for all track data (24 columns including Tempo)
 
 export async function fetchMusicTracks(): Promise<Track[]> {
   try {
@@ -31,26 +31,12 @@ export async function fetchMusicTracks(): Promise<Track[]> {
     const data: SheetData = await response.json();
     console.log(`📋 Loaded ${data.values?.length - 1 || 0} tracks from Google Sheets`);
     
-    // Debug: Check data mapping for first track to find tempo column
+    // Debug: Check tempo mapping for first track 
     if (data.values && data.values.length > 1) {
-      console.log('🎵 Tempo Debug - First track columns 0-22:', {
+      console.log('🎵 Tempo Debug - Column 23:', {
         'Track Name (Col 1)': data.values[1][1],
-        'Col 0': data.values[1][0],
-        'Col 8': data.values[1][8],
-        'Col 9': data.values[1][9], 
-        'Col 10 (Genres)': data.values[1][10],
-        'Col 11': data.values[1][11],
-        'Col 12': data.values[1][12],
-        'Col 13': data.values[1][13],
-        'Col 14': data.values[1][14],
-        'Col 15': data.values[1][15],
-        'Col 16': data.values[1][16],
-        'Col 17': data.values[1][17],
-        'Col 18': data.values[1][18],
-        'Col 19': data.values[1][19],
-        'Col 20': data.values[1][20],
-        'Col 21': data.values[1][21],
-        'Col 22': data.values[1][22] || 'undefined'
+        'Col 23 (Tempo)': data.values[1][23],
+        'Tempo parsed': parseFloat(data.values[1][23]) || null
       });
     }
     
@@ -81,7 +67,7 @@ export async function fetchMusicTracks(): Promise<Track[]> {
       instrumentalness: parseFloat(row[19]) || null, // Column 19: "Instrumentalness"
       liveness: parseFloat(row[20]) || null,        // Column 20: "Liveness"
       valence: parseFloat(row[21]) || null,         // Column 21: "Valence"
-      tempo: parseFloat(row[22]) || null,           // Column 22: "Tempo" (BPM)
+      tempo: parseFloat(row[23]) || null,           // Column 23: "Tempo" (BPM)
     }));
     
     // Filter out empty rows (tracks without a name)
