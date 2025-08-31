@@ -29,54 +29,36 @@ export async function fetchMusicTracks(): Promise<Track[]> {
     }
     
     const data: SheetData = await response.json();
-    console.log('📋 Raw Google Sheets data:', {
-      hasValues: !!data.values,
-      rowCount: data.values?.length || 0,
-      firstRow: data.values?.[0],
-      sampleRows: data.values?.slice(1, 3)
-    });
-
-    // Debug: Log column headers and first few data rows
-    if (data.values && data.values.length > 0) {
-      console.log('🔍 Column Headers:', data.values[0]);
-      console.log('🔍 First Data Row:', data.values[1]);
-      console.log('🔍 Second Data Row:', data.values[2]);
-      
-      // Extra detailed logging for troubleshooting
-      console.log('🔍 Column Mapping:');
-      data.values[0].forEach((header, index) => {
-        console.log(`  Column ${index}: "${header}" = "${data.values[1]?.[index] || 'N/A'}"`);
-      });
-    }
+    console.log(`📋 Loaded ${data.values?.length - 1 || 0} tracks from Google Sheets`);
     
     if (!data.values || data.values.length <= 1) {
       return [];
     }
     
-    // Skip header row and map to Track objects
-    const tracks = data.values.slice(1).map((row): Track => ({
-      id: parseInt(row[0]) || 0,
-      track_uri: row[1] || null,
-      track_name: row[2] || null,
-      album_name: row[3] || null,
-      artist_names: row[4] || null,
-      release_date: row[5] || null,
-      duration_ms: parseInt(row[6]) || null,
-      popularity: parseInt(row[7]) || null,
-      explicit: row[8] ? row[8].toLowerCase() === 'true' : null,
-      genres: row[9] || null,
-      record_label: row[10] || null,
-      danceability: parseFloat(row[11]) || null,
-      energy: parseFloat(row[12]) || null,
-      key_mode: parseInt(row[13]) || null,
-      loudness: parseFloat(row[14]) || null,
-      mode: parseInt(row[15]) || null,
-      speechiness: parseFloat(row[16]) || null,
-      acousticness: parseFloat(row[17]) || null,
-      instrumentalness: parseFloat(row[18]) || null,
-      liveness: parseFloat(row[19]) || null,
-      valence: parseFloat(row[20]) || null,
-      tempo: parseFloat(row[21]) || null,
+    // Skip header row and map to Track objects - Updated mapping based on actual spreadsheet structure
+    const tracks = data.values.slice(1).map((row, index): Track => ({
+      id: index + 1, // Generate sequential ID since spreadsheet doesn't have ID column
+      track_uri: row[0] || null,           // Column 0: "Track URI"
+      track_name: row[1] || null,          // Column 1: "Track Name"
+      album_name: row[2] || null,          // Column 2: "Album Name"
+      artist_names: row[3] || null,        // Column 3: "Artist Name(s)"
+      release_date: row[4] || null,        // Column 4: "Release Date"
+      duration_ms: parseInt(row[5]) || null, // Column 5: "Duration (ms)"
+      popularity: parseInt(row[6]) || null,  // Column 6: "Popularity"
+      explicit: row[7] ? row[7].toLowerCase() === 'true' : null, // Column 7: "Explicit"
+      genres: row[10] || null,             // Column 10: "Genres"
+      record_label: row[11] || null,       // Column 11: "Record Label"
+      danceability: parseFloat(row[12]) || null,    // Column 12: "Danceability"
+      energy: parseFloat(row[13]) || null,          // Column 13: "Energy"
+      key_mode: parseInt(row[14]) || null,          // Column 14: "Key"
+      loudness: parseFloat(row[15]) || null,        // Column 15: "Loudness"
+      mode: parseInt(row[16]) || null,              // Column 16: "Mode"
+      speechiness: parseFloat(row[17]) || null,     // Column 17: "Speechiness"
+      acousticness: parseFloat(row[18]) || null,    // Column 18: "Acousticness"
+      instrumentalness: parseFloat(row[19]) || null, // Column 19: "Instrumentalness"
+      liveness: parseFloat(row[20]) || null,        // Column 20: "Liveness"
+      valence: parseFloat(row[21]) || null,         // Column 21: "Valence"
+      tempo: null, // Not available in current spreadsheet structure
     }));
     
     // Filter out empty rows (tracks without a name)
