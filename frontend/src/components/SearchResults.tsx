@@ -103,29 +103,29 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
                 {/* All Audio Features with Consistent Design */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
                   {/* Basic Track Info */}
-                  <div className="text-center p-3 bg-gray-800/30 rounded-lg flex flex-col justify-center items-center">
-                    <span className="text-xs font-medium text-gray-400 mb-2">Popularitet</span>
+                  <div className="text-center p-3 bg-slate-800/40 rounded-lg flex flex-col justify-center items-center">
+                    <span className="text-xs font-medium text-slate-300 mb-2">Popularitet</span>
                     <span className="text-white font-semibold text-sm">
                       {track.popularity || '--'}
                     </span>
                   </div>
                   
-                  <div className="text-center p-3 bg-gray-800/30 rounded-lg flex flex-col justify-center items-center">
-                    <span className="text-xs font-medium text-gray-400 mb-2">Varighet</span>
+                  <div className="text-center p-3 bg-slate-700/40 rounded-lg flex flex-col justify-center items-center">
+                    <span className="text-xs font-medium text-slate-300 mb-2">Varighet</span>
                     <span className="text-white font-semibold text-sm">
                       {formatDuration(track.duration_ms)}
                     </span>
                   </div>
 
-                  <div className="text-center p-3 bg-gray-800/30 rounded-lg flex flex-col justify-center items-center">
-                    <span className="text-xs font-medium text-gray-400 mb-2">Tempo</span>
+                  <div className="text-center p-3 bg-slate-600/40 rounded-lg flex flex-col justify-center items-center">
+                    <span className="text-xs font-medium text-slate-300 mb-2">Tempo</span>
                     <span className="text-white font-semibold text-sm">
                       {formatTempo(track.tempo)}
                     </span>
                   </div>
 
-                  <div className="text-center p-3 bg-gray-800/30 rounded-lg flex flex-col justify-center items-center">
-                    <span className="text-xs font-medium text-gray-400 mb-2">Eksplisitt</span>
+                  <div className="text-center p-3 bg-slate-800/40 rounded-lg flex flex-col justify-center items-center">
+                    <span className="text-xs font-medium text-slate-300 mb-2">Eksplisitt</span>
                     <span className="text-white font-semibold text-sm">
                       {track.explicit ? 'Ja' : 'Nei'}
                     </span>
@@ -133,44 +133,51 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, loading }) => {
                 </div>
 
                 {/* Audio Features */}
-                <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
-                  <div className="text-center p-3 bg-blue-900/20 rounded-lg flex flex-col justify-center items-center">
+                <div className="grid grid-cols-3 sm:grid-cols-7 gap-3">
+                  <div className="text-center p-3 bg-blue-800/30 rounded-lg flex flex-col justify-center items-center">
                     <span className="text-xs font-medium text-blue-300 mb-2">Dansbar</span>
                     <span className="text-white font-semibold text-sm">
                       {formatAudioFeature(track.danceability)}
                     </span>
                   </div>
 
-                  <div className="text-center p-3 bg-red-900/20 rounded-lg flex flex-col justify-center items-center">
+                  <div className="text-center p-3 bg-red-800/30 rounded-lg flex flex-col justify-center items-center">
                     <span className="text-xs font-medium text-red-300 mb-2">Energi</span>
                     <span className="text-white font-semibold text-sm">
                       {formatAudioFeature(track.energy)}
                     </span>
                   </div>
 
-                  <div className="text-center p-3 bg-green-900/20 rounded-lg flex flex-col justify-center items-center">
+                  <div className="text-center p-3 bg-green-800/30 rounded-lg flex flex-col justify-center items-center">
                     <span className="text-xs font-medium text-green-300 mb-2">Valens</span>
                     <span className="text-white font-semibold text-sm">
                       {formatAudioFeature(track.valence)}
                     </span>
                   </div>
 
-                  <div className="text-center p-3 bg-purple-900/20 rounded-lg flex flex-col justify-center items-center">
+                  <div className="text-center p-3 bg-purple-800/30 rounded-lg flex flex-col justify-center items-center">
                     <span className="text-xs font-medium text-purple-300 mb-2">Akustisk</span>
                     <span className="text-white font-semibold text-sm">
                       {formatAudioFeature(track.acousticness)}
                     </span>
                   </div>
 
-                  <div className="text-center p-3 bg-orange-900/20 rounded-lg flex flex-col justify-center items-center">
+                  <div className="text-center p-3 bg-pink-800/30 rounded-lg flex flex-col justify-center items-center">
+                    <span className="text-xs font-medium text-pink-300 mb-2">Instrumental</span>
+                    <span className="text-white font-semibold text-sm">
+                      {formatAudioFeature(track.instrumentalness)}
+                    </span>
+                  </div>
+
+                  <div className="text-center p-3 bg-orange-800/30 rounded-lg flex flex-col justify-center items-center">
                     <span className="text-xs font-medium text-orange-300 mb-2">Live</span>
                     <span className="text-white font-semibold text-sm">
                       {formatAudioFeature(track.liveness)}
                     </span>
                   </div>
 
-                  <div className="text-center p-3 bg-gray-700/30 rounded-lg flex flex-col justify-center items-center">
-                    <span className="text-xs font-medium text-gray-300 mb-2">Lydstyrke</span>
+                  <div className="text-center p-3 bg-yellow-800/30 rounded-lg flex flex-col justify-center items-center">
+                    <span className="text-xs font-medium text-yellow-300 mb-2">Lydstyrke</span>
                     <span className="text-white font-semibold text-sm">
                       {formatLoudness(track.loudness)}
                     </span>

@@ -202,35 +202,57 @@ function App() {
               </DialogTrigger>
               <DialogContent className="max-w-2xl">
                 <DialogHeader>
-                  <DialogTitle>Hva betyr disse dataene?</DialogTitle>
-                  <DialogDescription>
-                    Lær hva disse lydegenskapene betyr:
-                  </DialogDescription>
+                  <DialogTitle>Hva betyr disse lydegenskapene?</DialogTitle>
                 </DialogHeader>
                 <ScrollArea className="h-96">
                   <div className="space-y-4">
                     <div>
                       <h4 className="font-semibold text-white">Popularitet</h4>
                       <p className="text-sm text-gray-400">
-                        Hvor populær låten er (0-100). Høyere tall betyr at flere lytter til den.
+                        Hvor populær låta er – på en skala fra 0 til 100. 100 betyr "alle elsker den", 0 betyr "ingen vet at den finnes".
                       </p>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-white">Dansebarhet</h4>
+                      <h4 className="font-semibold text-white">Eksplisitt</h4>
                       <p className="text-sm text-gray-400">
-                        Hvor egnet låten er for dans (0,0-1,0). Høyere verdier betyr mer dansbar.
+                        Forteller deg om teksten inneholder banning eller annet språk som kan fornærme bestemødre. true = ja, false = nei – eller at ingen gadd å sjekke.
+                      </p>
+                    </div>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white">Dansbar</h4>
+                      <p className="text-sm text-gray-400">
+                        Hvor dansbar låta er. Basert på tempo, rytmestabilitet, beat-trykk og hvor jevnt den flyter. 0 er “sitt helt rolig”, 1 er “klar for dansegulvet”.
                       </p>
                     </div>
                     <div>
                       <h4 className="font-semibold text-white">Energi</h4>
                       <p className="text-sm text-gray-400">
-                        Intensitet og kraft i låten (0,0-1,0). Høyere verdier føles mer energiske.
+                        Måler intensitet og tempo, fra 0.0 til 1.0. Høy energi føles som death metal i et lynnedslag. Lav energi minner mer om klassisk musikk og te.
                       </p>
                     </div>
                     <div>
                       <h4 className="font-semibold text-white">Valens</h4>
                       <p className="text-sm text-gray-400">
-                        Musikalsk positivitet (0,0-1,0). Høyere verdier låter mer positive/glade.
+                        Måler hvor glad eller trist låta føles. 1.0 = solskinn, lykkepiller og sjokolade. 0.0 = regn, ekskjærester og tomt kjøleskap.
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white">Akustisk</h4>
+                      <p className="text-sm text-gray-400">
+                        Forteller hvor akustisk låta er. 1.0 betyr “hentet fra en fjellhytte med gitar og opptaker”, 0.0 betyr “laget på en laptop med ti plugins og et håp”.
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white">Live</h4>
+                      <p className="text-sm text-gray-400">
+                        Hvor “live” det høres ut. Høye tall betyr publikum i bakgrunnen, klapping, roping – du vet, konsertfølelse. Over 0.8 og du kan nesten kjenne svetten i rommet.
+                      </p>
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-white">Lydstyrke</h4>
+                      <p className="text-sm text-gray-400">
+                        Gjennomsnittlig lydnivå gjennom hele låta, målt i desibel (dB). Vanligvis mellom -60 og 0 dB. Det sier noe om hvor høyt du må skru opp før naboen banker i veggen.
                       </p>
                     </div>
                   </div>
