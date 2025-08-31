@@ -138,68 +138,92 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white">
       {/* Status Banner */}
       {hasGoogleSheets ? (
-        <div className="bg-gradient-to-r from-green-600/20 to-blue-600/20 border-b border-green-500/30 p-3 text-center">
-          <p className="text-sm text-green-200">
-            ✨ <strong>Live data</strong> - via Google Sheets API
-          </p>
+        <div className="bg-gradient-to-r from-emerald-500/10 to-blue-500/10 backdrop-blur-sm border-b border-emerald-500/20 px-6 py-3">
+          <div className="container mx-auto max-w-7xl">
+            <div className="flex items-center justify-center gap-2">
+              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+              <p className="text-sm font-medium text-emerald-200">
+                Live data fra Google Sheets API
+              </p>
+            </div>
+          </div>
         </div>
       ) : (
-        <div className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border-b border-yellow-500/30 p-3 text-center">
-          <p className="text-sm text-yellow-200">
-            🔧 <strong>Debug-modus</strong> - API-nøkkel: {import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY ? `✅ SATT (${import.meta.env.VITE_GOOGLE_SHEETS_API_KEY.substring(0, 6)}...)` : '❌ MANGLER'}, ark-ID: {import.meta.env?.VITE_GOOGLE_SHEET_ID ? `✅ SATT (${import.meta.env.VITE_GOOGLE_SHEET_ID.substring(0, 6)}...)` : '❌ MANGLER'}, bruker: {hasGoogleSheets ? 'Google Sheets' : 'eksempeldata'}
-          </p>
+        <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 backdrop-blur-sm border-b border-amber-500/20 px-6 py-3">
+          <div className="container mx-auto max-w-7xl">
+            <p className="text-sm text-center text-amber-200">
+              <span className="font-medium">Debug-modus</span> - Bruker testsystemet
+            </p>
+          </div>
         </div>
       )}
 
-      <div className="container mx-auto max-w-7xl p-6">
+      <div className="container mx-auto max-w-7xl px-6 py-12">
         {/* Header */}
-        <header className="mb-8">
-          <div className="flex items-center gap-4 mb-6">
-            <div className="h-14 w-14 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-lg flex items-center justify-center">
-              <Music className="h-8 w-8 text-white" />
+        <header className="mb-12">
+          <div className="flex items-center gap-6 mb-8">
+            <div className="relative">
+              <div className="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/10">
+                <Music className="w-8 h-8 text-blue-400" />
+              </div>
+              <div className="absolute -inset-1 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl blur opacity-60"></div>
             </div>
             <div>
-              <h1 className="text-5xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+              <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
                 MusikkMeta
               </h1>
-              <p className="text-gray-400 mt-1">Oppdag musikkens DNA</p>
+              <p className="text-gray-400 text-lg font-medium">Oppdag musikkens DNA</p>
             </div>
           </div>
 
           {/* Search */}
-          <div className="flex items-center gap-4 max-w-2xl">
+          <div className="flex flex-col sm:flex-row items-stretch gap-4 max-w-4xl">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <Input
                 type="text"
                 placeholder="Søk etter låt, artist, album og mer..."
-                className="pl-10 pr-24 h-12 bg-gray-900/50 border-gray-700 text-white placeholder-gray-400 focus:border-blue-500"
+                className="pl-12 pr-28 h-14 bg-gray-900/40 backdrop-blur-sm border-gray-700/50 text-white placeholder-gray-400 focus:border-blue-500/50 focus:bg-gray-900/60 transition-all duration-200 rounded-xl text-base"
                 value={localQuery}
                 onChange={(e) => setLocalQuery(e.target.value)}
                 onKeyDown={handleKeyDown}
               />
               <button
                 onClick={open}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 px-2 py-1 text-xs text-gray-400 hover:text-white transition-colors border border-gray-600 rounded bg-gray-800/50"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 px-3 py-1.5 text-xs font-medium text-gray-400 hover:text-white transition-colors border border-gray-600/50 rounded-lg bg-gray-800/50 backdrop-blur-sm hover:bg-gray-700/50"
                 title="Åpne kommandopalett (⌘K / Ctrl+K)"
               >
                 ⌘K / Ctrl+K
               </button>
             </div>
-            <Button onClick={handleSearch} size="lg" className="h-12">
-              {loading ? <LoadingSpinner size="sm" text="" /> : 'Søk'}
-            </Button>
-            
-            <Dialog>
-              <DialogTrigger asChild>
-                <Button variant="outline" size="lg" className="h-12">
-                  Veiledning
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
+            <div className="flex gap-3">
+              <Button 
+                onClick={handleSearch} 
+                size="lg" 
+                className="h-14 px-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border-0 rounded-xl font-medium transition-all duration-200"
+              >
+                {loading ? <LoadingSpinner size="sm" text="" /> : 'Søk'}
+              </Button>
+              
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="h-14 px-6 border-gray-700/50 bg-gray-900/40 backdrop-blur-sm hover:bg-gray-800/60 rounded-xl font-medium transition-all duration-200"
+                  >
+                    Veiledning
+                  </Button>
+                </DialogTrigger>
+              <DialogContent className="max-w-3xl bg-gray-950/95 backdrop-blur-sm border-gray-700/50">
+                <DialogHeader className="pb-6">
+                  <DialogTitle className="text-2xl font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                    Hvordan bruke MusikkMeta
+                  </DialogTitle>
+                </DialogHeader>
                 <ScrollArea className="h-96">
                   <div className="space-y-6">
                     {/* Getting Started Section */}
@@ -208,7 +232,6 @@ function App() {
                       <p className="text-sm text-gray-400 mb-4">
                         Bruk søkefeltet eller <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">⌘K</kbd> / <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">Ctrl+K</kbd> for å finne musikk og grave i detaljerte lydegenskaper.
                       </p>
-                      
                       <div className="bg-gray-900/50 rounded-lg p-4">
                         <h5 className="font-medium text-white">Prøv å søke etter noe spesifikt som:</h5>
                         <div className="space-y-2 text-sm">
