@@ -175,7 +175,7 @@ function App() {
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
               <Input
                 type="text"
-                placeholder="Søk etter låter, artister, album... (⌘K / Ctrl+K for kommandopalett)"
+                placeholder="Søk etter låt, artist, album og mer..."
                 className="pl-10 pr-24 h-12 bg-gray-900/50 border-gray-700 text-white placeholder-gray-400 focus:border-blue-500"
                 value={localQuery}
                 onChange={(e) => setLocalQuery(e.target.value)}
@@ -209,26 +209,26 @@ function App() {
                     <div>
                       <h4 className="font-semibold text-white mb-3">Kom i gang</h4>
                       <p className="text-sm text-gray-400 mb-4">
-                        Bruk søkefeltet ovenfor eller <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">⌘K</kbd> / <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">Ctrl+K</kbd> for å finne musikk og utforske detaljerte lydegenskaper.
+                        Bruk søkefeltet eller <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">⌘K</kbd> / <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">Ctrl+K</kbd> for å finne musikk og grave i detaljerte lydegenskaper.
                       </p>
                       
                       <div className="bg-gray-900/50 rounded-lg p-4">
-                        <h5 className="text-sm font-medium text-gray-300 mb-3">Prøv å søke etter:</h5>
+                        <h5 className="text-sm font-medium text-gray-300 mb-3">Prøv å søke etter noe veldig spesifikt som:</h5>
                         <div className="space-y-2 text-sm">
                           <div className="flex items-center gap-2">
                             <span className="text-gray-400">•</span>
-                            <span className="text-blue-300 font-medium">"Blinding Lights"</span>
-                            <span className="text-gray-500">- populære låter</span>
+                            <span className="text-blue-300 font-medium">"Krølla 50-lapp Y'all"</span>
+                            <span className="text-gray-500">- en låt fra Oslos fineste borgere</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="text-gray-400">•</span>
-                            <span className="text-purple-300 font-medium">"Ed Sheeran"</span>
-                            <span className="text-gray-500">- artistnavn</span>
+                            <span className="text-purple-300 font-medium">"Shatoo"</span>
+                            <span className="text-gray-500">- Norsk boyband fra 80-tallet med smør i stemmen</span>
                           </div>
                           <div className="flex items-center gap-2">
                             <span className="text-gray-400">•</span>
-                            <span className="text-green-300 font-medium">"pop"</span>
-                            <span className="text-gray-500">- musikksjangre</span>
+                            <span className="text-green-300 font-medium">"madchester"</span>
+                            <span className="text-gray-500">- En mer presis musikksjanger en den store sekkeposten "pop"</span>
                           </div>
                         </div>
                       </div>
