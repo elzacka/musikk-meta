@@ -270,55 +270,65 @@ function App() {
                         <div>
                           <h5 className="font-medium text-white">Popularitet</h5>
                           <p className="text-sm text-gray-400">
-                            Hvor populær låta er – på en skala fra 0 til 100. 100 betyr "alle elsker den", 0 betyr "ingen vet at den finnes".
+                            Hvor populær låta er – på en skala fra 0 til 100. 
+100 betyr "alle elsker den", 0 betyr "ingen vet at den finnes".
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Dansbar</h5>
                           <p className="text-sm text-gray-400">
-                            Hvor dansbar låta er. Basert på tempo, rytmestabilitet, beat-trykk og hvor jevnt den flyter. 0 er "sitt helt rolig", 100 er "klar for dansegulvet".
+                            Hvor dansbar låta er. Basert på tempo, rytmestabilitet, beat-trykk og hvor jevnt den flyter.
+100 er "klar for dansegulvet", 0 er "sitt helt rolig".
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Energi</h5>
                           <p className="text-sm text-gray-400">
-                            Måler intensitet og tempo, fra 0 til 100. Høy energi føles som death metal i et lynnedslag. Lav energi minner mer om klassisk musikk og te.
+                            Måler intensitet og tempo, fra 0 til 100.
+Høy energi føles som death metal i et lynnedslag. Lav energi minner mer om klassisk musikk og te.
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Valens</h5>
                           <p className="text-sm text-gray-400">
-                            Måler hvor glad eller trist låta føles. 100 = solskinn, lykkepiller og sjokolade. 0 = regn, ekskjærester og tomt kjøleskap.
+                            Måler hvor glad eller trist låta føles.
+100 = solskinn, lykkepiller og sjokolade. 0 = regn, ekskjærester og tomt kjøleskap.
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Akustisk</h5>
                           <p className="text-sm text-gray-400">
-                            Forteller hvor akustisk låta er. 100 betyr "hentet fra en fjellhytte med gitar og opptaker", 0 betyr "laget på en laptop med ti plugins og et håp".
+                            Forteller hvor akustisk låta er.
+100 betyr "hentet fra en fjellhytte med gitar og opptaker", 0 betyr "laget på en laptop med ti plugins og et håp".
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Instrumental</h5>
                           <p className="text-sm text-gray-400">
-                            Måler hvor lite vokal det er. Høye verdier (nær 100) betyr instrumental – kanskje med litt "ooh" og "aah". Men hvis det er snakking eller rap? Nope.
+                            Måler hvor lite vokal det er.
+Høye verdier (nær 100) betyr instrumental – kanskje med litt "ooh" og "aah". Men hvis det er snakking eller rap? Nope.
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Live</h5>
                           <p className="text-sm text-gray-400">
-                            Hvor "live" det høres ut. Høye tall betyr publikum i bakgrunnen, klapping, roping – du vet, konsertfølelse. Over 80 og du kan nesten kjenne svetten i rommet.
+                            Hvor "live" det høres ut.
+Høye tall betyr publikum i bakgrunnen, klapping, roping – du vet, konsertfølelse.
+Over 80 og du kan nesten kjenne svetten i rommet.
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Lydstyrke</h5>
                           <p className="text-sm text-gray-400">
-                            Gjennomsnittlig lydnivå gjennom hele låta, målt i desibel (dB). Vanligvis mellom -60 og 0 dB. Det sier noe om hvor høyt du må skru opp før naboen banker i veggen.
+                            Gjennomsnittlig lydnivå gjennom hele låta, målt i desibel (dB).
+Vanligvis mellom -60 og 0 dB. Det sier noe om hvor høyt du må skru opp før naboen banker i veggen.
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Eksplisitt</h5>
                           <p className="text-sm text-gray-400">
-                            Forteller deg om teksten inneholder banning eller annet språk som kan fornærme bestemødre. Ja = Pastor Eriksen får magesår. Nei = Klar for Ten Sing.
+                            Forteller deg om teksten inneholder banning eller annet språk som kan fornærme bestemødre.
+Ja = Pastor Eriksen får magesår. Nei = Klar for Ten Sing.
                           </p>
                         </div>
                       </div>
