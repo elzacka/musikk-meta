@@ -146,7 +146,7 @@ function App() {
             <div className="flex items-center justify-center gap-2">
               <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
               <p className="text-sm font-medium text-emerald-200">
-                Live data fra Google Sheets API
+                Live data fra Google Sheets API | Under utvikling
               </p>
             </div>
           </div>
