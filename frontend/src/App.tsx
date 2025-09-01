@@ -52,7 +52,7 @@ function App() {
 
   // Initialize app
   useEffect(() => {
-    document.title = "MusikkMeta - Lydens DNA"
+    document.title = "MusikkMeta - Utforsk musikkens DNA"
     loadInitialData()
   }, [])
 
@@ -175,7 +175,7 @@ function App() {
               <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
                 MusikkMeta
               </h1>
-              <p className="text-gray-400 text-lg font-medium">Oppdag musikkens DNA</p>
+              <p className="text-gray-400 text-lg font-medium">Utforsk musikkens DNA</p>
             </div>
           </div>
 
