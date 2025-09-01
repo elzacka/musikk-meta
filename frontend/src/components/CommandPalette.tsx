@@ -45,7 +45,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
     const searchOption = {
       id: 'search-database',
       track_name: `Søk etter "${query}" i databasen`,
-      artist_names: 'Trykk Enter eller klikk for å søke',
+      artist_names: filteredTracks.length === 0 ? 'Trykk Enter for å søke i hele databasen' : 'Trykk Enter eller klikk for å søke',
       album_name: '',
       isSearchOption: true
     }
@@ -149,7 +149,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
             <input
               ref={inputRef}
               type="text"
-              placeholder="Søk etter låter, artister, album... (⌘K / Ctrl+K)"
+              placeholder="Søk etter låter, artister, album..."
               className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none text-lg"
               value={query}
               onChange={handleQueryChange}
