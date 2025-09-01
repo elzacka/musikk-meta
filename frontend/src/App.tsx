@@ -89,11 +89,15 @@ function App() {
   }
 
   const performSearch = async (searchQuery: string) => {
+    console.log('🎯 performSearch called with:', searchQuery)
+    
     if (!searchQuery.trim()) {
+      console.log('❌ Empty search query, clearing tracks')
       setTracks([]) // Show no tracks when search is empty
       return
     }
 
+    console.log('🔄 Starting search...')
     setLoading(true)
     setError(null)
     
@@ -105,19 +109,24 @@ function App() {
         page_size: 50 
       })
       
+      console.log('📡 Search response status:', response.ok, response.status)
+      
       if (response.ok) {
         const data = await response.json()
+        console.log('✅ Search successful, setting tracks:', data.tracks.length)
         setTracks(data.tracks)
         console.log(`🔍 Found ${data.tracks.length} tracks for "${searchQuery}"`)
       } else {
         const errorData = await response.json()
+        console.error('❌ Search failed with response:', errorData)
         throw new Error(errorData.detail || 'Search failed')
       }
     } catch (err) {
-      console.error('Search error:', err)
+      console.error('💥 Search error:', err)
       setError(`Search failed: ${err instanceof Error ? err.message : 'Unknown error'}`)
       setTracks([])
     } finally {
+      console.log('🏁 Search completed, setting loading to false')
       setLoading(false)
     }
   }
@@ -267,37 +276,37 @@ function App() {
                         <div>
                           <h5 className="font-medium text-white">Dansbar</h5>
                           <p className="text-sm text-gray-400">
-                            Hvor dansbar låta er. Basert på tempo, rytmestabilitet, beat-trykk og hvor jevnt den flyter. 0 er "sitt helt rolig", 1 er "klar for dansegulvet".
+                            Hvor dansbar låta er. Basert på tempo, rytmestabilitet, beat-trykk og hvor jevnt den flyter. 0 er "sitt helt rolig", 100 er "klar for dansegulvet".
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Energi</h5>
                           <p className="text-sm text-gray-400">
-                            Måler intensitet og tempo, fra 0.0 til 1.0. Høy energi føles som death metal i et lynnedslag. Lav energi minner mer om klassisk musikk og te.
+                            Måler intensitet og tempo, fra 0 til 100. Høy energi føles som death metal i et lynnedslag. Lav energi minner mer om klassisk musikk og te.
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Valens</h5>
                           <p className="text-sm text-gray-400">
-                            Måler hvor glad eller trist låta føles. 1.0 = solskinn, lykkepiller og sjokolade. 0.0 = regn, ekskjærester og tomt kjøleskap.
+                            Måler hvor glad eller trist låta føles. 100 = solskinn, lykkepiller og sjokolade. 0 = regn, ekskjærester og tomt kjøleskap.
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Akustisk</h5>
                           <p className="text-sm text-gray-400">
-                            Forteller hvor akustisk låta er. 1.0 betyr "hentet fra en fjellhytte med gitar og opptaker", 0.0 betyr "laget på en laptop med ti plugins og et håp".
+                            Forteller hvor akustisk låta er. 100 betyr "hentet fra en fjellhytte med gitar og opptaker", 0 betyr "laget på en laptop med ti plugins og et håp".
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Instrumental</h5>
                           <p className="text-sm text-gray-400">
-                            Måler hvor lite vokal det er. Høye verdier (nær 1.0) betyr instrumental – kanskje med litt "ooh" og "aah". Men hvis det er snakking eller rap? Nope.
+                            Måler hvor lite vokal det er. Høye verdier (nær 100) betyr instrumental – kanskje med litt "ooh" og "aah". Men hvis det er snakking eller rap? Nope.
                           </p>
                         </div>
                         <div>
                           <h5 className="font-medium text-white">Live</h5>
                           <p className="text-sm text-gray-400">
-                            Hvor "live" det høres ut. Høye tall betyr publikum i bakgrunnen, klapping, roping – du vet, konsertfølelse. Over 0.8 og du kan nesten kjenne svetten i rommet.
+                            Hvor "live" det høres ut. Høye tall betyr publikum i bakgrunnen, klapping, roping – du vet, konsertfølelse. Over 80 og du kan nesten kjenne svetten i rommet.
                           </p>
                         </div>
                         <div>
@@ -309,7 +318,7 @@ function App() {
                         <div>
                           <h5 className="font-medium text-white">Eksplisitt</h5>
                           <p className="text-sm text-gray-400">
-                            Forteller deg om teksten inneholder banning eller annet språk som kan fornærme bestemødre. Ja = snill som et lam, nei = Huffameg (eller at ingen gadd å sjekke).
+                            Forteller deg om teksten inneholder banning eller annet språk som kan fornærme bestemødre. Ja = Pastor Eriksen får magesår. Nei = Klar for Ten Sing.
                           </p>
                         </div>
                       </div>
@@ -347,10 +356,13 @@ function App() {
               const searchTerm = `${track.artist_names} ${track.track_name}`
               setLocalQuery(searchTerm)
               setQuery(searchTerm)
-              performSearch(searchTerm)
+              // Instead of searching, directly show the selected track
+              setTracks([track])
+              console.log(`🎯 Selected track: ${track.track_name} by ${track.artist_names}`)
               close()
             }}
             onSearch={(searchQuery) => {
+              console.log('🔍 Command palette search initiated:', searchQuery)
               setLocalQuery(searchQuery)
               setQuery(searchQuery)
               performSearch(searchQuery)
