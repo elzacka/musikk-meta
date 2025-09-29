@@ -173,7 +173,7 @@ Got ideas for improvements? Create an issue or submit a pull request!
 
 ## 📄 License
 
-This project is private and belongs to elzacka.
+MIT - see LICENSE
 
 ---
 
