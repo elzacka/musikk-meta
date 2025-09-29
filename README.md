@@ -1,78 +1,78 @@
 # MusikkMeta 🎵
 
-En moderne web-applikasjon for å utforske og analysere musikkens metadata med detaljerte lydegenskaper fra Spotify. Perfekt for musikkelskere som vil forstå hva som gjør musikk til musikk.
+A web application for exploring and analyzing music metadata with detailed audio features from Spotify. Perfect for music enthusiasts who want to understand what makes music *music*.
 
 ## 🚀 Live Demo
 
-🔗 **[Se live demo](https://elzacka.github.io/musikk-meta)**
+🔗 **[View live demo](https://elzacka.github.io/musikk-meta)**
 
-## ✨ Funksjoner
+## ✨ Features
 
-- 🔍 **Avansert søk** - Finn låter etter artist, sang, album eller sjanger
-- 📊 **Spotify Audio Features** - Detaljerte analyser av musikkelementene:
-  - Danceability (dansbarhet), Energy (energi), Valence (lykkefølelse)
+- 🔍 **Advanced Search** - Find tracks by artist, song, album, or genre
+- 📊 **Spotify Audio Features** - Detailed analysis of musical elements:
+  - Danceability, Energy, Valence
   - Acousticness, Instrumentalness, Liveness
-  - Loudness, Speechiness, Tempo og toneart
-- ⌨️ **Kommandopalett** - Hurtignavigering med `⌘K` / `Ctrl+K`
-- 📱 **Responsiv design** - Fungerer perfekt på alle enheter
-- 🎨 **Glassmorphic UI** - Moderne, elegant design med bakgrunnsuskarphet
-- ⚡ **Real-time søk** - Øyeblikkelige resultater mens du skriver
-- 🎯 **Sortering og filtrering** - Arranger resultater etter alle audio features
+  - Loudness, Speechiness, Tempo, and Key
+- ⌨️ **Command Palette** - Quick navigation using `⌘K` / `Ctrl+K`
+- 📱 **Responsive Design** - Works seamlessly on all devices
+- 🎨 **Glassmorphic UI** - Modern, elegant design with background blur
+- ⚡ **Real-time Search** - Instant results as you type
+- 🎯 **Sorting and Filtering** - Sort results by any audio feature
 
-## 🛠️ Teknisk stack
+## 🛠️ Tech Stack
 
 ### Frontend
-- **React 18** med TypeScript for type-sikkerhet
-- **Vite** som lynrask build tool og dev server
+- **React 18** with TypeScript for type safety
+- **Vite** as a fast build tool and dev server
 - **Tailwind CSS** for utility-first styling
-- **Radix UI** for tilgjengelige UI-komponenter
-- **Zustand** for enkel state management
-- **React Query** for server state og caching
-- **Lucide React** for konsistente ikoner
+- **Radix UI** for accessible UI components
+- **Zustand** for simple state management
+- **React Query** for server state and caching
+- **Lucide React** for consistent icons
 
 ### Data Sources
-- **Google Sheets API** - Primær datakilde (konfigurerbar)
-- **Statiske data** - Fallback for demo og GitHub Pages
-- **Smart caching** - 5 minutters cache for optimal ytelse
+- **Google Sheets API** - Primary data source (configurable)
+- **Static Data** - Fallback for demo and GitHub Pages
+- **Smart Caching** - 5-minute cache for optimal performance
 
-### Backend (valgfritt)
+### Backend (optional)
 - **FastAPI** Python server
 - **PostgreSQL** database
 - **Firebase Authentication**
 
-## 🚀 Kom i gang
+## 🚀 Getting Started
 
-### Kjør lokalt
+### Run Locally
 
-1. **Klon repositoryet**
+1. **Clone the repository**
    ```bash
    git clone https://github.com/elzacka/musikk-meta.git
    cd musikk-meta
    ```
 
-2. **Installer avhengigheter**
+2. **Install dependencies**
    ```bash
    cd frontend
    yarn install
    ```
 
-3. **Start utviklingsserver**
+3. **Start development server**
    ```bash
    yarn dev
    ```
 
    Applikasjonen kjører nå på `http://localhost:3000`
 
-### Konfigurer Google Sheets (valgfritt)
+### Configure Google Sheets (optional)
 
-For å bruke Google Sheets som datakilde, legg til miljøvariabler:
+To use Google Sheets as a data source, add the environment variables:
 
 ```env
 VITE_GOOGLE_SHEETS_API_KEY=din_api_nøkkel
 VITE_GOOGLE_SHEET_ID=din_sheet_id
 ```
 
-### Build for produksjon
+### Build for Production
 
 ```bash
 # Standard build
@@ -82,9 +82,9 @@ yarn build
 yarn build:gh
 ```
 
-## 📊 Datastruktur
+## 📊 Data Structure
 
-Applikasjonen arbeider med omfattende musikkmeta-data:
+The application works with rich music metadata:
 
 ```typescript
 interface Track {
@@ -113,36 +113,37 @@ interface Track {
 }
 ```
 
-## 🎵 Forstå Audio Features
+## 🎵 Understanding Audio Features
 
-MusikkMeta bruker Spotifys audio features for å analysere musikk:
+MusikkMeta uses Spotify's audio features to analyze music:
 
-- **Popularity** (0-100): Hvor populær låten er globalt
-- **Danceability** (0-100%): Hvor dansbar låten er basert på tempo og rytme
-- **Energy** (0-100%): Intensitet og kraft - høy energi føles kraftfull og intens
-- **Valence** (0-100%): Lykkefølelse - høy valence = glad musikk, lav = trist
-- **Acousticness** (0-100%): Sannsynlighet for at låten er akustisk
-- **Instrumentalness** (0-100%): Hvor lite vokal det er i låten
-- **Liveness** (0-100%): Sannsynlighet for live-opptak med publikum
-- **Speechiness** (0-100%): Mengde tale/rap i låten
-- **Loudness** (dB): Gjennomsnittlig lydnivå gjennom hele låten
-- **Tempo** (BPM): Estimert tempo i beats per minutt
+- **Popularity** (0–100): How globally popular the track is
+- **Danceability** (0–100%): How suitable the track is for dancing based on tempo and rhythm
+- **Energy** (0–100%): Intensity and power – high energy feels loud and dynamic
+- **Valence** (0–100%): Positivity – high valence = happy music, low = sad music
+- **Acousticness** (0–100%): Likelihood that the track is acoustic
+- **Instrumentalness** (0–100%): Degree to which the track lacks vocals
+- **Liveness** (0–100%): Probability the track was recorded live with an audience
+- **Speechiness** (0–100%): Presence of spoken words/rap
+- **Loudness** (dB): Average volume level throughout the track
+- **Tempo** (BPM): Estimated tempo in beats per minute
 
-## 📱 Brukerveiledning
 
-### Søking
-- Skriv i søkefeltet for å finne låter etter artist, låtnavn eller album
-- Bruk `⌘K` eller `Ctrl+K` for kommandopaletten (hurtigsøk)
-- Klikk på kolonneoverskrifter for å sortere resultater
+## 📱 User Guide
 
-### Navigering
-- **Kommandopalett**: Rask navigering og søk i hele databasen
-- **Sortering**: Klikk på kolonneoverskrifter for å sortere
-- **Responsive**: Fungerer på mobil, nettbrett og desktop
+### Searching
+- Type in the search field to find tracks by artist, track name, or album
+- Use `⌘K` or `Ctrl+K` to open the command palette (quick search)
+- Click column headers to sort results
 
-## 🔧 Utviklingsinfo
+### Navigation
+- **Command Palette**: Quick navigation and database search
+- **Sorting**: Click on column headers to sort
+- **Responsive**: Works on mobile, tablet, and desktop
 
-### Prosjektstruktur
+## 🔧 Development Info
+
+### Project Structure
 ```
 musikk-meta/
 ├── frontend/           # React frontend
@@ -157,25 +158,25 @@ musikk-meta/
 ```
 
 ### Deployment
-- **GitHub Pages**: Automatisk deployment ved push til main branch
-- **Vercel/Netlify**: Enkel deployment med miljøvariabler
-- **Backend**: Kan deployes til Heroku, Railway, eller Vercel
+- **GitHub Pages**: Automatic deployment on push to main branch
+- **Vercel/Netlify**: Easy deployment with environment variables
+- **Backend**: Can be deployed to Heroku, Railway, or Vercel
 
-## 🤝 Bidrag
+## 🤝 Contributing
 
-Har du forslag til forbedringer? Opprett en issue eller pull request!
+Got ideas for improvements? Create an issue or submit a pull request!
 
-### Kjente issues
-- [ ] Optimalisering for store datasett (>10k låter)
-- [ ] Offline support med service workers
-- [ ] Eksport av søkeresultater til CSV/JSON
+### Known Issues
+- [ ] Optimization for large datasets (>10k tracks)
+- [ ] Offline support with service workers
+- [ ] Export search results to CSV/JSON
 
-## 📄 Lisens
+## 📄 License
 
-Dette prosjektet er privat og tilhører elzacka.
+This project is private and belongs to elzacka.
 
 ---
 
-*Laget med ❤️ av elzacka*
+*Made with ❤️ by elzacka*
 
-**MusikkMeta** - Utforsk musikkens DNA gjennom data
+**MusikkMeta** – Explore the DNA of music through data
