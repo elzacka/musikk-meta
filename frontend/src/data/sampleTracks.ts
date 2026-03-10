@@ -29,8 +29,7 @@ export const sampleTracks: Track[] = [
     valence: 0.862,
     tempo: 169.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
   {
     id: 2,
@@ -56,8 +55,7 @@ export const sampleTracks: Track[] = [
     valence: 0.521,
     tempo: 121.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
   {
     id: 3,
@@ -83,8 +81,7 @@ export const sampleTracks: Track[] = [
     valence: 0.748,
     tempo: 128.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
   {
     id: 4,
@@ -110,8 +107,7 @@ export const sampleTracks: Track[] = [
     valence: 0.303,
     tempo: 90.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
   {
     id: 5,
@@ -137,8 +133,7 @@ export const sampleTracks: Track[] = [
     valence: 0.631,
     tempo: 138.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
   {
     id: 6,
@@ -164,8 +159,7 @@ export const sampleTracks: Track[] = [
     valence: 0.212,
     tempo: 98.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
   {
     id: 7,
@@ -191,8 +185,7 @@ export const sampleTracks: Track[] = [
     valence: 0.722,
     tempo: 120.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
   {
     id: 8,
@@ -218,8 +211,7 @@ export const sampleTracks: Track[] = [
     valence: 0.879,
     tempo: 137.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
   {
     id: 9,
@@ -245,8 +237,7 @@ export const sampleTracks: Track[] = [
     valence: 0.382,
     tempo: 72.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
   {
     id: 10,
@@ -272,8 +263,7 @@ export const sampleTracks: Track[] = [
     valence: 0.681,
     tempo: 102.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
   {
     id: 11,
@@ -299,8 +289,7 @@ export const sampleTracks: Track[] = [
     valence: 0.671,
     tempo: 116.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
   {
     id: 12,
@@ -326,7 +315,6 @@ export const sampleTracks: Track[] = [
     valence: 0.798,
     tempo: 115.0,
     time_signature: 4,
-    added_by: 'demo',
-    added_at: '2024-01-01',
+
   },
 ];

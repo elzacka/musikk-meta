@@ -80,8 +80,6 @@ export async function fetchMusicTracks(): Promise<Track[]> {
     duration_ms:      safeParseInt(row[5]),
     popularity:       safeParseInt(row[6]),
     explicit:         safeParseBool(row[7]),
-    added_by:         row[8]  || null,
-    added_at:         row[9]  || null,
     genres:           row[10] || null,
     record_label:     row[11] || null,
     danceability:     safeParseFloat(row[12]),

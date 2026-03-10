@@ -9,8 +9,6 @@ export interface Track {
   duration_ms?: number | null;
   popularity?: number | null;
   explicit?: boolean | null;
-  added_by?: string | null;
-  added_at?: string | null;
   genres?: string | null;
   record_label?: string | null;
 

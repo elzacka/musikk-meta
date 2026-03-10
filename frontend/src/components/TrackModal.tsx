@@ -121,8 +121,6 @@ export function TrackModal({ track, onClose }: TrackModalProps) {
               <MetaRow label="Eksplisitt"  value={track.explicit == null ? '–' : track.explicit ? 'Ja' : 'Nei'} />
               <MetaRow label="Sjanger"     value={track.genres || '–'} />
               <MetaRow label="Plateselskap" value={track.record_label || '–'} />
-              {track.added_by && <MetaRow label="Lagt til av" value={track.added_by} />}
-              {track.added_at && <MetaRow label="Lagt til"    value={track.added_at} />}
             </div>
             <div>
               <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
