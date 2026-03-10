@@ -1,5 +1,5 @@
 import React, { Suspense, useEffect, useMemo, useState } from 'react'
-import { Music, Search, Info } from 'lucide-react'
+import { Search, Info } from 'lucide-react'
 import { useMusicStore } from '@/stores/musicStore'
 import { useCommandPalette } from '@/hooks/useCommandPalette'
 import { useDebounce } from '@/utils/useDebounce'
@@ -123,16 +123,11 @@ function App() {
         <header className="mb-6">
           {/* Logo + søk på samme rad */}
           <div className="flex items-center gap-4 mb-3">
-            <div className="flex items-center gap-3 shrink-0">
-              <div className="relative">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/10">
-                  <Music className="w-5 h-5 text-blue-400" />
-                </div>
-                <div className="absolute -inset-0.5 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl blur opacity-60" />
-              </div>
-              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <div className="relative shrink-0">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent animate-glow-text select-none">
                 MusikkMeta
               </h1>
+              <div className="absolute -inset-x-3 -inset-y-1 bg-gradient-to-r from-blue-500/30 via-purple-500/30 to-pink-500/30 rounded-xl blur-xl animate-glow-pulse pointer-events-none" />
             </div>
 
             {/* Søkefelt */}

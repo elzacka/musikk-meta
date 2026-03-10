@@ -95,12 +95,12 @@ function TrackDetailPanel({ track, onClose }: TrackDetailPanelProps) {
                   Lydprofil
                 </h3>
                 <div className="bg-gray-900/40 rounded-xl p-3">
-                  <ResponsiveContainer width="100%" height={240}>
-                    <RadarChart data={buildRadarData(track)} margin={{ top: 8, right: 28, bottom: 8, left: 28 }}>
+                  <ResponsiveContainer width="100%" height={280}>
+                    <RadarChart data={buildRadarData(track)} margin={{ top: 20, right: 40, bottom: 20, left: 40 }}>
                       <PolarGrid stroke="#374151" strokeOpacity={0.5} />
                       <PolarAngleAxis
                         dataKey="egenskap"
-                        tick={{ fill: '#9ca3af', fontSize: 10 }}
+                        tick={{ fill: '#9ca3af', fontSize: 11 }}
                       />
                       <Radar
                         name={track.track_name || 'Spor'}
@@ -130,33 +130,35 @@ function TrackDetailPanel({ track, onClose }: TrackDetailPanelProps) {
             )}
 
             {/* Metadata */}
-            <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+            <div className="space-y-5">
               <div>
                 <h3 className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
                   Sporinfo
                 </h3>
-                <MetaRow label="Varighet"    value={fmtDuration(track.duration_ms)} />
-                <MetaRow label="Utgitt"      value={track.release_date || '–'} />
-                <MetaRow label="Popularitet" value={track.popularity != null ? `${track.popularity} / 100` : '–'} />
-                <MetaRow label="Eksplisitt"  value={track.explicit == null ? '–' : track.explicit ? 'Ja' : 'Nei'} />
-                <MetaRow label="Sjanger"     value={track.genres || '–'} />
+                <MetaRow label="Varighet"     value={fmtDuration(track.duration_ms)} />
+                <MetaRow label="Utgitt"       value={track.release_date || '–'} />
+                <MetaRow label="Popularitet"  value={track.popularity != null ? `${track.popularity} / 100` : '–'} />
+                <MetaRow label="Eksplisitt"   value={track.explicit == null ? '–' : track.explicit ? 'Ja' : 'Nei'} />
+                <MetaRow label="Sjanger"      value={track.genres || '–'} />
                 <MetaRow label="Plateselskap" value={track.record_label || '–'} />
               </div>
               <div>
                 <h3 className="text-[11px] font-medium text-gray-500 uppercase tracking-wider mb-2">
                   Lydegenskaper
                 </h3>
-                <MetaRow label="BPM"          value={track.tempo ? `${Math.round(track.tempo)}` : '–'} />
-                <MetaRow label="Toneart"      value={fmtKey(track.key_mode, track.mode)} />
-                <MetaRow label="Takt"         value={track.time_signature ? `${track.time_signature}/4` : '–'} />
-                <MetaRow label="Lydstyrke"    value={track.loudness != null ? `${fmtFloat(track.loudness)} dB` : '–'} />
-                <MetaRow label="Dansbar"      value={fmtPct(track.danceability)} />
-                <MetaRow label="Energi"       value={fmtPct(track.energy)} />
-                <MetaRow label="Valens"       value={fmtPct(track.valence)} />
-                <MetaRow label="Akustisk"     value={fmtPct(track.acousticness)} />
-                <MetaRow label="Tale"         value={fmtPct(track.speechiness)} />
-                <MetaRow label="Instrumental" value={fmtPct(track.instrumentalness)} />
-                <MetaRow label="Live"         value={fmtPct(track.liveness)} />
+                <div className="grid grid-cols-2 gap-x-4">
+                  <MetaRow label="BPM"          value={track.tempo ? `${Math.round(track.tempo)}` : '–'} />
+                  <MetaRow label="Toneart"      value={fmtKey(track.key_mode, track.mode)} />
+                  <MetaRow label="Takt"         value={track.time_signature ? `${track.time_signature}/4` : '–'} />
+                  <MetaRow label="Lydstyrke"    value={track.loudness != null ? `${fmtFloat(track.loudness)} dB` : '–'} />
+                  <MetaRow label="Dansbar"      value={fmtPct(track.danceability)} />
+                  <MetaRow label="Energi"       value={fmtPct(track.energy)} />
+                  <MetaRow label="Valens"       value={fmtPct(track.valence)} />
+                  <MetaRow label="Akustisk"     value={fmtPct(track.acousticness)} />
+                  <MetaRow label="Tale"         value={fmtPct(track.speechiness)} />
+                  <MetaRow label="Instrumental" value={fmtPct(track.instrumentalness)} />
+                  <MetaRow label="Live"         value={fmtPct(track.liveness)} />
+                </div>
               </div>
             </div>
           </div>
