@@ -16,7 +16,7 @@ import type { Track } from '@/types/music'
 
 const SearchResults = React.lazy(() => import('@/components/SearchResults'))
 const CommandPalette = React.lazy(() => import('@/components/CommandPalette'))
-
+const TrackDetailPanel = React.lazy(() => import('@/components/TrackDetailPanel'))
 
 function App() {
   const {
@@ -25,12 +25,14 @@ function App() {
     allTracks,
     loading,
     error,
+    selectedTrack,
     filters,
     setQuery,
     setTracks,
     setAllTracks,
     setLoading,
     setError,
+    setSelectedTrack,
     setFilters,
     resetFilters,
   } = useMusicStore()
@@ -50,6 +52,17 @@ function App() {
       performSearch(debouncedQuery)
     }
   }, [debouncedQuery])
+
+  // Lukk detaljpanel med Escape
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && selectedTrack && !isOpen) {
+        setSelectedTrack(null)
+      }
+    }
+    document.addEventListener('keydown', handleEsc)
+    return () => document.removeEventListener('keydown', handleEsc)
+  }, [selectedTrack, isOpen])
 
   const loadInitialData = async () => {
     try {
@@ -105,119 +118,115 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white">
-
-      <div className="container mx-auto max-w-7xl px-6 py-12">
-        {/* Topptekst */}
-        <header className="mb-10">
-          <div className="flex items-center gap-6 mb-8">
-            <div className="relative">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm rounded-2xl flex items-center justify-center border border-white/10">
-                <Music className="w-8 h-8 text-blue-400" />
+      <div className="container mx-auto max-w-7xl px-4 sm:px-6 py-6">
+        {/* Kompakt header */}
+        <header className="mb-6">
+          {/* Logo + søk på samme rad */}
+          <div className="flex items-center gap-4 mb-3">
+            <div className="flex items-center gap-3 shrink-0">
+              <div className="relative">
+                <div className="w-10 h-10 bg-gradient-to-br from-blue-500/20 to-purple-500/20 backdrop-blur-sm rounded-xl flex items-center justify-center border border-white/10">
+                  <Music className="w-5 h-5 text-blue-400" />
+                </div>
+                <div className="absolute -inset-0.5 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-xl blur opacity-60" />
               </div>
-              <div className="absolute -inset-1 bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-2xl blur opacity-60" />
-            </div>
-            <div>
-              <h1 className="text-6xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2">
+              <h1 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
                 MusikkMeta
               </h1>
-              <p className="text-gray-400 text-lg font-medium">Utforsk musikkens DNA</p>
             </div>
-          </div>
 
-          {/* Søk */}
-          <div className="flex flex-col gap-3 max-w-4xl">
-            <div className="flex flex-col sm:flex-row items-stretch gap-3">
-              <div className="relative flex-1">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+            {/* Søkefelt */}
+            <div className="flex-1 flex items-center gap-2">
+              <div className="relative flex-1 max-w-2xl">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
                 <Input
                   type="text"
                   placeholder="Søk etter låt, artist, album, sjanger..."
-                  className="pl-12 pr-28 h-14 bg-gray-900/40 backdrop-blur-sm border-gray-700/50 text-white placeholder-gray-400 focus:border-blue-500/50 focus:bg-gray-900/60 transition-all duration-200 rounded-xl text-base"
+                  className="pl-10 pr-20 h-10 bg-gray-900/40 backdrop-blur-sm border-gray-700/50 text-white placeholder-gray-500 focus:border-blue-500/50 focus:bg-gray-900/60 transition-all duration-200 rounded-lg text-sm"
                   value={localQuery}
                   onChange={(e) => setLocalQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                 />
                 <button
                   onClick={open}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 px-3 py-1.5 text-xs font-medium text-gray-400 hover:text-white transition-colors border border-gray-600/50 rounded-lg bg-gray-800/50 backdrop-blur-sm hover:bg-gray-700/50"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 px-2 py-1 text-[10px] font-medium text-gray-500 hover:text-white transition-colors border border-gray-700/50 rounded bg-gray-800/50 hover:bg-gray-700/50"
                   title="Kommandopalett (Cmd+K / Ctrl+K)"
                 >
                   Cmd+K
                 </button>
               </div>
-              <div className="flex gap-3">
-                <Button
-                  onClick={handleSearch}
-                  size="lg"
-                  className="h-14 px-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border-0 rounded-xl font-medium transition-all duration-200"
-                >
-                  {loading ? <LoadingSpinner size="sm" text="" /> : 'Søk'}
-                </Button>
 
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant="outline"
-                      size="lg"
-                      className="h-14 px-6 border-gray-700/50 bg-gray-900/40 backdrop-blur-sm hover:bg-gray-800/60 rounded-xl font-medium transition-all duration-200"
-                    >
-                      <Info className="h-4 w-4" />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-3xl bg-gray-950/95 backdrop-blur-sm border-gray-700/50">
-                    <DialogHeader className="pb-6">
-                      <DialogTitle className="text-2xl font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                        Hvordan bruke MusikkMeta
-                      </DialogTitle>
-                      <DialogDescription className="text-gray-400">
-                        Søk i musikkdatabasen og utforsk lydegenskapene til sporene.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <ScrollArea className="h-96">
-                      <div className="space-y-6 pr-4">
-                        <div>
-                          <h4 className="font-semibold text-white mb-3">Kom i gang</h4>
-                          <p className="text-sm text-gray-400 mb-4">
-                            Bruk søkefeltet eller <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">Cmd+K</kbd> for å finne musikk. Bruk filter-knappen for å utforske etter lydegenskaper — BPM, energi, stemning og mer. Klikk en rad i tabellen for å se full lydprofil med radar-diagram.
-                          </p>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-white mb-3">Hva betyr lydegenskapene?</h4>
-                          <div className="space-y-4 text-sm text-gray-400">
-                            {[
-                              ['Popularitet', 'Skala 0–100. 100 = alle elsker den, 0 = ingen vet at den finnes.'],
-                              ['Dansbar', 'Hvor dansbar låta er — basert på tempo, rytmestabilitet og beat-trykk.'],
-                              ['Energi', 'Intensitet fra 0–100. Høy = death metal. Lav = klassisk og te.'],
-                              ['Valens', 'Stemning: 100 = solskinn og lykkepiller, 0 = regn og tomt kjøleskap.'],
-                              ['Akustisk', '100 = fjellhytte og gitar, 0 = laptop med ti plugins og et håp.'],
-                              ['Instrumental', 'Høye verdier = lite eller ingen vokal.'],
-                              ['Live', 'Over 80 kan du nesten kjenne svetten i rommet.'],
-                              ['Lydstyrke', 'Gjennomsnittlig lydnivå i dB (typisk −60 til 0).'],
-                              ['Tale', 'Høye verdier = mye prat eller rap.'],
-                              ['Takt', 'Taktart — vanligvis 3 eller 4.'],
-                            ].map(([title, desc]) => (
-                              <div key={title}>
-                                <span className="font-medium text-white">{title}: </span>
-                                {desc}
-                              </div>
-                            ))}
-                          </div>
+              <Button
+                onClick={handleSearch}
+                size="sm"
+                className="h-10 px-5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 border-0 rounded-lg font-medium transition-all duration-200 shrink-0"
+              >
+                {loading ? <LoadingSpinner size="sm" text="" /> : 'Søk'}
+              </Button>
+
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-10 w-10 text-gray-500 hover:text-white hover:bg-gray-800/50 rounded-lg shrink-0"
+                  >
+                    <Info className="h-4 w-4" />
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-3xl bg-gray-950/95 backdrop-blur-sm border-gray-700/50">
+                  <DialogHeader className="pb-6">
+                    <DialogTitle className="text-2xl font-semibold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                      Hvordan bruke MusikkMeta
+                    </DialogTitle>
+                    <DialogDescription className="text-gray-400">
+                      Søk i musikkdatabasen og utforsk lydegenskapene til sporene.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <ScrollArea className="h-96">
+                    <div className="space-y-6 pr-4">
+                      <div>
+                        <h4 className="font-semibold text-white mb-3">Kom i gang</h4>
+                        <p className="text-sm text-gray-400 mb-4">
+                          Bruk søkefeltet eller <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">Cmd+K</kbd> for å finne musikk. Bruk filter-knappen for å utforske etter lydegenskaper — BPM, energi, stemning og mer. Klikk en rad i tabellen for å se full lydprofil med radar-diagram.
+                        </p>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-white mb-3">Hva betyr lydegenskapene?</h4>
+                        <div className="space-y-4 text-sm text-gray-400">
+                          {[
+                            ['Popularitet', 'Skala 0–100. 100 = alle elsker den, 0 = ingen vet at den finnes.'],
+                            ['Dansbar', 'Hvor dansbar låta er — basert på tempo, rytmestabilitet og beat-trykk.'],
+                            ['Energi', 'Intensitet fra 0–100. Høy = death metal. Lav = klassisk og te.'],
+                            ['Valens', 'Stemning: 100 = solskinn og lykkepiller, 0 = regn og tomt kjøleskap.'],
+                            ['Akustisk', '100 = fjellhytte og gitar, 0 = laptop med ti plugins og et håp.'],
+                            ['Instrumental', 'Høye verdier = lite eller ingen vokal.'],
+                            ['Live', 'Over 80 kan du nesten kjenne svetten i rommet.'],
+                            ['Lydstyrke', 'Gjennomsnittlig lydnivå i dB (typisk −60 til 0).'],
+                            ['Tale', 'Høye verdier = mye prat eller rap.'],
+                            ['Takt', 'Taktart — vanligvis 3 eller 4.'],
+                          ].map(([title, desc]) => (
+                            <div key={title}>
+                              <span className="font-medium text-white">{title}: </span>
+                              {desc}
+                            </div>
+                          ))}
                         </div>
                       </div>
-                    </ScrollArea>
-                  </DialogContent>
-                </Dialog>
-              </div>
+                    </div>
+                  </ScrollArea>
+                </DialogContent>
+              </Dialog>
             </div>
-
-            {/* Filter-panel */}
-            <FilterPanel
-              filters={filters}
-              genres={genres}
-              onChange={setFilters}
-              onReset={resetFilters}
-            />
           </div>
+
+          {/* Filter-panel */}
+          <FilterPanel
+            filters={filters}
+            genres={genres}
+            onChange={setFilters}
+            onReset={resetFilters}
+          />
         </header>
 
         {/* Innhold */}
@@ -262,6 +271,14 @@ function App() {
           />
         </Suspense>
       </div>
+
+      {/* Detaljpanel — desktop slide-in */}
+      <Suspense fallback={null}>
+        <TrackDetailPanel
+          track={selectedTrack}
+          onClose={() => setSelectedTrack(null)}
+        />
+      </Suspense>
     </div>
   )
 }

@@ -9,6 +9,7 @@ interface SearchState {
   loading: boolean;
   error: string | null;
   selectedTracks: Set<number>;
+  selectedTrack: Track | null;
   filters: SearchFilters;
 }
 
@@ -20,6 +21,7 @@ interface SearchActions {
   setError: (error: string | null) => void;
   setFilters: (filters: SearchFilters) => void;
   resetFilters: () => void;
+  setSelectedTrack: (track: Track | null) => void;
   toggleTrackSelection: (trackId: number) => void;
   selectAllTracks: (select: boolean) => void;
   clearSelection: () => void;
@@ -35,6 +37,7 @@ const initialState: SearchState = {
   loading: false,
   error: null,
   selectedTracks: new Set<number>(),
+  selectedTrack: null,
   filters: {},
 };
 
@@ -51,6 +54,7 @@ export const useMusicStore = create<MusicStore>()(
         setError: (error) => set({ error }, false, 'setError'),
         setFilters: (filters) => set({ filters }, false, 'setFilters'),
         resetFilters: () => set({ filters: {} }, false, 'resetFilters'),
+        setSelectedTrack: (track) => set({ selectedTrack: track }, false, 'setSelectedTrack'),
 
         toggleTrackSelection: (trackId) =>
           set((state) => {

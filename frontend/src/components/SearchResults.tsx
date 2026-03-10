@@ -1,13 +1,13 @@
-import { useState, useMemo } from 'react';
-import { ArrowUp, ArrowDown, ArrowUpDown, Music2, ChevronRight } from 'lucide-react';
+import { useState, useMemo, useRef, useEffect } from 'react';
+import { ArrowUp, ArrowDown, ArrowUpDown, Music2, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
-import { TrackModal } from '@/components/TrackModal';
+import { AudioDnaBar } from '@/components/AudioDnaBar';
 import { TrackListSkeleton } from '@/components/Loading';
-import { fmtDuration, fmtKey, fmtPct, fmtNum, fmtFloat } from '@/utils/formatters';
+import { useMusicStore } from '@/stores/musicStore';
+import { fmtDuration, fmtNum } from '@/utils/formatters';
 import type { Track, SearchFilters } from '@/types/music';
 
 const PAGE_SIZE = 50;
@@ -23,6 +23,36 @@ function SortIcon({ k, config }: { k: SortKey; config: SortConfig | null }) {
   return config.dir === 'asc'
     ? <ArrowUp className="ml-1 h-3 w-3 text-blue-400" />
     : <ArrowDown className="ml-1 h-3 w-3 text-blue-400" />;
+}
+
+// --- Sorteringsmeny-alternativer ---
+
+const sortOptions: { key: SortKey; label: string }[] = [
+  { key: 'popularity', label: 'Popularitet' },
+  { key: 'artist_names', label: 'Artist' },
+  { key: 'track_name', label: 'Tittel' },
+  { key: 'album_name', label: 'Album' },
+  { key: 'release_date', label: 'Utgivelsesår' },
+  { key: 'duration_ms', label: 'Varighet' },
+  { key: 'tempo', label: 'BPM' },
+  { key: 'energy', label: 'Energi' },
+  { key: 'danceability', label: 'Dansbarhet' },
+  { key: 'valence', label: 'Valens' },
+  { key: 'acousticness', label: 'Akustisk' },
+  { key: 'speechiness', label: 'Tale' },
+  { key: 'instrumentalness', label: 'Instrumental' },
+  { key: 'liveness', label: 'Live' },
+  { key: 'loudness', label: 'Lydstyrke' },
+  { key: 'key_mode', label: 'Toneart' },
+];
+
+// --- Rad-aksentfarge ---
+
+function getRowAccent(track: Track): string {
+  if ((track.energy ?? 0) > 0.7) return 'border-l-rose-500/40';
+  if ((track.valence ?? 0) > 0.7) return 'border-l-amber-400/40';
+  if ((track.acousticness ?? 0) > 0.6) return 'border-l-teal-400/40';
+  return 'border-l-gray-700/20';
 }
 
 // --- Klient-side filtrering ---
@@ -54,6 +84,59 @@ function applyFilters(tracks: Track[], filters: SearchFilters): Track[] {
   });
 }
 
+// --- Sorteringsmeny-komponent ---
+
+function SortMenu({ config, onSort }: { config: SortConfig | null; onSort: (key: SortKey) => void }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
+
+  const activeLabel = config ? sortOptions.find(o => o.key === config.key)?.label ?? 'Sorter' : 'Sorter';
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center gap-1.5 px-2.5 py-1 text-xs text-gray-400 hover:text-white border border-gray-700/50 rounded-lg bg-gray-900/40 hover:bg-gray-800/50 transition-colors"
+      >
+        {activeLabel}
+        {config && (
+          <span className="text-blue-400">{config.dir === 'asc' ? '\u2191' : '\u2193'}</span>
+        )}
+        <ChevronDown className={`h-3 w-3 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      {open && (
+        <div className="absolute right-0 top-full mt-1 w-48 py-1 bg-gray-900/95 backdrop-blur-sm border border-gray-700/50 rounded-lg shadow-xl z-30">
+          {sortOptions.map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => { onSort(key); setOpen(false); }}
+              className={`w-full text-left px-3 py-1.5 text-xs transition-colors ${
+                config?.key === key
+                  ? 'text-blue-400 bg-blue-500/10'
+                  : 'text-gray-300 hover:text-white hover:bg-gray-800/50'
+              }`}
+            >
+              {label}
+              {config?.key === key && (
+                <span className="ml-1.5 text-blue-400">{config.dir === 'asc' ? '\u2191' : '\u2193'}</span>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 // --- Komponent ---
 
 interface SearchResultsProps {
@@ -66,12 +149,11 @@ interface SearchResultsProps {
 
 const SearchResults: React.FC<SearchResultsProps> = ({ tracks, allTracks, query, filters, loading }) => {
   const [sortConfig, setSortConfig] = useState<SortConfig | null>({ key: 'popularity', dir: 'desc' });
-  const [selectedTrack, setSelectedTrack] = useState<Track | null>(null);
   const [page, setPage] = useState(1);
+  const setSelectedTrack = useMusicStore((s) => s.setSelectedTrack);
 
   const hasActiveFilters = Object.values(filters).some((v) => v !== undefined);
 
-  // Vis søkeresultater hvis query finnes, ellers allTracks (for filter-only browsing)
   const baseSource = query.trim() ? tracks : (hasActiveFilters ? allTracks : []);
 
   const filtered = useMemo(() => applyFilters(baseSource, filters), [baseSource, filters]);
@@ -113,7 +195,6 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, allTracks, query,
 
   if (loading) return <TrackListSkeleton count={8} />;
 
-  // Tom tilstand — ingen søk og ingen aktive filtre
   if (!query.trim() && !hasActiveFilters) {
     return (
       <div className="flex flex-col items-center justify-center py-24">
@@ -137,155 +218,124 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, allTracks, query,
   }
 
   return (
-    <>
-      <TrackModal track={selectedTrack} onClose={() => setSelectedTrack(null)} />
-
-      <div className="space-y-3">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-gray-400">
-            <span className="font-medium text-white">{filtered.length}</span>
-            {' '}{filtered.length === 1 ? 'låt' : 'låter'}
-            {filtered.length !== baseSource.length && (
-              <span className="text-gray-600"> (filtrert fra {baseSource.length})</span>
-            )}
-          </p>
-          <p className="text-xs text-gray-600 hidden sm:block">Klikk en rad for detaljer og lydprofil</p>
+    <div className="space-y-3">
+      {/* Header med resultattelling + sorteringsmeny */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-gray-400">
+          <span className="font-medium text-white">{filtered.length}</span>
+          {' '}{filtered.length === 1 ? 'låt' : 'låter'}
+          {filtered.length !== baseSource.length && (
+            <span className="text-gray-600"> (filtrert fra {baseSource.length})</span>
+          )}
+        </p>
+        <div className="flex items-center gap-3">
+          <p className="text-xs text-gray-600 hidden sm:block">Klikk en rad for detaljer</p>
+          <SortMenu config={sortConfig} onSort={toggleSort} />
         </div>
-
-        {/* Tabell — desktop */}
-        <div className="hidden md:block">
-          <ScrollArea className="w-full rounded-xl border border-gray-800/50">
-            <Table className="min-w-max">
-              <TableHeader>
-                <TableRow className="border-gray-800/50 hover:bg-transparent bg-gray-900/60">
-                  <TableHead className="sticky left-0 z-10 bg-gray-900/95 w-10 text-center">#</TableHead>
-                  <TableHead className="sticky left-10 z-10 bg-gray-900/95 min-w-[11rem]">
-                    <SortBtn sortKey="artist_names">Artist</SortBtn>
-                  </TableHead>
-                  <TableHead className="sticky left-[11rem] z-10 bg-gray-900/95 min-w-[14rem]">
-                    <SortBtn sortKey="track_name">Tittel</SortBtn>
-                  </TableHead>
-                  <TableHead className="min-w-[11rem]">
-                    <SortBtn sortKey="album_name">Album</SortBtn>
-                  </TableHead>
-                  <TableHead className="w-16"><SortBtn sortKey="duration_ms">Tid</SortBtn></TableHead>
-                  <TableHead className="w-20"><SortBtn sortKey="release_date">Utgitt</SortBtn></TableHead>
-                  <TableHead className="w-16"><SortBtn sortKey="popularity">Pop.</SortBtn></TableHead>
-                  <TableHead className="w-14"><SortBtn sortKey="explicit">Expl.</SortBtn></TableHead>
-                  <TableHead className="min-w-[9rem]"><SortBtn sortKey="genres">Sjanger</SortBtn></TableHead>
-                  <TableHead className="w-16"><SortBtn sortKey="tempo">BPM</SortBtn></TableHead>
-                  <TableHead className="w-24"><SortBtn sortKey="key_mode">Toneart</SortBtn></TableHead>
-                  <TableHead className="w-16"><SortBtn sortKey="time_signature">Takt</SortBtn></TableHead>
-                  <TableHead className="w-18"><SortBtn sortKey="energy">Energi</SortBtn></TableHead>
-                  <TableHead className="w-20"><SortBtn sortKey="danceability">Dansbar</SortBtn></TableHead>
-                  <TableHead className="w-18"><SortBtn sortKey="valence">Valens</SortBtn></TableHead>
-                  <TableHead className="w-24"><SortBtn sortKey="loudness">Lydstyrke</SortBtn></TableHead>
-                  <TableHead className="w-18"><SortBtn sortKey="acousticness">Akust.</SortBtn></TableHead>
-                  <TableHead className="w-16"><SortBtn sortKey="speechiness">Tale</SortBtn></TableHead>
-                  <TableHead className="w-16"><SortBtn sortKey="instrumentalness">Instr.</SortBtn></TableHead>
-                  <TableHead className="w-16"><SortBtn sortKey="liveness">Live</SortBtn></TableHead>
-                  <TableHead className="w-8" />
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {visible.map((track, i) => (
-                  <TableRow
-                    key={track.id}
-                    onClick={() => setSelectedTrack(track)}
-                    className="border-gray-800/30 hover:bg-gray-800/40 cursor-pointer transition-colors group"
-                  >
-                    <TableCell className="sticky left-0 z-10 bg-gray-950/95 group-hover:bg-gray-800/50 text-center text-xs text-gray-600 font-mono">
-                      {i + 1}
-                    </TableCell>
-                    <TableCell className="sticky left-10 z-10 bg-gray-950/95 group-hover:bg-gray-800/50 font-medium text-sm text-gray-200 truncate max-w-[11rem]">
-                      {track.artist_names || '–'}
-                    </TableCell>
-                    <TableCell className="sticky left-[11rem] z-10 bg-gray-950/95 group-hover:bg-gray-800/50 text-sm text-white truncate max-w-[14rem]">
-                      {track.track_name || '–'}
-                    </TableCell>
-                    <TableCell className="text-sm text-gray-400 truncate max-w-[11rem]">
-                      {track.album_name || '–'}
-                    </TableCell>
-                    <TableCell className="font-mono text-xs text-gray-300">{fmtDuration(track.duration_ms)}</TableCell>
-                    <TableCell className="text-xs text-gray-400">{track.release_date?.slice(0, 4) || '–'}</TableCell>
-                    <TableCell className="text-xs font-medium text-yellow-400">{fmtNum(track.popularity)}</TableCell>
-                    <TableCell className="text-xs text-gray-500">
-                      {track.explicit === null || track.explicit === undefined ? '–' : track.explicit ? 'Ja' : 'Nei'}
-                    </TableCell>
-                    <TableCell className="text-xs text-gray-400 truncate max-w-[9rem]">{track.genres || '–'}</TableCell>
-                    <TableCell className="font-mono text-xs text-gray-300">{track.tempo ? fmtNum(track.tempo) : '–'}</TableCell>
-                    <TableCell className="font-mono text-xs text-gray-300">{fmtKey(track.key_mode, track.mode)}</TableCell>
-                    <TableCell className="font-mono text-xs text-gray-400">{track.time_signature ? `${track.time_signature}/4` : '–'}</TableCell>
-                    <TableCell className="font-mono text-xs text-red-400">{fmtPct(track.energy)}</TableCell>
-                    <TableCell className="font-mono text-xs text-blue-400">{fmtPct(track.danceability)}</TableCell>
-                    <TableCell className="font-mono text-xs text-green-400">{fmtPct(track.valence)}</TableCell>
-                    <TableCell className="font-mono text-xs text-gray-400">{track.loudness !== null && track.loudness !== undefined ? `${fmtFloat(track.loudness)} dB` : '–'}</TableCell>
-                    <TableCell className="font-mono text-xs text-gray-400">{fmtPct(track.acousticness)}</TableCell>
-                    <TableCell className="font-mono text-xs text-gray-400">{fmtPct(track.speechiness)}</TableCell>
-                    <TableCell className="font-mono text-xs text-gray-400">{fmtPct(track.instrumentalness)}</TableCell>
-                    <TableCell className="font-mono text-xs text-gray-400">{fmtPct(track.liveness)}</TableCell>
-                    <TableCell className="text-gray-600 group-hover:text-gray-400">
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <ScrollBar orientation="horizontal" />
-          </ScrollArea>
-        </div>
-
-        {/* Kort-visning — mobil */}
-        <div className="md:hidden space-y-2">
-          {visible.map((track, i) => (
-            <button
-              key={track.id}
-              onClick={() => setSelectedTrack(track)}
-              className="w-full text-left bg-gray-900/40 backdrop-blur-sm rounded-xl border border-gray-700/30 p-4 hover:bg-gray-800/50 transition-colors"
-            >
-              <div className="flex items-start gap-3">
-                <span className="text-xs text-gray-600 font-mono w-6 shrink-0 pt-0.5">{i + 1}</span>
-                <div className="flex-1 min-w-0">
-                  <p className="font-medium text-white text-sm truncate">{track.track_name || '–'}</p>
-                  <p className="text-gray-400 text-xs truncate mt-0.5">{track.artist_names || '–'}</p>
-                  {track.album_name && (
-                    <p className="text-gray-600 text-xs truncate">{track.album_name}</p>
-                  )}
-                  <div className="flex flex-wrap gap-3 mt-2 text-xs">
-                    {track.popularity !== null && track.popularity !== undefined && (
-                      <span className="text-yellow-400 font-medium">Pop. {track.popularity}</span>
-                    )}
-                    {track.tempo && <span className="text-gray-400 font-mono">{Math.round(track.tempo)} BPM</span>}
-                    {track.energy !== null && track.energy !== undefined && (
-                      <span className="text-red-400">Energi {fmtPct(track.energy)}</span>
-                    )}
-                    {track.danceability !== null && track.danceability !== undefined && (
-                      <span className="text-blue-400">Dans {fmtPct(track.danceability)}</span>
-                    )}
-                  </div>
-                </div>
-                <ChevronRight className="h-4 w-4 text-gray-600 shrink-0 mt-1" />
-              </div>
-            </button>
-          ))}
-        </div>
-
-        {/* Last flere */}
-        {visible.length < sorted.length && (
-          <div className="flex justify-center pt-2">
-            <Button
-              variant="outline"
-              onClick={() => setPage((p) => p + 1)}
-              className="border-gray-700/50 bg-gray-900/40 hover:bg-gray-800/60 text-gray-300 rounded-xl text-sm"
-            >
-              Last {Math.min(PAGE_SIZE, sorted.length - visible.length)} til
-              <span className="ml-1.5 text-gray-500">({visible.length} av {sorted.length})</span>
-            </Button>
-          </div>
-        )}
       </div>
-    </>
+
+      {/* Tabell — desktop */}
+      <div className="hidden md:block rounded-xl border border-gray-800/50 overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow className="border-gray-800/50 hover:bg-transparent bg-gray-900/60">
+              <TableHead className="w-10 text-center">#</TableHead>
+              <TableHead className="min-w-[10rem]">
+                <SortBtn sortKey="artist_names">Artist</SortBtn>
+              </TableHead>
+              <TableHead className="min-w-[12rem]">
+                <SortBtn sortKey="track_name">Tittel</SortBtn>
+              </TableHead>
+              <TableHead className="min-w-[10rem] hidden lg:table-cell">
+                <SortBtn sortKey="album_name">Album</SortBtn>
+              </TableHead>
+              <TableHead className="w-16"><SortBtn sortKey="duration_ms">Tid</SortBtn></TableHead>
+              <TableHead className="w-16"><SortBtn sortKey="release_date">År</SortBtn></TableHead>
+              <TableHead className="w-14"><SortBtn sortKey="popularity">Pop.</SortBtn></TableHead>
+              <TableHead className="w-40">
+                <span className="text-xs font-medium text-gray-400">Audio DNA</span>
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {visible.map((track, i) => (
+              <TableRow
+                key={track.id}
+                onClick={() => setSelectedTrack(track)}
+                className={`border-gray-800/30 hover:bg-gray-800/40 cursor-pointer transition-colors group border-l-4 ${getRowAccent(track)}`}
+              >
+                <TableCell className="text-center text-xs text-gray-600 font-mono">
+                  {i + 1}
+                </TableCell>
+                <TableCell className="font-medium text-sm text-gray-200 truncate max-w-[10rem]">
+                  {track.artist_names || '–'}
+                </TableCell>
+                <TableCell className="text-sm text-white truncate max-w-[12rem]">
+                  {track.track_name || '–'}
+                </TableCell>
+                <TableCell className="text-sm text-gray-400 truncate max-w-[10rem] hidden lg:table-cell">
+                  {track.album_name || '–'}
+                </TableCell>
+                <TableCell className="font-mono text-xs text-gray-300">{fmtDuration(track.duration_ms)}</TableCell>
+                <TableCell className="text-xs text-gray-400">{track.release_date?.slice(0, 4) || '–'}</TableCell>
+                <TableCell className="text-xs font-medium text-yellow-400">{fmtNum(track.popularity)}</TableCell>
+                <TableCell>
+                  <AudioDnaBar track={track} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* Kort-visning — mobil */}
+      <div className="md:hidden space-y-2">
+        {visible.map((track, i) => (
+          <button
+            key={track.id}
+            onClick={() => setSelectedTrack(track)}
+            className={`w-full text-left bg-gray-900/40 backdrop-blur-sm rounded-xl border border-gray-700/30 p-4 hover:bg-gray-800/50 transition-colors border-l-4 ${getRowAccent(track)}`}
+          >
+            <div className="flex items-start gap-3">
+              <span className="text-xs text-gray-600 font-mono w-6 shrink-0 pt-0.5">{i + 1}</span>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-white text-sm truncate">{track.track_name || '–'}</p>
+                <p className="text-gray-400 text-xs truncate mt-0.5">{track.artist_names || '–'}</p>
+                {track.album_name && (
+                  <p className="text-gray-600 text-xs truncate">{track.album_name}</p>
+                )}
+                {track.genres && (
+                  <div className="flex flex-wrap gap-1 mt-2">
+                    {track.genres.split(',').slice(0, 3).map((g) => (
+                      <span key={g} className="px-1.5 py-0.5 text-[10px] text-gray-400 bg-gray-800/60 rounded">
+                        {g.trim()}
+                      </span>
+                    ))}
+                  </div>
+                )}
+                <div className="mt-2">
+                  <AudioDnaBar track={track} />
+                </div>
+              </div>
+            </div>
+          </button>
+        ))}
+      </div>
+
+      {/* Last flere */}
+      {visible.length < sorted.length && (
+        <div className="flex justify-center pt-2">
+          <Button
+            variant="outline"
+            onClick={() => setPage((p) => p + 1)}
+            className="border-gray-700/50 bg-gray-900/40 hover:bg-gray-800/60 text-gray-300 rounded-xl text-sm"
+          >
+            Last {Math.min(PAGE_SIZE, sorted.length - visible.length)} til
+            <span className="ml-1.5 text-gray-500">({visible.length} av {sorted.length})</span>
+          </Button>
+        </div>
+      )}
+    </div>
   );
 };
 
