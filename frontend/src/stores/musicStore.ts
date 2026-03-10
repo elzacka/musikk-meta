@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
-import type { Track } from '@/types/music';
+import type { Track, SearchFilters } from '@/types/music';
 
 interface SearchState {
   query: string;
@@ -8,7 +8,8 @@ interface SearchState {
   allTracks: Track[];
   loading: boolean;
   error: string | null;
-  selectedTracks: Set<string>;
+  selectedTracks: Set<number>;
+  filters: SearchFilters;
 }
 
 interface SearchActions {
@@ -17,7 +18,9 @@ interface SearchActions {
   setAllTracks: (tracks: Track[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  toggleTrackSelection: (trackId: string) => void;
+  setFilters: (filters: SearchFilters) => void;
+  resetFilters: () => void;
+  toggleTrackSelection: (trackId: number) => void;
   selectAllTracks: (select: boolean) => void;
   clearSelection: () => void;
   reset: () => void;
@@ -31,7 +34,8 @@ const initialState: SearchState = {
   allTracks: [],
   loading: false,
   error: null,
-  selectedTracks: new Set<string>(),
+  selectedTracks: new Set<number>(),
+  filters: {},
 };
 
 export const useMusicStore = create<MusicStore>()(
@@ -40,56 +44,43 @@ export const useMusicStore = create<MusicStore>()(
       (set, get) => ({
         ...initialState,
 
-        setQuery: (query: string) =>
-          set({ query }, false, 'setQuery'),
+        setQuery: (query) => set({ query }, false, 'setQuery'),
+        setTracks: (tracks) => set({ tracks }, false, 'setTracks'),
+        setAllTracks: (allTracks) => set({ allTracks }, false, 'setAllTracks'),
+        setLoading: (loading) => set({ loading }, false, 'setLoading'),
+        setError: (error) => set({ error }, false, 'setError'),
+        setFilters: (filters) => set({ filters }, false, 'setFilters'),
+        resetFilters: () => set({ filters: {} }, false, 'resetFilters'),
 
-        setTracks: (tracks: Track[]) =>
-          set({ tracks }, false, 'setTracks'),
-
-        setAllTracks: (allTracks: Track[]) =>
-          set({ allTracks }, false, 'setAllTracks'),
-
-        setLoading: (loading: boolean) =>
-          set({ loading }, false, 'setLoading'),
-
-        setError: (error: string | null) =>
-          set({ error }, false, 'setError'),
-
-        toggleTrackSelection: (trackId: string) =>
+        toggleTrackSelection: (trackId) =>
           set((state) => {
-            const newSelected = new Set(state.selectedTracks);
-            if (newSelected.has(trackId)) {
-              newSelected.delete(trackId);
+            const next = new Set(state.selectedTracks);
+            if (next.has(trackId)) {
+              next.delete(trackId);
             } else {
-              newSelected.add(trackId);
+              next.add(trackId);
             }
-            return { selectedTracks: newSelected };
+            return { selectedTracks: next };
           }, false, 'toggleTrackSelection'),
 
-        selectAllTracks: (select: boolean) =>
-          set((state) => {
-            if (select) {
-              const allIds = new Set(state.tracks.map(t => t.id));
-              return { selectedTracks: allIds };
-            } else {
-              return { selectedTracks: new Set<string>() };
-            }
-          }, false, 'selectAllTracks'),
+        selectAllTracks: (select) =>
+          set((state) => ({
+            selectedTracks: select
+              ? new Set(state.tracks.map(t => t.id))
+              : new Set<number>(),
+          }), false, 'selectAllTracks'),
 
         clearSelection: () =>
-          set({ selectedTracks: new Set<string>() }, false, 'clearSelection'),
+          set({ selectedTracks: new Set<number>() }, false, 'clearSelection'),
 
-        reset: () =>
-          set(initialState, false, 'reset'),
+        reset: () => set(initialState, false, 'reset'),
       }),
       {
         name: 'music-store',
-        // Only persist certain fields
         partialize: (state) => ({
           query: state.query,
-          selectedTracks: Array.from(state.selectedTracks), // Convert Set to Array for persistence
+          selectedTracks: Array.from(state.selectedTracks),
         }),
-        // Deserialize the persisted selectedTracks back to Set
         onRehydrateStorage: () => (state) => {
           if (state && Array.isArray(state.selectedTracks)) {
             state.selectedTracks = new Set(state.selectedTracks);
@@ -97,14 +88,11 @@ export const useMusicStore = create<MusicStore>()(
         },
       }
     ),
-    {
-      name: 'music-store',
-    }
+    { name: 'music-store' }
   )
 );
 
-// Selectors for computed values
-export const useSelectedTrackCount = () => 
+export const useSelectedTrackCount = () =>
   useMusicStore((state) => state.selectedTracks.size);
 
 export const useSelectedTracks = () =>
@@ -113,5 +101,5 @@ export const useSelectedTracks = () =>
     return state.tracks.filter(track => selectedIds.has(track.id));
   });
 
-export const useIsTrackSelected = (trackId: string) =>
+export const useIsTrackSelected = (trackId: number) =>
   useMusicStore((state) => state.selectedTracks.has(trackId));

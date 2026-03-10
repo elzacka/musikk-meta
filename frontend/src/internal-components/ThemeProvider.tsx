@@ -21,12 +21,10 @@ const initialState: ThemeProviderState = {
 export const ThemeProviderContext =
   createContext<ThemeProviderState>(initialState);
 
-declare const __APP_ID__: string;
-
 export function ThemeProvider({
   children,
-  defaultTheme = "system",
-  storageKey = `databutton-${__APP_ID__}-ui-theme`,
+  defaultTheme = "dark",
+  storageKey = "musikkmeta-ui-theme",
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
@@ -35,15 +33,12 @@ export function ThemeProvider({
 
   useEffect(() => {
     const root = window.document.documentElement;
-
     root.classList.remove("light", "dark");
 
     if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
         ? "dark"
         : "light";
-
       root.classList.add(systemTheme);
       return;
     }
@@ -68,9 +63,8 @@ export function ThemeProvider({
 
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext);
-
-  if (context === undefined)
-    throw new Error("useTheme must be used within a ThemeProvider");
-
+  if (context === undefined) {
+    throw new Error("useTheme must brukes innenfor ThemeProvider");
+  }
   return context;
 };

@@ -1,11 +1,14 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
 
-// Modern Vite config focused on performance and developer experience
 export default defineConfig({
-  plugins: [react()],
-  
+  plugins: [
+    react(),
+    tailwindcss(),
+  ],
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -18,14 +21,12 @@ export default defineConfig({
     },
   },
 
-  // Development server configuration
   server: {
     port: 3000,
     host: true,
     open: true,
   },
 
-  // Build optimization
   build: {
     target: 'esnext',
     minify: 'esbuild',
@@ -33,20 +34,17 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          // Separate vendor chunks for better caching
           react: ['react', 'react-dom'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-scroll-area', 'lucide-react'],
-          state: ['zustand', '@tanstack/react-query'],
+          state: ['zustand'],
         },
       },
     },
-    // Remove console logs in production
     esbuild: {
       drop: ['console', 'debugger'],
     },
   },
 
-  // Performance optimizations
   optimizeDeps: {
     include: ['react', 'react-dom', 'lucide-react'],
   },

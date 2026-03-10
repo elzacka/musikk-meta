@@ -1,12 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
 
-// GitHub Pages specific build configuration
+// GitHub Pages build — base path must match repo name
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    tailwindcss(),
+  ],
   base: '/musikk-meta/',
-  
+
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
@@ -19,7 +23,6 @@ export default defineConfig({
     },
   },
 
-  // GitHub Pages build optimization
   build: {
     target: 'esnext',
     minify: 'esbuild',
@@ -29,19 +32,17 @@ export default defineConfig({
         manualChunks: {
           react: ['react', 'react-dom'],
           ui: ['@radix-ui/react-dialog', '@radix-ui/react-scroll-area', 'lucide-react'],
-          state: ['zustand', '@tanstack/react-query'],
+          state: ['zustand'],
         },
       },
     },
+    // Keep console logs in GH Pages build for debugging
     esbuild: {
-      drop: ['debugger'], // Keep console logs for debugging
+      drop: ['debugger'],
     },
   },
 
-  // Environment variables for GitHub Pages
-  define: {
-    'process.env.NODE_ENV': JSON.stringify('production'),
-    'import.meta.env.VITE_GOOGLE_SHEETS_API_KEY': JSON.stringify(process.env.VITE_GOOGLE_SHEETS_API_KEY || ''),
-    'import.meta.env.VITE_GOOGLE_SHEET_ID': JSON.stringify(process.env.VITE_GOOGLE_SHEET_ID || ''),
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'lucide-react'],
   },
 })

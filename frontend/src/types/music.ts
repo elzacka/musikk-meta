@@ -1,6 +1,6 @@
-// Core track interface matching the existing data structure
+// Kjernetype for et musikkspor
 export interface Track {
-  id: string;
+  id: number;
   track_uri?: string | null;
   track_name?: string | null;
   album_name?: string | null;
@@ -9,24 +9,27 @@ export interface Track {
   duration_ms?: number | null;
   popularity?: number | null;
   explicit?: boolean | null;
+  added_by?: string | null;
+  added_at?: string | null;
   genres?: string | null;
   record_label?: string | null;
-  
-  // Audio features
+
+  // Lydegenskaper fra Spotify Audio Features
   danceability?: number | null;
   energy?: number | null;
-  key_mode?: string | null;
+  key_mode?: number | null;       // Numerisk toneart-indeks: 0=C, 1=C#, ..., 11=B
   loudness?: number | null;
-  mode?: number | null;
+  mode?: number | null;           // 0 = moll, 1 = dur
   speechiness?: number | null;
   acousticness?: number | null;
   instrumentalness?: number | null;
   liveness?: number | null;
   valence?: number | null;
   tempo?: number | null;
+  time_signature?: number | null; // Taktart (vanligvis 3 eller 4)
 }
 
-// Audio features as a separate type for visualization
+// Lydegenskaper som eget type for visualisering
 export interface AudioFeatures {
   danceability: number;
   energy: number;
@@ -39,14 +42,14 @@ export interface AudioFeatures {
   tempo: number;
 }
 
-// Search response from API
+// Søkesvar fra datakilde
 export interface SearchResponse {
   tracks: Track[];
   pages: number;
   total: number;
 }
 
-// Search filters
+// Søkefiltre
 export interface SearchFilters {
   query?: string;
   genre?: string;
@@ -56,38 +59,41 @@ export interface SearchFilters {
   maxYear?: number;
   minDuration?: number;
   maxDuration?: number;
+  minBpm?: number;
+  maxBpm?: number;
+  minEnergy?: number;
+  maxEnergy?: number;
+  minDanceability?: number;
+  maxDanceability?: number;
+  minValence?: number;
+  maxValence?: number;
   explicit?: boolean;
 }
 
-// Pagination
+// Paginering
 export interface PaginationParams {
   page: number;
   page_size: number;
 }
 
-// API response wrapper
+// Generisk API-svar
 export interface ApiResponse<T> {
   ok: boolean;
   json: () => Promise<T>;
 }
 
-// Brain/data source interface
+// Grensesnitt for datakilde (brain)
 export interface MusicDataSource {
-  search_tracks(params: { 
-    query: string; 
-    page?: number | string; 
-    page_size?: number; 
+  search_tracks(params: {
+    query: string;
+    page?: number | string;
+    page_size?: number;
   }): Promise<ApiResponse<SearchResponse>>;
-  
-  login?(): Promise<ApiResponse<{ authorization_url?: string; detail?: string }>>;
-  create_playlist?(): Promise<ApiResponse<{ detail?: string }>>;
-  callback?(): Promise<ApiResponse<{ detail?: string }>>;
-  check_health?(): Promise<ApiResponse<{ status: string }>>;
   getAllTracks?(): Promise<Track[]>;
   refreshData?(): Promise<void>;
 }
 
-// UI state types
+// UI-tilstandstyper
 export type SortField = keyof Track;
 export type SortDirection = 'asc' | 'desc';
 
@@ -96,14 +102,14 @@ export interface SortConfig {
   direction: SortDirection;
 }
 
-// Chart data for visualizations
+// Diagramdata for visualiseringer
 export interface ChartDataPoint {
   name: string;
   value: number;
   color?: string;
 }
 
-// Command palette types
+// Kommandopalett-type
 export interface Command {
   id: string;
   label: string;
@@ -111,17 +117,7 @@ export interface Command {
   keywords?: string[];
 }
 
-// Playlist types (for future Spotify integration)
-export interface Playlist {
-  id: string;
-  name: string;
-  description?: string;
-  track_ids: string[];
-  created_at: string;
-  updated_at: string;
-}
-
-// Error types
+// Feiltype
 export interface MusicError extends Error {
   code?: string;
   status?: number;

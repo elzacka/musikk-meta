@@ -1,45 +1,118 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind CSS v4 */
+@import "tailwindcss";
+@import "tw-animate-css";
 
-@layer base {
-  :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --chart-4: 12 74% 60%;
-    --chart-5: 60 9.1% 97.8%;
-  }
+/* Mørk modus via .dark-klasse på html-elementet */
+@custom-variant dark (&:is(.dark *));
+
+/* =============================================
+   Shadcn/ui temaverdier (CSS-variabler)
+   ============================================= */
+:root {
+  --background: hsl(222.2 84% 4.9%);
+  --foreground: hsl(210 40% 98%);
+  --card: hsl(222.2 84% 4.9%);
+  --card-foreground: hsl(210 40% 98%);
+  --popover: hsl(222.2 84% 4.9%);
+  --popover-foreground: hsl(210 40% 98%);
+  --primary: hsl(210 40% 98%);
+  --primary-foreground: hsl(222.2 47.4% 11.2%);
+  --secondary: hsl(217.2 32.6% 17.5%);
+  --secondary-foreground: hsl(210 40% 98%);
+  --muted: hsl(217.2 32.6% 17.5%);
+  --muted-foreground: hsl(215 20.2% 65.1%);
+  --accent: hsl(217.2 32.6% 17.5%);
+  --accent-foreground: hsl(210 40% 98%);
+  --destructive: hsl(0 62.8% 30.6%);
+  --destructive-foreground: hsl(210 40% 98%);
+  --border: hsl(217.2 32.6% 17.5%);
+  --input: hsl(217.2 32.6% 17.5%);
+  --ring: hsl(212.7 26.8% 83.9%);
+  --radius: 0.5rem;
+  --chart-1: hsl(220 70% 50%);
+  --chart-2: hsl(160 60% 45%);
+  --chart-3: hsl(30 80% 55%);
+  --chart-4: hsl(12 74% 60%);
+  --chart-5: hsl(60 9.1% 97.8%);
 }
 
+/* =============================================
+   Tailwind v4 tema — mapper Tailwind-klasser
+   til eksisterende CSS-variabler
+   ============================================= */
+@theme inline {
+  /* Farger */
+  --color-background:           var(--background);
+  --color-foreground:           var(--foreground);
+  --color-card:                 var(--card);
+  --color-card-foreground:      var(--card-foreground);
+  --color-popover:              var(--popover);
+  --color-popover-foreground:   var(--popover-foreground);
+  --color-primary:              var(--primary);
+  --color-primary-foreground:   var(--primary-foreground);
+  --color-secondary:            var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:                var(--muted);
+  --color-muted-foreground:     var(--muted-foreground);
+  --color-accent:               var(--accent);
+  --color-accent-foreground:    var(--accent-foreground);
+  --color-destructive:          var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border:               var(--border);
+  --color-input:                var(--input);
+  --color-ring:                 var(--ring);
+  --color-chart-1:              var(--chart-1);
+  --color-chart-2:              var(--chart-2);
+  --color-chart-3:              var(--chart-3);
+  --color-chart-4:              var(--chart-4);
+  --color-chart-5:              var(--chart-5);
+
+  /* Merkevarefarger */
+  --color-brand-main:   #2f6d75;
+  --color-brand-medium: #72a0a6;
+  --color-brand-light:  #b6d4d6;
+
+  /* Hjørneavrunding */
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  /* Typografi */
+  --font-sans:    'Roboto', ui-sans-serif, system-ui, sans-serif;
+  --font-heading: 'Exo 2', ui-sans-serif, system-ui, sans-serif;
+
+  /* Animasjoner */
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up:   accordion-up 0.2s ease-out;
+  --animate-gradient-x:     gradient-x 5s ease infinite;
+  --animate-pulse-b:        pulse-b 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* =============================================
+   Globale basestiler
+   ============================================= */
 @layer base {
   * {
-    @apply border-border;
+    border-color: var(--border);
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
   }
 }
 
-.animate-gradient-x {
-  animation: gradient-x 4s ease infinite;
-  background-size: 200% 200%;
+/* =============================================
+   Keyframes
+   ============================================= */
+@keyframes accordion-down {
+  from { height: 0; }
+  to   { height: var(--radix-accordion-content-height); }
+}
+
+@keyframes accordion-up {
+  from { height: var(--radix-accordion-content-height); }
+  to   { height: 0; }
 }
 
 @keyframes gradient-x {
@@ -54,36 +127,63 @@
 }
 
 @keyframes gradient-x-logo {
-    0%, 100% {
-        background-size: 200% 200%;
-        background-position: left center;
-        background-image: linear-gradient(to right, #CCEEFF, #0077BE, #CCEEFF);
-    }
-    50% {
-        background-size: 200% 200%;
-        background-position: right center;
-        background-image: linear-gradient(to right, #E0F7FA, #00BFFF, #E0F7FA);
-    }
-}
-
-.animate-gradient-x-logo {
-    animation: gradient-x-logo 4s ease infinite;
+  0%, 100% {
+    background-size: 200% 200%;
+    background-position: left center;
+    background-image: linear-gradient(to right, #cceeff, #0077be, #cceeff);
+  }
+  50% {
+    background-size: 200% 200%;
+    background-position: right center;
+    background-image: linear-gradient(to right, #e0f7fa, #00bfff, #e0f7fa);
+  }
 }
 
 @keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.7;
-    transform: scale(1.1);
-  }
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.7; transform: scale(1.1); }
+}
+
+@keyframes pulse-b {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
+
+/* =============================================
+   Hjelpeklasser
+   ============================================= */
+.animate-gradient-x {
+  animation: gradient-x 4s ease infinite;
+  background-size: 200% 200%;
+}
+
+.animate-gradient-x-logo {
+  animation: gradient-x-logo 4s ease infinite;
+}
+
+.glassmorphic {
+  background: rgb(255 255 255 / 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgb(255 255 255 / 0.1);
+}
+
+.glassmorphic-container {
+  background: rgb(16 16 18 / 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 1.5rem;
+}
+
+.shadow-inner-strong {
+  box-shadow: inset 0 4px 8px rgb(0 0 0 / 0.3);
 }
 
 .horizontal-fade {
   position: relative;
 }
+
 .horizontal-fade.is-scrollable::after {
   content: '';
   position: absolute;
@@ -91,25 +191,6 @@
   right: 0;
   bottom: 0;
   width: 60px;
-  background: linear-gradient(to left, hsl(var(--background)), transparent);
+  background: linear-gradient(to left, var(--background), transparent);
   pointer-events: none;
-}
-
-.glassmorphic {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glassmorphic-container {
-  background: rgba(16, 16, 18, 0.6); /* Slightly more opaque for better readability */
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.5rem; /* Consistent rounded corners */
-}
-
-.shadow-inner-strong {
-  box-shadow: inset 0 4px 8px rgba(0,0,0,0.3);
 }
