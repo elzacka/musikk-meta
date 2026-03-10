@@ -1,7 +1,22 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import { Search, Music, X, User, Disc } from 'lucide-react'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { fmtDuration } from '@/utils/formatters'
 import type { Track } from '@/types/music'
+
+interface SearchOption {
+  type: 'search'
+  id: string
+  label: string
+  hint: string
+}
+
+interface TrackOption {
+  type: 'track'
+  track: Track
+}
+
+type PaletteItem = SearchOption | TrackOption
 
 interface CommandPaletteProps {
   isOpen: boolean
@@ -11,61 +26,56 @@ interface CommandPaletteProps {
   onSearch: (query: string) => void
 }
 
-const CommandPalette: React.FC<CommandPaletteProps> = ({
+const CommandPalette = ({
   isOpen,
   onClose,
   tracks,
   onTrackSelect,
   onSearch
-}) => {
+}: CommandPaletteProps) => {
   const [query, setQuery] = useState('')
   const [selectedIndex, setSelectedIndex] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
   const listRef = useRef<HTMLDivElement>(null)
 
-  // Filter tracks based on query
   const filteredTracks = useMemo(() => {
     if (!query.trim()) return tracks.slice(0, 10)
-    
-    const searchTerm = query.toLowerCase()
-    const filtered = tracks.filter(track => 
-      track.track_name?.toLowerCase().includes(searchTerm) ||
-      track.artist_names?.toLowerCase().includes(searchTerm) ||
-      track.album_name?.toLowerCase().includes(searchTerm)
-    ).slice(0, 9) // Leave space for "Search in database" option
-    
-    return filtered
+
+    const term = query.toLowerCase()
+    return tracks.filter(t =>
+      t.track_name?.toLowerCase().includes(term) ||
+      t.artist_names?.toLowerCase().includes(term) ||
+      t.album_name?.toLowerCase().includes(term)
+    ).slice(0, 9)
   }, [query, tracks])
 
-  // Combined results with search option when there's a query
-  const displayResults = useMemo(() => {
-    if (!query.trim()) return filteredTracks
-    
-    // Add "Search in database" option at the top
-    const searchOption = {
+  const displayResults: PaletteItem[] = useMemo(() => {
+    const trackItems: PaletteItem[] = filteredTracks.map(track => ({ type: 'track', track }))
+
+    if (!query.trim()) return trackItems
+
+    const searchItem: SearchOption = {
+      type: 'search',
       id: 'search-database',
-      track_name: `Søk etter "${query}" i databasen`,
-      artist_names: filteredTracks.length === 0 ? 'Trykk Enter for å søke i hele databasen' : 'Trykk Enter eller klikk for å søke',
-      album_name: '',
-      isSearchOption: true
+      label: `Søk etter "${query}" i databasen`,
+      hint: filteredTracks.length === 0
+        ? 'Trykk Enter for å søke i hele databasen'
+        : 'Trykk Enter eller klikk for å søke',
     }
-    
-    return [searchOption as any, ...filteredTracks]
+
+    return [searchItem, ...trackItems]
   }, [query, filteredTracks])
 
-  // Reset selection when results change
   useEffect(() => {
     setSelectedIndex(0)
   }, [displayResults])
 
-  // Focus input when opened
   useEffect(() => {
     if (isOpen && inputRef.current) {
       inputRef.current.focus()
     }
   }, [isOpen])
 
-  // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (!isOpen) return
@@ -73,32 +83,31 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
       switch (e.key) {
         case 'ArrowDown':
           e.preventDefault()
-          setSelectedIndex(prev => 
+          setSelectedIndex(prev =>
             prev < displayResults.length - 1 ? prev + 1 : 0
           )
           break
         case 'ArrowUp':
           e.preventDefault()
-          setSelectedIndex(prev => 
+          setSelectedIndex(prev =>
             prev > 0 ? prev - 1 : displayResults.length - 1
           )
           break
-        case 'Enter':
+        case 'Enter': {
           e.preventDefault()
-          const selectedItem = displayResults[selectedIndex]
-          if (selectedItem?.isSearchOption) {
-            // User selected "Search in database" option
+          const selected = displayResults[selectedIndex]
+          if (selected?.type === 'search') {
             onSearch(query)
             onClose()
-          } else if (selectedItem && !selectedItem.isSearchOption) {
-            // User selected a track
-            handleTrackSelect(selectedItem as Track)
+          } else if (selected?.type === 'track') {
+            onTrackSelect(selected.track)
+            setQuery('')
           } else if (query.trim()) {
-            // Fallback: search if no selection but there's a query
             onSearch(query)
             onClose()
           }
           break
+        }
         case 'Escape':
           e.preventDefault()
           onClose()
@@ -108,42 +117,25 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
 
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [isOpen, selectedIndex, displayResults, query, onSearch, onClose])
+  }, [isOpen, selectedIndex, displayResults, query, onSearch, onClose, onTrackSelect])
 
-  // Scroll selected item into view
   useEffect(() => {
     if (listRef.current && listRef.current.children[selectedIndex]) {
-      const selectedElement = listRef.current.children[selectedIndex] as HTMLElement
-      selectedElement.scrollIntoView({ 
-        block: 'nearest', 
-        behavior: 'smooth' 
-      })
+      const el = listRef.current.children[selectedIndex] as HTMLElement
+      el.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
     }
   }, [selectedIndex])
 
-  const handleTrackSelect = (track: Track) => {
-    onTrackSelect(track)
-    setQuery('')
-  }
-
-  const handleQueryChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value)
-  }
-
-  const formatDuration = (ms: number | null): string => {
-    if (!ms) return ''
-    const minutes = Math.floor(ms / 60000)
-    const seconds = Math.floor((ms % 60000) / 1000)
-    return `${minutes}:${seconds.toString().padStart(2, '0')}`
-  }
-
   if (!isOpen) return null
+
+  const itemKey = (item: PaletteItem) =>
+    item.type === 'search' ? item.id : item.track.id
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl p-0 bg-black/95 border border-gray-700 backdrop-blur-sm">
         <div className="flex flex-col">
-          {/* Search Input */}
+          {/* Søkefelt */}
           <div className="flex items-center px-4 py-3 border-b border-gray-700">
             <Search className="w-5 h-5 text-gray-400 mr-3" />
             <input
@@ -152,7 +144,7 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
               placeholder="Søk etter låter, artister, album..."
               className="flex-1 bg-transparent text-white placeholder-gray-400 outline-none text-lg"
               value={query}
-              onChange={handleQueryChange}
+              onChange={(e) => setQuery(e.target.value)}
             />
             <button
               onClick={onClose}
@@ -162,11 +154,8 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
             </button>
           </div>
 
-          {/* Results */}
-          <div 
-            ref={listRef}
-            className="max-h-96 overflow-y-auto"
-          >
+          {/* Resultater */}
+          <div ref={listRef} className="max-h-96 overflow-y-auto">
             {displayResults.length === 0 ? (
               <div className="px-4 py-8 text-center text-gray-400">
                 <Search className="w-8 h-8 mx-auto mb-2 opacity-50" />
@@ -176,85 +165,77 @@ const CommandPalette: React.FC<CommandPaletteProps> = ({
               <div className="py-2">
                 {displayResults.map((item, index) => (
                   <button
-                    key={item.id}
+                    key={itemKey(item)}
                     className={`w-full px-4 py-3 text-left hover:bg-gray-800/50 transition-colors ${
                       index === selectedIndex ? 'bg-blue-600/30 border-l-2 border-blue-500' : ''
-                    } ${item.isSearchOption ? 'bg-gray-800/30' : ''}`}
+                    } ${item.type === 'search' ? 'bg-gray-800/30' : ''}`}
                     onClick={() => {
-                      if (item.isSearchOption) {
+                      if (item.type === 'search') {
                         onSearch(query)
                         onClose()
                       } else {
-                        handleTrackSelect(item as Track)
+                        onTrackSelect(item.track)
+                        setQuery('')
                       }
                     }}
                   >
-                    <div className="flex items-center justify-between">
-                      <div className="flex-1 min-w-0">
+                    {item.type === 'search' ? (
+                      <div>
                         <div className="flex items-center space-x-2 mb-1">
-                          {item.isSearchOption ? (
-                            <Search className="w-4 h-4 text-green-400 flex-shrink-0" />
-                          ) : (
-                            <Music className="w-4 h-4 text-blue-400 flex-shrink-0" />
-                          )}
-                          <p className="font-medium text-white truncate">
-                            {item.track_name || 'Ukjent låt'}
-                          </p>
+                          <Search className="w-4 h-4 text-green-400 flex-shrink-0" />
+                          <p className="font-medium text-white truncate">{item.label}</p>
                         </div>
-                        {!item.isSearchOption && (
+                        <p className="text-sm text-gray-400 truncate">{item.hint}</p>
+                      </div>
+                    ) : (
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center space-x-2 mb-1">
+                            <Music className="w-4 h-4 text-blue-400 flex-shrink-0" />
+                            <p className="font-medium text-white truncate">
+                              {item.track.track_name || 'Ukjent låt'}
+                            </p>
+                          </div>
                           <div className="flex items-center space-x-4 text-sm text-gray-400">
                             <div className="flex items-center space-x-1">
                               <User className="w-3 h-3" />
-                              <span className="truncate">
-                                {item.artist_names || 'Ukjent artist'}
-                              </span>
+                              <span className="truncate">{item.track.artist_names || 'Ukjent artist'}</span>
                             </div>
                             <div className="flex items-center space-x-1">
                               <Disc className="w-3 h-3" />
-                              <span className="truncate">
-                                {item.album_name || 'Ukjent album'}
-                              </span>
+                              <span className="truncate">{item.track.album_name || 'Ukjent album'}</span>
                             </div>
                           </div>
-                        )}
-                        {item.isSearchOption && (
-                          <p className="text-sm text-gray-400 truncate">
-                            {item.artist_names}
-                          </p>
-                        )}
-                      </div>
-                      {!item.isSearchOption && (
+                        </div>
                         <div className="ml-4 flex-shrink-0 text-right">
-                          {item.popularity && (
+                          {item.track.popularity != null && (
                             <div className="text-xs text-gray-400 mb-1">
-                              ★ {item.popularity}
+                              ★ {item.track.popularity}
                             </div>
                           )}
-                          {item.duration_ms && (
+                          {item.track.duration_ms != null && (
                             <div className="text-xs text-gray-500">
-                              {formatDuration(item.duration_ms)}
+                              {fmtDuration(item.track.duration_ms)}
                             </div>
                           )}
                         </div>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Footer */}
+          {/* Bunntekst */}
           <div className="px-4 py-2 border-t border-gray-700 bg-gray-900/50">
             <div className="flex items-center justify-between text-xs text-gray-400">
               <div className="flex items-center space-x-4">
-                <span>↑↓ Navigate</span>
-                <span>Enter Select</span>
-                <span>Esc Close</span>
+                <span>↑↓ Naviger</span>
+                <span>Enter Velg</span>
+                <span>Esc Lukk</span>
               </div>
-              <div>
-                ⌘K / Ctrl+K to open
-              </div>
+              <div>⌘K / Ctrl+K</div>
             </div>
           </div>
         </div>

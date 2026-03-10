@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import { ArrowUp, ArrowDown, ArrowUpDown, Music2, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -7,41 +7,10 @@ import {
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { TrackModal } from '@/components/TrackModal';
 import { TrackListSkeleton } from '@/components/Loading';
+import { fmtDuration, fmtKey, fmtPct, fmtNum, fmtFloat } from '@/utils/formatters';
 import type { Track, SearchFilters } from '@/types/music';
 
 const PAGE_SIZE = 50;
-
-// --- Formateringshjelpere ---
-
-const fmtDuration = (ms: number | null | undefined): string => {
-  if (!ms) return '–';
-  const m = Math.floor(ms / 60000);
-  const s = Math.floor((ms % 60000) / 1000);
-  return `${m}:${s.toString().padStart(2, '0')}`;
-};
-
-const fmtKey = (key: number | null | undefined, mode: number | null | undefined): string => {
-  if (key === null || key === undefined) return '–';
-  const keys = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-  const k = keys[key] ?? '?';
-  if (mode === null || mode === undefined) return k;
-  return `${k} ${mode === 1 ? 'dur' : 'moll'}`;
-};
-
-const fmtPct = (v: number | null | undefined): string => {
-  if (v === null || v === undefined) return '–';
-  return `${Math.round(v * 100)} %`;
-};
-
-const fmtNum = (v: number | null | undefined): string => {
-  if (v === null || v === undefined) return '–';
-  return String(Math.round(v));
-};
-
-const fmtFloat = (v: number | null | undefined, d = 1): string => {
-  if (v === null || v === undefined) return '–';
-  return v.toFixed(d);
-};
 
 // --- Sortering ---
 

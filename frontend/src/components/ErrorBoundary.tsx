@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -30,14 +30,9 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error('ErrorBoundary caught an error:', error, errorInfo);
-    
-    this.setState({
-      error,
-      errorInfo,
-    });
+    console.error('ErrorBoundary fanget en feil:', error, errorInfo);
 
-    // Call the optional error callback
+    this.setState({ error, errorInfo });
     this.props.onError?.(error, errorInfo);
   }
 
@@ -55,7 +50,6 @@ export class ErrorBoundary extends Component<Props, State> {
 
   public render() {
     if (this.state.hasError) {
-      // Custom fallback UI
       if (this.props.fallback) {
         return this.props.fallback;
       }
@@ -66,18 +60,18 @@ export class ErrorBoundary extends Component<Props, State> {
             <div className="flex justify-center">
               <AlertTriangle className="h-16 w-16 text-red-500" />
             </div>
-            
+
             <div className="space-y-2">
-              <h1 className="text-2xl font-bold">Something went wrong</h1>
+              <h1 className="text-2xl font-bold">Noe gikk galt</h1>
               <p className="text-gray-400">
-                An unexpected error occurred while loading this page.
+                En uventet feil oppstod under lasting av siden.
               </p>
             </div>
 
-            {process.env.NODE_ENV === 'development' && this.state.error && (
+            {import.meta.env.DEV && this.state.error && (
               <details className="text-left bg-gray-900 p-4 rounded-lg text-sm">
                 <summary className="cursor-pointer text-red-400 mb-2">
-                  Error Details (Development)
+                  Feildetaljer (utvikling)
                 </summary>
                 <pre className="whitespace-pre-wrap text-gray-300 overflow-auto max-h-40">
                   {this.state.error.toString()}
@@ -93,16 +87,16 @@ export class ErrorBoundary extends Component<Props, State> {
                 className="flex items-center gap-2"
               >
                 <RefreshCw className="h-4 w-4" />
-                Try Again
+                Prøv igjen
               </Button>
-              
+
               <Button
                 onClick={this.handleReload}
                 variant="default"
                 className="flex items-center gap-2"
               >
                 <Home className="h-4 w-4" />
-                Reload Page
+                Last siden på nytt
               </Button>
             </div>
           </div>
@@ -113,11 +107,3 @@ export class ErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
-
-// Hook-based error boundary for functional components
-export const useErrorHandler = () => {
-  return (error: Error, errorInfo: { componentStack: string }) => {
-    console.error('Error caught by useErrorHandler:', error, errorInfo);
-    // You can integrate with error reporting services here
-  };
-};

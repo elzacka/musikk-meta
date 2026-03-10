@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from 'react'
+import React, { Suspense, useEffect, useMemo, useState } from 'react'
 import { Music, Search, Info } from 'lucide-react'
 import { useMusicStore } from '@/stores/musicStore'
 import { useCommandPalette } from '@/hooks/useCommandPalette'
@@ -58,12 +58,8 @@ function App() {
   const loadInitialData = async () => {
     try {
       setLoading(true)
-      if (brain.getAllTracks) {
-        const allTracksData = await brain.getAllTracks()
-        setAllTracks(allTracksData)
-      } else {
-        setAllTracks([])
-      }
+      const allTracksData = await brain.getAllTracks()
+      setAllTracks(allTracksData)
     } catch {
       setError('Kunne ikke laste musikdata. Sjekk konfigurasjon.')
       setAllTracks([])
@@ -82,19 +78,12 @@ function App() {
     setError(null)
 
     try {
-      const response = await brain.search_tracks({
+      const data = await brain.searchTracks({
         query: searchQuery,
         page: 1,
-        page_size: 200,
+        pageSize: 200,
       })
-
-      if (response.ok) {
-        const data = await response.json()
-        setTracks(data.tracks)
-      } else {
-        const errorData = await response.json()
-        throw new Error(errorData.detail || 'Søk mislyktes')
-      }
+      setTracks(data.tracks)
     } catch (err) {
       setError(`Søk mislyktes: ${err instanceof Error ? err.message : 'Ukjent feil'}`)
       setTracks([])
@@ -112,7 +101,7 @@ function App() {
     if (e.key === 'Enter') handleSearch()
   }
 
-  const genres = getUniqueGenres(allTracks)
+  const genres = useMemo(() => getUniqueGenres(allTracks), [allTracks])
 
   if (loading && !tracks.length && !allTracks.length) {
     return <PageLoading message="Laster MusikkMeta..." />

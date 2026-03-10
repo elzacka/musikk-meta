@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   RadarChart,
   Radar,
@@ -8,34 +7,8 @@ import {
   Tooltip,
 } from 'recharts';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { fmtDuration, fmtKey, fmtPct, fmtFloat } from '@/utils/formatters';
 import type { Track } from '@/types/music';
-
-// --- Hjelpere ---
-
-const fmt = (v: number | null | undefined, decimals = 2): string => {
-  if (v === null || v === undefined) return '–';
-  return v.toFixed(decimals);
-};
-
-const fmtPct = (v: number | null | undefined): string => {
-  if (v === null || v === undefined) return '–';
-  return `${Math.round(v * 100)} %`;
-};
-
-const fmtMs = (ms: number | null | undefined): string => {
-  if (!ms) return '–';
-  const m = Math.floor(ms / 60000);
-  const s = Math.floor((ms % 60000) / 1000);
-  return `${m}:${s.toString().padStart(2, '0')}`;
-};
-
-const fmtKey = (key: number | null | undefined, mode: number | null | undefined): string => {
-  if (key === null || key === undefined) return '–';
-  const keys = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-  const keyName = keys[key] ?? '?';
-  if (mode === null || mode === undefined) return keyName;
-  return `${keyName} ${mode === 1 ? 'dur' : 'moll'}`;
-};
 
 // --- Radar chart ---
 
@@ -142,10 +115,10 @@ export function TrackModal({ track, onClose }: TrackModalProps) {
               <h3 className="text-xs font-medium text-gray-500 uppercase tracking-wider mb-2">
                 Sporinfo
               </h3>
-              <MetaRow label="Varighet"    value={fmtMs(track.duration_ms)} />
+              <MetaRow label="Varighet"    value={fmtDuration(track.duration_ms)} />
               <MetaRow label="Utgitt"      value={track.release_date || '–'} />
-              <MetaRow label="Popularitet" value={track.popularity !== null && track.popularity !== undefined ? `${track.popularity} / 100` : '–'} />
-              <MetaRow label="Eksplisitt"  value={track.explicit === null || track.explicit === undefined ? '–' : track.explicit ? 'Ja' : 'Nei'} />
+              <MetaRow label="Popularitet" value={track.popularity != null ? `${track.popularity} / 100` : '–'} />
+              <MetaRow label="Eksplisitt"  value={track.explicit == null ? '–' : track.explicit ? 'Ja' : 'Nei'} />
               <MetaRow label="Sjanger"     value={track.genres || '–'} />
               <MetaRow label="Plateselskap" value={track.record_label || '–'} />
               {track.added_by && <MetaRow label="Lagt til av" value={track.added_by} />}
@@ -158,7 +131,7 @@ export function TrackModal({ track, onClose }: TrackModalProps) {
               <MetaRow label="BPM"          value={track.tempo ? `${Math.round(track.tempo)}` : '–'} />
               <MetaRow label="Toneart"      value={fmtKey(track.key_mode, track.mode)} />
               <MetaRow label="Takt"         value={track.time_signature ? `${track.time_signature}/4` : '–'} />
-              <MetaRow label="Lydstyrke"    value={track.loudness !== null && track.loudness !== undefined ? `${fmt(track.loudness, 1)} dB` : '–'} />
+              <MetaRow label="Lydstyrke"    value={track.loudness != null ? `${fmtFloat(track.loudness)} dB` : '–'} />
               <MetaRow label="Dansbar"      value={fmtPct(track.danceability)} />
               <MetaRow label="Energi"       value={fmtPct(track.energy)} />
               <MetaRow label="Valens"       value={fmtPct(track.valence)} />

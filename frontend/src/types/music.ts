@@ -29,19 +29,6 @@ export interface Track {
   time_signature?: number | null; // Taktart (vanligvis 3 eller 4)
 }
 
-// Lydegenskaper som eget type for visualisering
-export interface AudioFeatures {
-  danceability: number;
-  energy: number;
-  loudness: number;
-  speechiness: number;
-  acousticness: number;
-  instrumentalness: number;
-  liveness: number;
-  valence: number;
-  tempo: number;
-}
-
 // Søkesvar fra datakilde
 export interface SearchResponse {
   tracks: Track[];
@@ -70,27 +57,15 @@ export interface SearchFilters {
   explicit?: boolean;
 }
 
-// Paginering
-export interface PaginationParams {
-  page: number;
-  page_size: number;
-}
-
-// Generisk API-svar
-export interface ApiResponse<T> {
-  ok: boolean;
-  json: () => Promise<T>;
-}
-
 // Grensesnitt for datakilde (brain)
 export interface MusicDataSource {
-  search_tracks(params: {
+  searchTracks(params: {
     query: string;
-    page?: number | string;
-    page_size?: number;
-  }): Promise<ApiResponse<SearchResponse>>;
-  getAllTracks?(): Promise<Track[]>;
-  refreshData?(): Promise<void>;
+    page?: number;
+    pageSize?: number;
+  }): Promise<SearchResponse>;
+  getAllTracks(): Promise<Track[]>;
+  refreshData(): Promise<void>;
 }
 
 // UI-tilstandstyper
@@ -102,24 +77,7 @@ export interface SortConfig {
   direction: SortDirection;
 }
 
-// Diagramdata for visualiseringer
-export interface ChartDataPoint {
-  name: string;
-  value: number;
-  color?: string;
-}
-
-// Kommandopalett-type
-export interface Command {
-  id: string;
-  label: string;
-  value: string;
-  keywords?: string[];
-}
-
-// Feiltype
-export interface MusicError extends Error {
-  code?: string;
-  status?: number;
-  context?: Record<string, unknown>;
+// Google Sheets API-svar
+export interface SheetData {
+  values: string[][];
 }
