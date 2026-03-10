@@ -17,10 +17,6 @@ import type { Track } from '@/types/music'
 const SearchResults = React.lazy(() => import('@/components/SearchResults'))
 const CommandPalette = React.lazy(() => import('@/components/CommandPalette'))
 
-const hasGoogleSheets = !!(
-  import.meta.env?.VITE_GOOGLE_SHEET_ID &&
-  import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY
-)
 
 function App() {
   const {
@@ -109,27 +105,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 text-white">
-      {/* Statusbanner */}
-      {hasGoogleSheets ? (
-        <div className="bg-gradient-to-r from-emerald-500/10 to-blue-500/10 backdrop-blur-sm border-b border-emerald-500/20 px-6 py-3">
-          <div className="container mx-auto max-w-7xl">
-            <div className="flex items-center justify-center gap-2">
-              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-              <p className="text-sm font-medium text-emerald-200">
-                Live-data fra Google Sheets
-              </p>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <div className="bg-gradient-to-r from-amber-500/10 to-orange-500/10 backdrop-blur-sm border-b border-amber-500/20 px-6 py-3">
-          <div className="container mx-auto max-w-7xl">
-            <p className="text-sm text-center text-amber-200">
-              <span className="font-medium">Demo-modus</span> — bruker eksempeldata
-            </p>
-          </div>
-        </div>
-      )}
 
       <div className="container mx-auto max-w-7xl px-6 py-12">
         {/* Topptekst */}

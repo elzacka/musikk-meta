@@ -91,7 +91,7 @@ interface MusicDataSource {
 
 ## Kjente begrensninger
 
-- Spotify Audio Features API deprecated november 2024. Datasettet er et statisk snapshot.
+- Spotify Audio Features API avviklet november 2024. Datasettet er et statisk snapshot.
 - Paginering er client-side (alle spor lastes ved oppstart).
 - ESLint 10 blokkert av `eslint-plugin-react-hooks` (ingen stabil versjon med ESLint 10-støtte per mars 2026).
 

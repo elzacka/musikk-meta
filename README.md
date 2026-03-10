@@ -67,7 +67,7 @@ frontend/src/
 
 ## Datakilde
 
-Appen henter musikkdata fra Google Sheets (25 kolonner, A:Y) med grunnleggende sporinfo og Spotify Audio Features. Spotify Audio Features API ble deprecated november 2024 — datasettet er et statisk snapshot.
+Appen henter musikkdata fra Google Sheets (25 kolonner, A:Y) med grunnleggende sporinfo og Spotify Audio Features. Spotify Audio Features API ble avviklet november 2024 — datasettet er et statisk snapshot.
 
 ## Lisens
 
