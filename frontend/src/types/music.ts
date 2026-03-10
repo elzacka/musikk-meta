@@ -1,3 +1,6 @@
+// Datakilde for et spor
+export type TrackSource = 'local' | 'deezer';
+
 // Kjernetype for et musikkspor
 export interface Track {
   id: number;
@@ -11,8 +14,11 @@ export interface Track {
   explicit?: boolean | null;
   genres?: string | null;
   record_label?: string | null;
+  preview_url?: string | null;
+  cover_url?: string | null;
+  source?: TrackSource;
 
-  // Lydegenskaper fra Spotify Audio Features
+  // Lydegenskaper (Spotify Audio Features eller beregnet)
   danceability?: number | null;
   energy?: number | null;
   key_mode?: number | null;       // Numerisk toneart-indeks: 0=C, 1=C#, ..., 11=B

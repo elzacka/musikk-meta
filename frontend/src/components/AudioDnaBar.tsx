@@ -17,7 +17,19 @@ interface AudioDnaBarProps {
   className?: string;
 }
 
+export function hasAudioFeatures(track: Track): boolean {
+  return features.some(({ key }) => (track[key as FeatureKey] as number | null | undefined) != null);
+}
+
 export function AudioDnaBar({ track, className = '' }: AudioDnaBarProps) {
+  if (!hasAudioFeatures(track)) {
+    return (
+      <div className={`w-36 flex items-center ${className}`}>
+        <span className="text-[10px] text-gray-600 italic">Ingen lyddata</span>
+      </div>
+    );
+  }
+
   return (
     <div className={`group/dna relative w-36 ${className}`}>
       <div className="flex flex-col gap-[2px]">

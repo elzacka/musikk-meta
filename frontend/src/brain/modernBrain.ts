@@ -1,4 +1,4 @@
-import { StaticBrain } from './staticBrain';
+import { HybridBrain } from './hybridBrain';
 import { GoogleSheetsBrain } from './googleSheetsBrain';
 import type { MusicDataSource } from '@/types/music';
 
@@ -8,11 +8,10 @@ const createBrainClient = (): MusicDataSource => {
     import.meta.env?.VITE_GOOGLE_SHEETS_API_KEY
   );
 
-  if (hasGoogleSheetsConfig) {
-    return new GoogleSheetsBrain();
-  }
+  const local = hasGoogleSheetsConfig ? new GoogleSheetsBrain() : null;
 
-  return new StaticBrain();
+  // HybridBrain: Deezer for universelt søk + lokale spor med audio features
+  return new HybridBrain(local);
 };
 
 export const brain = createBrainClient();

@@ -136,7 +136,7 @@ function App() {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500" />
                 <Input
                   type="text"
-                  placeholder="Søk etter låt, artist, album, sjanger..."
+                  placeholder="Søk blant millioner av låter..."
                   className="pl-10 pr-20 h-10 bg-gray-900/40 backdrop-blur-sm border-gray-700/50 text-white placeholder-gray-500 focus:border-blue-500/50 focus:bg-gray-900/60 transition-all duration-200 rounded-lg text-sm"
                   value={localQuery}
                   onChange={(e) => setLocalQuery(e.target.value)}
@@ -183,7 +183,7 @@ function App() {
                       <div>
                         <h4 className="font-semibold text-white mb-3">Kom i gang</h4>
                         <p className="text-sm text-gray-400 mb-4">
-                          Bruk søkefeltet eller <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">Cmd+K</kbd> for å finne musikk. Bruk filter-knappen for å utforske etter lydegenskaper — BPM, energi, stemning og mer. Klikk en rad i tabellen for å se full lydprofil med radar-diagram.
+                          Søk blant millioner av låter via Deezer, eller bruk <kbd className="px-1 py-0.5 bg-gray-700 rounded text-xs">Cmd+K</kbd> for hurtigsøk. Spor fra den lokale databasen vises med full lydprofil (radar-diagram og Audio DNA). Deezer-spor viser metadata, BPM og 30-sekunders forhåndslytting. Bruk filter for å utforske etter BPM, energi, stemning og mer.
                         </p>
                       </div>
                       <div>

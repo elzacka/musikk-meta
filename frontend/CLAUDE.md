@@ -2,7 +2,7 @@
 
 ## Versjon
 
-**2.2.0** (2026-03-10)
+**3.0.0** (2026-03-11)
 
 | Komponent | Versjon |
 |---|---|
@@ -16,17 +16,20 @@
 
 ## Arkitektur
 
-React 19 PWA med Google Sheets som datakilde. Uten env-variabler kjører appen i demo-modus med statiske eksempeldata.
+React 19 PWA med hybridarkitektur: Deezer API for universelt musikksøk (70M+ spor) kombinert med Google Sheets for lokale spor med audio features.
 
 ### Dataflyt
 
 ```
-Google Sheets API
-  → googleSheets.ts (fetch + safe parsing)
-  → GoogleSheetsBrain (in-memory cache, 5 min)
-  → modernBrain.ts (velger datakilde basert på env-variabler)
-  → App.tsx (søk + tilstand via Zustand)
-  → SearchResults.tsx (tabell/kort-visning)
+Bruker søker
+  → HybridBrain (parallelt søk)
+    ├─ DeezerBrain → deezer.ts → Deezer API (via proxy)
+    │   → metadata, BPM, cover art, 30-sek preview
+    └─ GoogleSheetsBrain → googleSheets.ts → Google Sheets API
+        → metadata + audio features (dansbarhet, energi, valens, …)
+  → Merge: lokale spor (med audio features) prioriteres, Deezer fyller resten
+  → App.tsx (Zustand store)
+  → SearchResults.tsx (tabell/kort) + TrackDetailPanel.tsx (slide-in)
 ```
 
 ### Nøkkelfiler
@@ -34,18 +37,29 @@ Google Sheets API
 | Fil | Ansvar |
 |---|---|
 | `src/types/music.ts` | Alle domenetyper + `MusicDataSource`-grensesnitt |
+| `src/services/deezer.ts` | Deezer API-klient (søk, albumdetaljer) |
 | `src/services/googleSheets.ts` | Henter og parser data fra Sheets |
-| `src/brain/searchUtils.ts` | Delt søke- og pagineringslogikk |
+| `src/brain/hybridBrain.ts` | Merger Deezer + lokale data med deduplisering |
+| `src/brain/deezerBrain.ts` | Deezer-datakilde |
 | `src/brain/googleSheetsBrain.ts` | Google Sheets-datakilde med cache |
 | `src/brain/staticBrain.ts` | Demo-datakilde med eksempeldata |
-| `src/brain/modernBrain.ts` | Velger datakilde basert på env |
+| `src/brain/modernBrain.ts` | Oppretter HybridBrain basert på env |
+| `src/brain/searchUtils.ts` | Delt søke- og pagineringslogikk |
 | `src/stores/musicStore.ts` | Global tilstand (Zustand) |
 | `src/utils/formatters.ts` | Delte formateringsfunksjoner |
-| `src/components/SearchResults.tsx` | Sorterbar resultattabell + mobilkort |
-| `src/components/TrackModal.tsx` | Detaljvisning med radar-diagram |
+| `src/components/SearchResults.tsx` | Sorterbar resultattabell + mobilkort + sorteringsmeny |
+| `src/components/AudioDnaBar.tsx` | Visuell DNA-bar (7 lydegenskaper) |
+| `src/components/TrackDetailPanel.tsx` | Slide-in detaljpanel med radar-diagram + preview |
 | `src/components/CommandPalette.tsx` | Cmd+K hurtigsøk |
 | `src/components/FilterPanel.tsx` | Filtrering på lydegenskaper |
 | `src/App.tsx` | Hovedkomponent |
+
+### CORS-proxy (produksjon)
+
+Deezer API støtter ikke CORS. Løsning:
+- **Dev:** Vite proxy (`/api/deezer` → `api.deezer.com`)
+- **Prod:** Cloudflare Worker (`proxy/worker.ts`)
+- **Env:** `VITE_DEEZER_PROXY_URL` — URL til Cloudflare Worker i produksjon
 
 ## Brain API
 
@@ -58,6 +72,14 @@ interface MusicDataSource {
   refreshData(): Promise<void>;
 }
 ```
+
+## Miljøvariabler
+
+| Variabel | Formål | Påkrevd |
+|---|---|---|
+| `VITE_GOOGLE_SHEET_ID` | Google Sheets dokument-ID | Nei (lokal database) |
+| `VITE_GOOGLE_SHEETS_API_KEY` | Google Sheets API-nøkkel | Nei (lokal database) |
+| `VITE_DEEZER_PROXY_URL` | URL til Deezer CORS-proxy | Nei (dev bruker Vite proxy) |
 
 ## Kolonnestruktur i Google Sheets
 
@@ -91,8 +113,9 @@ interface MusicDataSource {
 
 ## Kjente begrensninger
 
-- Spotify Audio Features API avviklet november 2024. Datasettet er et statisk snapshot.
-- Paginering er client-side (alle spor lastes ved oppstart).
+- Spotify Audio Features API avviklet november 2024. Lokale spor har statisk snapshot av audio features.
+- Deezer-spor mangler audio features (dansbarhet, energi, valens osv.) — kun BPM er tilgjengelig.
+- Paginering er client-side (lokale spor lastes ved oppstart).
 - ESLint 10 blokkert av `eslint-plugin-react-hooks` (ingen stabil versjon med ESLint 10-støtte per mars 2026).
 
 ## Versjonering

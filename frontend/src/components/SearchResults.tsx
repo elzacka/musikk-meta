@@ -201,7 +201,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, allTracks, query,
         <div className="w-16 h-16 bg-gray-800/50 rounded-2xl flex items-center justify-center mb-4">
           <Music2 className="w-8 h-8 text-gray-500" />
         </div>
-        <p className="text-gray-400 text-sm">Søk etter musikk, eller bruk filter for å utforske</p>
+        <p className="text-gray-400 text-sm">Søk blant millioner av låter — skriv inn artist, tittel eller album</p>
       </div>
     );
   }
@@ -240,6 +240,7 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, allTracks, query,
           <TableHeader>
             <TableRow className="border-gray-800/50 hover:bg-transparent bg-gray-900/60">
               <TableHead className="w-10 text-center">#</TableHead>
+              <TableHead className="w-10"></TableHead>
               <TableHead className="min-w-[10rem]">
                 <SortBtn sortKey="artist_names">Artist</SortBtn>
               </TableHead>
@@ -266,6 +267,15 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, allTracks, query,
               >
                 <TableCell className="text-center text-xs text-gray-600 font-mono">
                   {i + 1}
+                </TableCell>
+                <TableCell className="p-1">
+                  {track.cover_url ? (
+                    <img src={track.cover_url} alt="" className="w-8 h-8 rounded object-cover" />
+                  ) : (
+                    <div className="w-8 h-8 rounded bg-gray-800/40 flex items-center justify-center">
+                      <Music2 className="w-3.5 h-3.5 text-gray-600" />
+                    </div>
+                  )}
                 </TableCell>
                 <TableCell className="font-medium text-sm text-gray-200 truncate max-w-[10rem]">
                   {track.artist_names || '–'}
@@ -297,7 +307,11 @@ const SearchResults: React.FC<SearchResultsProps> = ({ tracks, allTracks, query,
             className={`w-full text-left bg-gray-900/40 backdrop-blur-sm rounded-xl border border-gray-700/30 p-4 hover:bg-gray-800/50 transition-colors border-l-4 ${getRowAccent(track)}`}
           >
             <div className="flex items-start gap-3">
-              <span className="text-xs text-gray-600 font-mono w-6 shrink-0 pt-0.5">{i + 1}</span>
+              {track.cover_url ? (
+                <img src={track.cover_url} alt="" className="w-10 h-10 rounded object-cover shrink-0" />
+              ) : (
+                <span className="text-xs text-gray-600 font-mono w-6 shrink-0 pt-0.5">{i + 1}</span>
+              )}
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-white text-sm truncate">{track.track_name || '–'}</p>
                 <p className="text-gray-400 text-xs truncate mt-0.5">{track.artist_names || '–'}</p>
