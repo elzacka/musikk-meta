@@ -7,38 +7,57 @@
 | Komponent | Versjon |
 |---|---|
 | React | 19.2.4 |
-| TypeScript | 5.9 |
-| Vite | 7.3 |
-| Tailwind CSS | 4.2 |
-| Zustand | 5.0 |
-| Recharts | 3.8 |
+| TypeScript | 5.9.3 |
+| Vite | 7.3.1 |
+| Tailwind CSS | 4.2.1 |
+| Zustand | 5.0.11 |
+| Recharts | 3.8.0 |
+| Yarn | 4.12.0 |
 
 ## Arkitektur
 
-Appen er en React 19 PWA som bruker Google Sheets som database.
+React 19 PWA med Google Sheets som datakilde. Uten env-variabler kjører appen i demo-modus med statiske eksempeldata.
 
 ### Dataflyt
 
 ```
 Google Sheets API
-  -> googleSheets.ts (fetch + safe parsing)
-  -> GoogleSheetsBrain (in-memory cache, søk, paginering)
-  -> modernBrain.ts (velger datakilde basert på env-variabler)
-  -> App.tsx (søk + tilstand)
-  -> ResultsTable.tsx (visning)
+  → googleSheets.ts (fetch + safe parsing)
+  → GoogleSheetsBrain (in-memory cache, 5 min)
+  → modernBrain.ts (velger datakilde basert på env-variabler)
+  → App.tsx (søk + tilstand via Zustand)
+  → SearchResults.tsx (tabell/kort-visning)
 ```
 
 ### Nøkkelfiler
 
 | Fil | Ansvar |
 |---|---|
-| `src/types/music.ts` | Alle domene-typer |
+| `src/types/music.ts` | Alle domenetyper + `MusicDataSource`-grensesnitt |
 | `src/services/googleSheets.ts` | Henter og parser data fra Sheets |
-| `src/brain/googleSheetsBrain.ts` | Søk, cache, paginering |
-| `src/brain/modernBrain.ts` | Velger datakilde |
+| `src/brain/searchUtils.ts` | Delt søke- og pagineringslogikk |
+| `src/brain/googleSheetsBrain.ts` | Google Sheets-datakilde med cache |
+| `src/brain/staticBrain.ts` | Demo-datakilde med eksempeldata |
+| `src/brain/modernBrain.ts` | Velger datakilde basert på env |
 | `src/stores/musicStore.ts` | Global tilstand (Zustand) |
-| `src/components/ResultsTable.tsx` | Sorterbar resultattabell |
-| `src/App.tsx` | Hoved-komponent |
+| `src/utils/formatters.ts` | Delte formateringsfunksjoner |
+| `src/components/SearchResults.tsx` | Sorterbar resultattabell + mobilkort |
+| `src/components/TrackModal.tsx` | Detaljvisning med radar-diagram |
+| `src/components/CommandPalette.tsx` | Cmd+K hurtigsøk |
+| `src/components/FilterPanel.tsx` | Filtrering på lydegenskaper |
+| `src/App.tsx` | Hovedkomponent |
+
+## Brain API
+
+Alle datakilder implementerer `MusicDataSource`:
+
+```typescript
+interface MusicDataSource {
+  searchTracks(params: { query: string; page?: number; pageSize?: number }): Promise<SearchResponse>;
+  getAllTracks(): Promise<Track[]>;
+  refreshData(): Promise<void>;
+}
+```
 
 ## Kolonnestruktur i Google Sheets
 
@@ -72,8 +91,9 @@ Google Sheets API
 
 ## Kjente begrensninger
 
-- Spotify Audio Features API deprecated november 2024. Datasettet er et statisk snapshot — nye spor kan ikke berikes automatisk uten alternativ datakilde.
-- Paginering i søk er client-side (alle spor lastes ved oppstart for kommandopaletten).
+- Spotify Audio Features API deprecated november 2024. Datasettet er et statisk snapshot.
+- Paginering er client-side (alle spor lastes ved oppstart).
+- ESLint 10 blokkert av `eslint-plugin-react-hooks` (ingen stabil versjon med ESLint 10-støtte per mars 2026).
 
 ## Versjonering
 
