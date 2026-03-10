@@ -67,3 +67,6 @@ package-lock.json
 
 # UV lock (Python package manager)
 uv.lock
+
+# Lokal utvikling
+dev_only/
